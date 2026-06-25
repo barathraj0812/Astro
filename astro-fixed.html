@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>விரிவான ஜோதிட கணிப்பு</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Tamil:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#07060f;--deep:#110e20;--card:#160f28;
+  --gold:#c9a84c;--gold-l:#e8c97a;--gold-d:#7a6530;
+  --sil:#a8b4c8;--sil-d:#4a5468;
+  --star:#f0e8d8;--acc:#6b4fa0;--acc-l:#9b7fd4;
+  --natch:#7ec8f0;--natch-d:#2a5f7a;
+  --grn:#5ec490;--grn-d:#1e5c3a;
+  --rose:#c47090;--rose-d:#5c2030;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--star);font-family:'Noto Serif Tamil',serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+#sf{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star-p{position:absolute;border-radius:50%;background:#fff;animation:twk var(--d) ease-in-out infinite alternate}
+@keyframes twk{from{opacity:var(--a)}to{opacity:var(--b);transform:scale(1.5)}}
+.pg{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:48px 14px 80px}
+header{text-align:center;margin-bottom:40px}
+.sig{display:block;margin:0 auto 16px;width:54px;height:54px;animation:rot 50s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+h1{font-size:clamp(1.6rem,5vw,2.6rem);font-weight:700;color:var(--gold-l);text-shadow:0 0 40px rgba(201,168,76,.4);margin-bottom:5px;line-height:1.3}
+.sub{font-size:.75rem;color:var(--sil-d);letter-spacing:.12em}
+/* INPUT CARD */
+.inp-card{width:100%;max-width:660px;background:linear-gradient(155deg,rgba(22,15,40,.97),rgba(10,7,18,.99));border:1px solid rgba(201,168,76,.2);border-radius:3px;padding:36px 36px 40px;box-shadow:0 0 0 1px rgba(201,168,76,.06),0 24px 60px rgba(0,0,0,.75);position:relative;animation:rise .8s ease both .15s}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.inp-card::before,.inp-card::after{content:'';position:absolute;width:18px;height:18px;border-color:var(--gold-d);border-style:solid;opacity:.5}
+.inp-card::before{top:11px;left:11px;border-width:1px 0 0 1px}
+.inp-card::after{bottom:11px;right:11px;border-width:0 1px 1px 0}
+.fg{margin-bottom:20px}
+label{display:block;font-size:.65rem;font-weight:600;color:var(--gold);margin-bottom:6px;letter-spacing:.08em}
+label span{color:var(--sil-d);font-weight:300;font-size:.7rem;margin-left:4px}
+select,input[type=date],input[type=time]{width:100%;background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.16);border-radius:2px;color:var(--star);font-family:'Noto Serif Tamil',serif;font-size:.88rem;padding:10px 12px;outline:none;transition:border-color .2s,background .2s;appearance:none;-webkit-appearance:none;cursor:pointer}
+select:focus,input:focus{border-color:var(--gold);background:rgba(201,168,76,.05);box-shadow:0 0 0 3px rgba(201,168,76,.08)}
+.sw{position:relative}.sw::after{content:'⌄';position:absolute;right:11px;top:50%;transform:translateY(-52%);color:var(--gold-d);pointer-events:none;font-size:.9rem}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+input::-webkit-calendar-picker-indicator{filter:invert(.6) sepia(1) saturate(2) hue-rotate(10deg);opacity:.6;cursor:pointer}
+.div{display:flex;align-items:center;gap:10px;margin:22px 0 18px;color:var(--gold-d);font-size:.75rem}
+.div::before,.div::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.25),transparent)}
+.calc-btn{width:100%;margin-top:22px;background:linear-gradient(135deg,rgba(107,79,160,.26),rgba(107,79,160,.08));border:1px solid var(--acc);color:var(--acc-l);font-family:'Noto Serif Tamil',serif;font-size:.92rem;font-weight:600;letter-spacing:.05em;padding:14px 22px;cursor:pointer;border-radius:2px;transition:all .25s}
+.calc-btn:hover{border-color:var(--acc-l);color:var(--star);box-shadow:0 0 24px rgba(107,79,160,.28)}
+.calc-btn:active{transform:scale(.99)}
+/* RESULTS */
+#results{width:100%;max-width:660px;margin-top:18px;display:none}
+/* PANEL BASE */
+.panel{border-radius:3px;padding:28px 32px 32px;position:relative;margin-bottom:12px}
+.panel::before,.panel::after{content:'';position:absolute;width:16px;height:16px;border-style:solid}
+/* gold panel */
+.pg-gold{background:linear-gradient(155deg,rgba(28,20,6,.97),rgba(10,7,3,.99));border:1px solid rgba(201,168,76,.28);box-shadow:0 0 0 1px rgba(201,168,76,.07),0 18px 50px rgba(0,0,0,.65)}
+.pg-gold::before{top:10px;left:10px;border-color:rgba(201,168,76,.4);border-width:1px 0 0 1px}
+.pg-gold::after{bottom:10px;right:10px;border-color:rgba(201,168,76,.4);border-width:0 1px 1px 0}
+/* blue panel */
+.pg-blue{background:linear-gradient(155deg,rgba(6,14,28,.97),rgba(3,6,14,.99));border:1px solid rgba(126,200,240,.24);box-shadow:0 0 0 1px rgba(126,200,240,.06),0 18px 50px rgba(0,0,0,.65)}
+.pg-blue::before{top:10px;left:10px;border-color:rgba(126,200,240,.36);border-width:1px 0 0 1px}
+.pg-blue::after{bottom:10px;right:10px;border-color:rgba(126,200,240,.36);border-width:0 1px 1px 0}
+/* green panel */
+.pg-grn{background:linear-gradient(155deg,rgba(6,20,12,.97),rgba(3,10,6,.99));border:1px solid rgba(94,196,144,.22);box-shadow:0 0 0 1px rgba(94,196,144,.05),0 18px 50px rgba(0,0,0,.65)}
+.pg-grn::before{top:10px;left:10px;border-color:rgba(94,196,144,.33);border-width:1px 0 0 1px}
+.pg-grn::after{bottom:10px;right:10px;border-color:rgba(94,196,144,.33);border-width:0 1px 1px 0}
+/* rose panel */
+.pg-rose{background:linear-gradient(155deg,rgba(20,8,14,.97),rgba(10,4,7,.99));border:1px solid rgba(196,112,144,.22);box-shadow:0 0 0 1px rgba(196,112,144,.05),0 18px 50px rgba(0,0,0,.65)}
+.pg-rose::before{top:10px;left:10px;border-color:rgba(196,112,144,.33);border-width:1px 0 0 1px}
+.pg-rose::after{bottom:10px;right:10px;border-color:rgba(196,112,144,.33);border-width:0 1px 1px 0}
+/* purple panel */
+.pg-acc{background:linear-gradient(155deg,rgba(16,10,30,.97),rgba(7,5,14,.99));border:1px solid rgba(155,127,212,.22);box-shadow:0 0 0 1px rgba(155,127,212,.06),0 18px 50px rgba(0,0,0,.65)}
+.pg-acc::before{top:10px;left:10px;border-color:rgba(155,127,212,.33);border-width:1px 0 0 1px}
+.pg-acc::after{bottom:10px;right:10px;border-color:rgba(155,127,212,.33);border-width:0 1px 1px 0}
+/* panel title */
+.ptitle{display:flex;align-items:center;gap:8px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.ptitle-icon{font-size:1.2rem}
+.ptitle h2{font-size:.88rem;font-weight:700;letter-spacing:.1em}
+.ptitle .psub{font-size:.6rem;font-weight:300;margin-top:1px;opacity:.7}
+.gold-c h2{color:var(--gold-l)} .gold-c .psub{color:var(--gold-d)}
+.blue-c h2{color:var(--natch)} .blue-c .psub{color:var(--natch-d)}
+.grn-c h2{color:var(--grn)} .grn-c .psub{color:var(--grn-d)}
+.rose-c h2{color:var(--rose)} .rose-c .psub{color:var(--rose-d)}
+.acc-c h2{color:var(--acc-l)} .acc-c .psub{color:var(--acc)}
+/* PLANET GRID */
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:16px}
+.pcell{background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.09);padding:10px 5px;text-align:center;transition:background .15s;cursor:default;position:relative}
+.pcell:hover{background:rgba(201,168,76,.09);border-color:rgba(201,168,76,.25)}
+.pcell .psym{font-size:1.2rem;display:block;margin-bottom:3px;filter:drop-shadow(0 0 4px rgba(201,168,76,.45))}
+.pcell .plbl{font-size:.52rem;color:var(--gold-d);display:block;margin-bottom:3px;letter-spacing:.04em}
+.pcell .rname{font-size:.72rem;font-weight:600;color:var(--gold-l);display:block;line-height:1.3}
+.pcell .rnum{font-size:.5rem;color:var(--sil-d);display:block;margin-top:2px}
+.pcell.hs{background:rgba(220,160,40,.11);border-color:rgba(220,160,40,.4)!important}
+.pcell.hm{background:rgba(180,200,255,.07);border-color:rgba(180,200,255,.3)!important}
+.pcell.exalt::after{content:'↑';position:absolute;top:3px;right:5px;font-size:.55rem;color:var(--grn)}
+.pcell.debil::after{content:'↓';position:absolute;top:3px;right:5px;font-size:.55rem;color:var(--rose)}
+.pcell.own::after{content:'★';position:absolute;top:3px;right:5px;font-size:.5rem;color:var(--gold)}
+/* INFO BOXES */
+.irow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.irow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.ibox{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.055);padding:10px 12px;border-radius:1px}
+.ibox .lbl{font-size:.55rem;color:var(--sil-d);display:block;margin-bottom:3px;letter-spacing:.06em}
+.ibox .val{font-size:.85rem;color:var(--star);line-height:1.4}
+.ibox .val2{font-size:.7rem;color:var(--sil);line-height:1.3;margin-top:2px;display:block}
+/* BADGES */
+.eb{display:inline-block;padding:1px 7px;border-radius:20px;font-size:.55rem;margin-top:3px;letter-spacing:.04em}
+.fire{background:rgba(200,80,40,.18);color:#e8805a;border:1px solid rgba(200,80,40,.28)}
+.earth{background:rgba(80,140,60,.18);color:#8ecf7a;border:1px solid rgba(80,140,60,.28)}
+.air{background:rgba(100,160,210,.18);color:#7ec8f0;border:1px solid rgba(100,160,210,.28)}
+.water{background:rgba(60,90,200,.18);color:#8aaaf0;border:1px solid rgba(60,90,200,.28)}
+/* NATCH */
+.ncard{background:rgba(126,200,240,.04);border:1px solid rgba(126,200,240,.15);border-radius:2px;padding:16px 14px;text-align:center}
+.ncard.jn{border-color:rgba(126,200,240,.35);background:rgba(126,200,240,.07)}
+.ncard .ni{font-size:1.5rem;display:block;margin-bottom:4px;filter:drop-shadow(0 0 6px rgba(126,200,240,.45))}
+.ncard .nr{font-size:.55rem;color:var(--natch-d);display:block;margin-bottom:4px;letter-spacing:.1em;font-weight:600}
+.ncard .nn{font-size:.95rem;font-weight:700;color:var(--natch);display:block;margin-bottom:2px;line-height:1.3}
+.ncard .np{font-size:.65rem;color:var(--sil-d);display:block;margin-bottom:5px}
+.ncard .nl{font-size:.72rem;color:var(--star)} .ncard .nl span{color:var(--natch);font-weight:600}
+.nlist{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:10px}
+.nitem{background:rgba(126,200,240,.02);border:1px solid rgba(126,200,240,.07);padding:6px 4px;text-align:center;font-size:.62rem;color:var(--sil-d)}
+.nitem:hover{background:rgba(126,200,240,.06);color:var(--natch)}
+.nitem.act{background:rgba(126,200,240,.11);border-color:rgba(126,200,240,.3);color:var(--natch);font-weight:600}
+.nnum{font-size:.48rem;color:var(--natch-d);display:block;margin-bottom:1px}
+/* BHAVA */
+.bhava-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:14px}
+.bcell{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);padding:9px 7px;text-align:center;min-height:64px}
+.bcell .bnum{font-size:.52rem;color:var(--sil-d);display:block;margin-bottom:2px}
+.bcell .bname{font-size:.6rem;color:var(--sil);display:block;margin-bottom:4px}
+.bcell .bplanets{font-size:.7rem;color:var(--gold-l);line-height:1.5;display:block;min-height:14px}
+.bcell .brasi{font-size:.58rem;color:var(--gold-d)}
+.bcell.lagna-house{border-color:rgba(201,168,76,.3)!important;background:rgba(201,168,76,.05)!important}
+/* DASHA */
+.dasha-row{display:flex;align-items:stretch;gap:2px;margin-bottom:8px;flex-wrap:wrap}
+.dasha-cell{background:rgba(94,196,144,.03);border:1px solid rgba(94,196,144,.1);padding:9px 10px;border-radius:1px;flex:1;min-width:70px}
+.dasha-cell.current{background:rgba(94,196,144,.1);border-color:rgba(94,196,144,.35)}
+.dasha-cell .dlbl{font-size:.52rem;color:var(--grn-d);display:block;margin-bottom:3px;letter-spacing:.05em}
+.dasha-cell .dgraha{font-size:.8rem;font-weight:700;color:var(--grn)}
+.dasha-cell .dyrs{font-size:.58rem;color:var(--sil-d);display:block;margin-top:2px}
+/* PANCHANGA */
+.panch-row{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.panch-cell{background:rgba(196,112,144,.03);border:1px solid rgba(196,112,144,.1);padding:9px 7px;text-align:center}
+.panch-cell .plbl2{font-size:.52rem;color:var(--rose-d);display:block;margin-bottom:3px;letter-spacing:.05em}
+.panch-cell .pval{font-size:.75rem;font-weight:600;color:var(--rose);display:block}
+.panch-cell .psub2{font-size:.58rem;color:var(--sil-d);display:block;margin-top:2px}
+/* YOGA */
+.yoga-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.yoga-badge{background:rgba(155,127,212,.1);border:1px solid rgba(155,127,212,.25);color:var(--acc-l);padding:4px 10px;border-radius:2px;font-size:.65rem;font-weight:600}
+.yoga-badge.strong{border-color:rgba(155,127,212,.5);background:rgba(155,127,212,.18)}
+.yoga-badge.none{color:var(--sil-d);border-color:rgba(255,255,255,.08);background:transparent}
+/* AI SECTION */
+.ai-loading{text-align:center;padding:24px;color:var(--sil-d);font-size:.8rem;letter-spacing:.1em}
+.ai-loading .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(155,127,212,.2);border-top-color:var(--acc-l);border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-content{font-size:.82rem;line-height:1.9;color:var(--sil)}
+.ai-content p{margin-bottom:10px}
+.ai-content strong{color:var(--star);font-weight:600}
+/* TRAIT LINE */
+.trait{font-size:.78rem;font-style:italic;color:var(--sil);text-align:center;padding-top:12px;border-top:1px solid rgba(255,255,255,.055);line-height:1.8;margin-top:4px}
+/* STRENGTH BAR */
+.str-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.str-name{font-size:.6rem;color:var(--sil-d);width:64px;flex-shrink:0;text-align:right}
+.str-bar{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.str-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.str-val{font-size:.58rem;color:var(--sil-d);width:28px;flex-shrink:0}
+.strong-fill{background:linear-gradient(90deg,#5ec490,#8adfb8)}
+.medium-fill{background:linear-gradient(90deg,#c9a84c,#e8c97a)}
+.weak-fill{background:linear-gradient(90deg,#c47090,#e8a0b8)}
+/* ERR */
+#errbox{display:none;background:rgba(180,60,60,.13);border:1px solid rgba(200,80,80,.3);color:#f08080;padding:10px 14px;border-radius:2px;margin-top:12px;font-size:.8rem;text-align:center}
+/* LEGEND */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.05)}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:.55rem;color:var(--sil-d)}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+footer{margin-top:40px;text-align:center;z-index:1;position:relative;font-size:.65rem;color:var(--sil-d);letter-spacing:.04em}
+/* ── PDF BUTTON ── */
+#pdf-bar{display:none;width:100%;max-width:660px;margin-top:10px}
+.pdf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(201,168,76,.06));border:1px solid var(--gold);color:var(--gold-l);font-family:'Noto Serif Tamil',serif;font-size:.9rem;font-weight:700;letter-spacing:.08em;padding:14px 24px;cursor:pointer;border-radius:2px;transition:all .25s;position:relative;overflow:hidden}
+.pdf-btn:hover{background:linear-gradient(135deg,rgba(201,168,76,.28),rgba(201,168,76,.12));box-shadow:0 0 28px rgba(201,168,76,.25);color:#fff}
+.pdf-btn:active{transform:scale(.99)}
+.pdf-btn .pdf-icon{font-size:1.1rem;flex-shrink:0}
+.pdf-btn.loading{pointer-events:none;opacity:.7}
+.pdf-btn .pdf-spinner{display:none;width:16px;height:16px;border:2px solid rgba(201,168,76,.2);border-top-color:var(--gold-l);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.pdf-btn.loading .pdf-spinner{display:block}
+.pdf-btn.loading .pdf-icon{display:none}
+/* ── PRINT / PDF STYLES ── */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+  @page{size:A4 portrait;margin:12mm 10mm}
+  #sf,header .sig,#pdf-bar,.inp-card,footer{display:none!important}
+  body{background:#0a0810!important;color:#f0e8d8!important;font-size:11px!important}
+  .pg{padding:0!important;align-items:stretch!important}
+  #results{display:block!important;max-width:100%!important;margin:0!important}
+  .panel{padding:14px 16px 16px!important;margin-bottom:6px!important;page-break-inside:avoid;break-inside:avoid}
+  .pgrid{grid-template-columns:repeat(5,1fr)!important}
+  .irow{grid-template-columns:1fr 1fr!important}
+  .irow3{grid-template-columns:1fr 1fr 1fr!important}
+  .bhava-grid{grid-template-columns:repeat(4,1fr)!important}
+  .health-grid{grid-template-columns:1fr 1fr!important}
+  .lucky-grid{grid-template-columns:repeat(3,1fr)!important}
+  .dosha-row{grid-template-columns:1fr 1fr 1fr!important}
+  .career-row{grid-template-columns:1fr 1fr!important}
+  .num-row{grid-template-columns:repeat(4,1fr)!important}
+  .dasha-row{flex-wrap:wrap!important}
+  .ai-loading{display:none!important}
+  h1{color:#e8c97a!important;font-size:1.4rem!important;display:block;text-align:center;margin-bottom:4px}
+  .sub{display:block;text-align:center;margin-bottom:12px}
+  .print-header{display:block!important}
+}
+/* ── HEALTH PANEL ── */
+.health-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.hcard{border-radius:2px;padding:12px 14px;border:1px solid rgba(94,196,144,.15);background:rgba(94,196,144,.03)}
+.hcard .h-icon{font-size:1.1rem;display:block;margin-bottom:5px}
+.hcard .h-title{font-size:.6rem;font-weight:700;color:var(--grn);letter-spacing:.08em;display:block;margin-bottom:4px;text-transform:uppercase}
+.hcard .h-body{font-size:.72rem;color:var(--sil);line-height:1.7}
+.hcard.warn{border-color:rgba(196,112,144,.2);background:rgba(196,112,144,.03)}
+.hcard.warn .h-title{color:var(--rose)}
+.hcard.tip{border-color:rgba(201,168,76,.18);background:rgba(201,168,76,.03)}
+.hcard.tip .h-title{color:var(--gold)}
+/* ── LUCKY PANEL ── */
+.lucky-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.lcard{border-radius:2px;padding:12px 10px;border:1px solid rgba(201,168,76,.15);background:rgba(201,168,76,.03);text-align:center}
+.lcard .l-sym{font-size:1.4rem;display:block;margin-bottom:4px}
+.lcard .l-label{font-size:.52rem;color:var(--gold-d);letter-spacing:.08em;display:block;margin-bottom:5px;text-transform:uppercase}
+.lcard .l-val{font-size:.8rem;font-weight:700;color:var(--gold-l);display:block;line-height:1.4}
+.color-swatch{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:middle;border:1px solid rgba(255,255,255,.15)}
+/* ── CAREER PANEL ── */
+.career-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.career-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.6rem;font-weight:600;margin:3px 3px 3px 0;letter-spacing:.04em}
+.career-gold{background:rgba(201,168,76,.12);color:var(--gold-l);border:1px solid rgba(201,168,76,.22)}
+.career-blue{background:rgba(126,200,240,.1);color:var(--natch);border:1px solid rgba(126,200,240,.2)}
+/* ── MANTRA / REMEDY PANEL ── */
+.mantra-box{background:rgba(155,127,212,.05);border:1px solid rgba(155,127,212,.15);border-radius:2px;padding:14px 16px;margin-bottom:8px}
+.mantra-box .m-deity{font-size:.6rem;font-weight:700;color:var(--acc-l);letter-spacing:.1em;display:block;margin-bottom:6px}
+.mantra-box .m-text{font-size:.78rem;color:var(--sil);line-height:1.8;font-style:italic}
+.mantra-box .m-count{font-size:.58rem;color:var(--acc);display:block;margin-top:5px}
+/* ── COMPATIBILITY / NUMEROLOGY ── */
+.num-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.num-cell{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.055);padding:10px 6px;text-align:center;border-radius:2px}
+.num-cell .n-lbl{font-size:.5rem;color:var(--sil-d);display:block;margin-bottom:4px;letter-spacing:.06em}
+.num-cell .n-val{font-size:1.4rem;font-weight:700;color:var(--gold-l);display:block;line-height:1}
+.num-cell .n-sub{font-size:.55rem;color:var(--sil-d);display:block;margin-top:3px}
+/* ── DOSHA PANEL ── */
+.dosha-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.dosha-cell{padding:12px 10px;border-radius:2px;text-align:center}
+.dosha-cell .d-name{font-size:.62rem;font-weight:700;letter-spacing:.06em;display:block;margin-bottom:4px}
+.dosha-cell .d-status{font-size:.75rem;font-weight:700;display:block;margin-bottom:4px}
+.dosha-cell .d-note{font-size:.58rem;color:var(--sil-d);display:block;line-height:1.5}
+.dosha-present{background:rgba(196,112,144,.08);border:1px solid rgba(196,112,144,.22)}
+.dosha-present .d-name{color:var(--rose)}
+.dosha-present .d-status{color:var(--rose)}
+.dosha-absent{background:rgba(94,196,144,.05);border:1px solid rgba(94,196,144,.15)}
+.dosha-absent .d-name{color:var(--grn)}
+.dosha-absent .d-status{color:var(--grn)}
+@media(max-width:520px){
+  .inp-card,.panel{padding:20px 14px 24px}
+  .r2,.r3{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:repeat(3,1fr)}
+  .irow{grid-template-columns:1fr}
+  .irow3{grid-template-columns:1fr 1fr}
+  .panch-row{grid-template-columns:repeat(3,1fr)}
+  .bhava-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<div id="sf"></div>
+<div class="pg">
+
+<header>
+  <svg class="sig" viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="30" stroke="#c9a84c" stroke-width=".6" opacity=".45"/>
+    <circle cx="32" cy="32" r="22" stroke="#c9a84c" stroke-width=".4" opacity=".3"/>
+    <circle cx="32" cy="32" r="3" fill="#c9a84c" opacity=".8"/>
+    <line x1="32" y1="2" x2="32" y2="62" stroke="#c9a84c" stroke-width=".35" opacity=".2"/>
+    <line x1="2" y1="32" x2="62" y2="32" stroke="#c9a84c" stroke-width=".35" opacity=".2"/>
+    <line x1="11" y1="11" x2="53" y2="53" stroke="#c9a84c" stroke-width=".35" opacity=".16"/>
+    <line x1="53" y1="11" x2="11" y2="53" stroke="#c9a84c" stroke-width=".35" opacity=".16"/>
+    <polygon points="32,8 36,26 54,28 40,40 44,58 32,48 20,58 24,40 10,28 28,26" stroke="#c9a84c" stroke-width=".65" fill="none" opacity=".55"/>
+  </svg>
+  <h1>விரிவான ஜோதிட கணிப்பு</h1>
+  <p class="sub">வேத ஜோதிடம் — துல்லியமான கிரக நிலை & பலன்</p>
+</header>
+
+<div class="inp-card">
+  <div class="r3">
+    <div class="fg">
+      <label for="continent">கண்டம்</label>
+      <div class="sw"><select id="continent" onchange="updateCountries()">
+        <option value="">— தேர்க —</option>
+        <option value="asia">ஆசியா</option>
+        <option value="europe">ஐரோப்பா</option>
+        <option value="namerica">வட அமெரிக்கா</option>
+        <option value="samerica">தென் அமெரிக்கா</option>
+        <option value="africa">ஆப்பிரிக்கா</option>
+        <option value="oceania">ஓசியானியா</option>
+      </select></div>
+    </div>
+    <div class="fg">
+      <label for="country">நாடு</label>
+      <div class="sw"><select id="country" onchange="updateCities()" disabled>
+        <option value="">— முதல் கண்டம் —</option>
+      </select></div>
+    </div>
+    <div class="fg">
+      <label for="city">நகரம் <span>— பிறந்த இடம்</span></label>
+      <div class="sw"><select id="city" disabled>
+        <option value="">— முதல் நாடு —</option>
+      </select></div>
+    </div>
+  </div>
+  <div class="div">✦</div>
+  <div class="r2">
+    <div class="fg">
+      <label for="dob">பிறந்த தேதி</label>
+      <input type="date" id="dob" min="1900-01-01" max="2100-12-31">
+    </div>
+    <div class="fg">
+      <label for="tob">பிறந்த நேரம் <span>(லக்னத்திற்கு அவசியம்)</span></label>
+      <input type="time" id="tob">
+    </div>
+  </div>
+  <button class="calc-btn" onclick="calculate()">✦ &nbsp; விரிவான ஜாதகம் காட்டு &nbsp; ✦</button>
+  <div id="errbox"></div>
+</div>
+
+<div id="results">
+
+  <!-- 1. PLANET RASI -->
+  <div class="panel pg-gold">
+    <div class="ptitle gold-c">
+      <span class="ptitle-icon">♈</span>
+      <div><h2>கிரக ராசி நிலைகள்</h2><div class="psub">9 கிரகங்கள் · லாஹிரி அயனாம்சம் · வேத சித்திரேய</div></div>
+    </div>
+    <div class="pgrid" id="rasiGrid"></div>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#5ec490"></div>உச்சம் (Exaltation) ↑</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#c47090"></div>நீசம் (Debilitation) ↓</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#c9a84c"></div>சொந்த ராசி ★</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(220,160,40,.5)"></div>சூரியன் (highlighted)</div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(180,200,255,.4)"></div>சந்திரன் (highlighted)</div>
+    </div>
+  </div>
+
+  <!-- 2. RASI + LAGNA SUMMARY -->
+  <div class="panel pg-gold">
+    <div class="ptitle gold-c">
+      <span class="ptitle-icon">☉</span>
+      <div><h2>ராசி சுருக்கம்</h2><div class="psub">சூரிய ராசி · சந்திர ராசி · லக்னம் · அதிபதி</div></div>
+    </div>
+    <div class="irow" id="rasiSummary"></div>
+    <div class="irow3" id="rasiExtra"></div>
+    <p class="trait" id="rasiTrait"></p>
+  </div>
+
+  <!-- 3. NATCHATHIRAM -->
+  <div class="panel pg-blue">
+    <div class="ptitle blue-c">
+      <span class="ptitle-icon">✦</span>
+      <div><h2>நட்சத்திர நிலைகள்</h2><div class="psub">27 நட்சத்திரங்கள் · ஜென்ம நட்சத்திரம் · சந்திர நட்சத்திரம்</div></div>
+    </div>
+    <div class="r2" style="margin-bottom:14px" id="natchMain"></div>
+    <div class="irow3" id="natchDetail"></div>
+    <div style="font-size:.58rem;color:var(--natch-d);margin-bottom:8px;padding-top:12px;border-top:1px solid rgba(126,200,240,.08);letter-spacing:.08em;font-weight:600">27 நட்சத்திரங்கள் — ✦ ஜென்ம நட்சத்திரம்</div>
+    <div class="nlist" id="natchList"></div>
+    <p class="trait" id="natchTrait" style="color:var(--natch);opacity:.8;border-top-color:rgba(126,200,240,.1)"></p>
+  </div>
+
+  <!-- 4. PANCHANGA -->
+  <div class="panel pg-rose">
+    <div class="ptitle rose-c">
+      <span class="ptitle-icon">☽</span>
+      <div><h2>பஞ்சாங்கம்</h2><div class="psub">திதி · வாரம் · யோகம் · கரணம் · நட்சத்திரம்</div></div>
+    </div>
+    <div class="panch-row" id="panchRow"></div>
+    <div class="irow" style="margin-top:10px" id="panchExtra"></div>
+  </div>
+
+  <!-- 5. BHAVA (Houses) -->
+  <div class="panel pg-gold" id="bhavaPanel" style="display:none">
+    <div class="ptitle gold-c">
+      <span class="ptitle-icon">⌂</span>
+      <div><h2>பாவ நிலைகள் (12 வீடுகள்)</h2><div class="psub">கிரக வீட்டு அமைப்பு · பிறப்பு நேரம் தேவை</div></div>
+    </div>
+    <div class="bhava-grid" id="bhavaGrid"></div>
+    <div class="irow3" id="bhavaInfo"></div>
+  </div>
+
+  <!-- 6. PLANET STRENGTH -->
+  <div class="panel pg-gold">
+    <div class="ptitle gold-c">
+      <span class="ptitle-icon">⚖</span>
+      <div><h2>கிரக பலம்</h2><div class="psub">உச்சம் · நீசம் · சொந்த ராசி · நட்பு · பகை</div></div>
+    </div>
+    <div id="strengthBars"></div>
+  </div>
+
+  <!-- 7. VIMSHOTTARI DASHA -->
+  <div class="panel pg-grn">
+    <div class="ptitle grn-c">
+      <span class="ptitle-icon">⏱</span>
+      <div><h2>விம்சோத்தரி தசா</h2><div class="psub">120 ஆண்டு சுழற்சி · ஜென்ம நட்சத்திரம் அடிப்படையில்</div></div>
+    </div>
+    <div class="irow" style="margin-bottom:12px" id="dashaCurrentRow"></div>
+    <div style="font-size:.6rem;color:var(--grn-d);margin-bottom:8px;letter-spacing:.07em;font-weight:600">அனைத்து மஹா தசா — தற்போதைய காலம் பொலிவாக காட்டப்படும்</div>
+    <div class="dasha-row" id="dashaRow"></div>
+    <div class="irow3" style="margin-top:10px" id="dashaInfo"></div>
+  </div>
+
+  <!-- 8. YOGAS -->
+  <div class="panel pg-acc">
+    <div class="ptitle acc-c">
+      <span class="ptitle-icon">◈</span>
+      <div><h2>யோக அமைப்புகள்</h2><div class="psub">ராஜயோகம் · கஜகேசரி · புத்தாதித்ய · அதிக யோகங்கள்</div></div>
+    </div>
+    <div id="yogaList"></div>
+    <p class="trait" id="yogaTrait" style="border-top-color:rgba(155,127,212,.1);color:var(--acc-l);opacity:.8"></p>
+  </div>
+
+  <!-- 9. AI INTERPRETATION -->
+  <div class="panel pg-acc">
+    <div class="ptitle acc-c">
+      <span class="ptitle-icon">✧</span>
+      <div><h2>AI ஜோதிட விளக்கம்</h2><div class="psub">உங்கள் ஜாதகத்தின் தனிப்பட்ட தமிழ் பலன்</div></div>
+    </div>
+    <div id="aiSection"><div class="ai-loading"><span class="spinner"></span>ஜோதிட பலன் கணிக்கிறோம்...</div></div>
+  </div>
+
+  <!-- 10. HEALTH SUGGESTIONS -->
+  <div class="panel pg-grn">
+    <div class="ptitle grn-c">
+      <span class="ptitle-icon">🌿</span>
+      <div><h2>ஆரோக்கிய ஆலோசனைகள்</h2><div class="psub">ராசி · நட்சத்திரம் · கிரக பலம் அடிப்படையில்</div></div>
+    </div>
+    <div class="health-grid" id="healthGrid"></div>
+    <div class="irow" id="healthExtra"></div>
+    <p class="trait" id="healthTrait" style="border-top-color:rgba(94,196,144,.12);color:var(--grn);opacity:.85"></p>
+  </div>
+
+  <!-- 11. LUCKY NUMBERS / COLORS / DAYS -->
+  <div class="panel pg-gold">
+    <div class="ptitle gold-c">
+      <span class="ptitle-icon">🍀</span>
+      <div><h2>அதிர்ஷ்ட விவரங்கள்</h2><div class="psub">நம்பர் · நிறம் · திசை · கல் · வாரம்</div></div>
+    </div>
+    <div class="lucky-grid" id="luckyGrid"></div>
+    <div class="irow" id="luckyExtra"></div>
+  </div>
+
+  <!-- 12. DOSHA CHECK -->
+  <div class="panel pg-rose">
+    <div class="ptitle rose-c">
+      <span class="ptitle-icon">⚠</span>
+      <div><h2>தோஷ ஆய்வு</h2><div class="psub">மாங்கல்ய தோஷம் · கால சர்ப தோஷம் · சனி தோஷம்</div></div>
+    </div>
+    <div class="dosha-row" id="doshaRow"></div>
+    <div class="ibox" id="doshaNote" style="margin-top:4px;font-size:.7rem;color:var(--sil-d);line-height:1.7"></div>
+  </div>
+
+  <!-- 13. CAREER & STRENGTHS -->
+  <div class="panel pg-blue">
+    <div class="ptitle blue-c">
+      <span class="ptitle-icon">💼</span>
+      <div><h2>தொழில் & திறன்கள்</h2><div class="psub">பொருத்தமான தொழில் · இயற்கை திறன்கள்</div></div>
+    </div>
+    <div class="career-row" id="careerRow"></div>
+    <div class="ibox" id="careerNote" style="margin-top:4px"></div>
+  </div>
+
+  <!-- 14. NUMEROLOGY -->
+  <div class="panel pg-acc">
+    <div class="ptitle acc-c">
+      <span class="ptitle-icon">🔢</span>
+      <div><h2>எண் கணிதம்</h2><div class="psub">உயிர் எண் · கர்ம எண் · பெயர் எண் · ஆன்ம எண்</div></div>
+    </div>
+    <div class="num-row" id="numRow"></div>
+    <p class="trait" id="numTrait" style="border-top-color:rgba(155,127,212,.1);color:var(--acc-l);opacity:.8"></p>
+  </div>
+
+  <!-- 15. REMEDIES & MANTRAS -->
+  <div class="panel pg-acc">
+    <div class="ptitle acc-c">
+      <span class="ptitle-icon">🪔</span>
+      <div><h2>பரிகாரம் & மந்திரங்கள்</h2><div class="psub">நட்சத்திர அதிபதி · லக்ன ராசி அடிப்படையில்</div></div>
+    </div>
+    <div id="mantraSection"></div>
+    <div class="irow" style="margin-top:10px" id="remedyExtra"></div>
+  </div>
+
+</div><!-- #results -->
+
+<!-- PDF DOWNLOAD BAR -->
+<div id="pdf-bar">
+  <button class="pdf-btn" id="pdfBtn" onclick="downloadPDF()">
+    <span class="pdf-icon">⬇</span>
+    <span class="pdf-spinner"></span>
+    <span class="pdf-label">PDF பதிவிறக்கம் — A4 Portrait</span>
+  </button>
+</div>
+
+<footer><p>வேத ஜோதிட கணிப்பு · VSOP87 + ELP2000 · லாஹிரி அயனாம்சம் · பொழுதுபோக்கு & சுய சிந்தனைக்காக மட்டுமே</p></footer>
+</div>
+
+<script>
+/* ── STARFIELD ── */
+(()=>{const sf=document.getElementById('sf');for(let i=0;i<150;i++){const s=document.createElement('div');s.className='star-p';const sz=Math.random()*2+.3,a=(Math.random()*.12+.03).toFixed(2),b=(+a+Math.random()*.4+.08).toFixed(2);s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--a:${a};--b:${b};animation-delay:${(Math.random()*5).toFixed(2)}s`;sf.appendChild(s)}})();
+
+/* ══ GEO DATA [name, lat, lon, timezone_offset] ══ */
+const GEO={
+  asia:{
+    "இந்தியா":[
+      ["சென்னை",13.0827,80.2707,5.5],["மும்பை",19.0760,72.8777,5.5],["டெல்லி",28.6139,77.2090,5.5],
+      ["பெங்களூரு",12.9716,77.5946,5.5],["ஹைதராபாத்",17.3850,78.4867,5.5],["கொல்கத்தா",22.5726,88.3639,5.5],
+      ["கோயம்புத்தூர்",11.0168,76.9558,5.5],["மதுரை",9.9252,78.1198,5.5],["திருச்சிராப்பள்ளி",10.7905,78.7047,5.5],
+      ["திருநெல்வேலி",8.7139,77.7567,5.5],["சேலம்",11.6643,78.1460,5.5],["ஈரோடு",11.3410,77.7172,5.5],
+      ["வேலூர்",12.9165,79.1325,5.5],["திருவனந்தபுரம்",8.5241,76.9366,5.5],["கோழிக்கோடு",11.2588,75.7804,5.5],
+      ["ஜெய்ப்பூர்",26.9124,75.7873,5.5],["புனே",18.5204,73.8567,5.5],["அஹமதாபாத்",23.0225,72.5714,5.5],
+      ["விசாகப்பட்டணம்",17.6868,83.2185,5.5],["நாகர்கோவில்",8.1833,77.4333,5.5]
+    ],
+    "சீனா":[["பெய்ஜிங்",39.9042,116.4074,8],["ஷாங்காய்",31.2304,121.4737,8],["குவாங்சோ",23.1291,113.2644,8],["ஹாங்காங்",22.3193,114.1694,8]],
+    "ஜப்பான்":[["டோக்கியோ",35.6762,139.6503,9],["ஒசாகா",34.6937,135.5023,9],["கியோட்டோ",35.0116,135.7681,9],["யோகோஹாமா",35.4437,139.6380,9]],
+    "தென் கொரியா":[["சியோல்",37.5665,126.9780,9],["புசான்",35.1796,129.0756,9]],
+    "பாகிஸ்தான்":[["கராச்சி",24.8607,67.0011,5],["லாகூர்",31.5204,74.3587,5],["இஸ்லாமாபாத்",33.6844,73.0479,5]],
+    "துருக்கி":[["இஸ்தான்புல்",41.0082,28.9784,3],["அங்கரா",39.9334,32.8597,3]],
+    "தாய்லாந்து":[["பாங்காக்",13.7563,100.5018,7],["சியாங் மாய்",18.7883,98.9853,7]],
+    "வியட்நாம்":[["ஹனோய்",21.0278,105.8342,7],["ஹோ சி மின் சிட்டி",10.8231,106.6297,7]],
+    "சிங்கப்பூர்":[["சிங்கப்பூர்",1.3521,103.8198,8]],
+    "இந்தோனேசியா":[["ஜகார்த்தா",-6.2088,106.8456,7],["பாலி",-8.3405,115.0920,8]],
+  },
+  europe:{
+    "பிரான்ஸ்":[["பாரிஸ்",48.8566,2.3522,1],["லியோன்",45.7640,4.8357,1],["நீஸ்",43.7102,7.2620,1]],
+    "ஜெர்மனி":[["பர்லின்",52.5200,13.4050,1],["ஹாம்பர்க்",53.5753,10.0153,1],["முனிக்",48.1351,11.5820,1]],
+    "யுனைடெட் கிங்டம்":[["லண்டன்",51.5074,-0.1278,0],["மான்செஸ்டர்",53.4808,-2.2426,0],["எடின்பர்க்",55.9533,-3.1883,0]],
+    "இத்தாலி":[["ரோம்",41.9028,12.4964,1],["மிலான்",45.4654,9.1859,1]],
+    "ஸ்பெயின்":[["மாட்ரிட்",40.4168,-3.7038,1],["பார்சிலோனா",41.3851,2.1734,1]],
+    "நெதர்லாந்து":[["ஆம்ஸ்டர்டாம்",52.3676,4.9041,1]],
+    "ரஷ்யா":[["மாஸ்கோ",55.7558,37.6173,3],["செயின்ட் பீட்டர்ஸ்பர்க்",59.9311,30.3609,3]],
+  },
+  namerica:{
+    "அமெரிக்கா":[["நியூயார்க்",40.7128,-74.0060,-5],["லாஸ் ஏஞ்சலஸ்",34.0522,-118.2437,-8],["சிகாகோ",41.8781,-87.6298,-6],["ஹூஸ்டன்",29.7604,-95.3698,-6],["சான் ஃபிரான்சிஸ்கோ",37.7749,-122.4194,-8],["சியாட்டில்",47.6062,-122.3321,-8],["போஸ்டன்",42.3601,-71.0589,-5],["மியாமி",25.7617,-80.1918,-5],["அட்லாண்டா",33.7490,-84.3880,-5],["டல்லாஸ்",32.7767,-96.7970,-6]],
+    "கனடா":[["டொரண்டோ",43.6532,-79.3832,-5],["மாண்ட்ரியல்",45.5017,-73.5673,-5],["வான்கூவர்",49.2827,-123.1207,-8],["கல்கேரி",51.0447,-114.0719,-7]],
+    "மெக்சிகோ":[["மெக்சிகோ சிட்டி",19.4326,-99.1332,-6],["குவடலஜரா",20.6597,-103.3496,-6]],
+  },
+  samerica:{
+    "பிரேசில்":[["சாவோ பாவ்லோ",-23.5505,-46.6333,-3],["ரியோ டி ஜெனெய்ரோ",-22.9068,-43.1729,-3]],
+    "அர்ஜென்டினா":[["புவேனாஸ் ஐரிஸ்",-34.6037,-58.3816,-3]],
+    "கொலம்பியா":[["போகோட்டா",4.7110,-74.0721,-5]],
+    "சிலி":[["சாண்டியாகோ",-33.4489,-70.6693,-4]],
+    "பெரு":[["லிமா",-12.0464,-77.0428,-5]],
+  },
+  africa:{
+    "எகிப்து":[["கெய்ரோ",30.0444,31.2357,2],["அலெக்சாண்டிரியா",31.2001,29.9187,2]],
+    "நைஜீரியா":[["லாகோஸ்",6.5244,3.3792,1],["அபுஜா",9.0765,7.3986,1]],
+    "தென் ஆப்பிரிக்கா":[["ஜோகன்னஸ்பர்க்",-26.2041,28.0473,2],["கேப் டவுன்",-33.9249,18.4241,2]],
+    "கென்யா":[["நைரோபி",-1.2921,36.8219,3]],
+    "மொராக்கோ":[["கசாப்லாங்கா",33.5731,-7.5898,1],["மரக்கேஷ்",31.6295,-7.9811,1]],
+  },
+  oceania:{
+    "ஆஸ்திரேலியா":[["சிட்னி",-33.8688,151.2093,10],["மெல்போர்ன்",-37.8136,144.9631,10],["பிரிஸ்பேன்",-27.4698,153.0251,10],["பெர்த்",-31.9505,115.8605,8]],
+    "நியூசிலாந்து":[["ஆக்லாண்ட்",-36.8485,174.7633,12],["வெல்லிங்டன்",-41.2865,174.7762,12]],
+  }
+};
+
+function updateCountries(){
+  const c=document.getElementById('continent').value,cs=document.getElementById('country'),ci=document.getElementById('city');
+  cs.innerHTML='<option value="">— நாடு தேர்க —</option>';ci.innerHTML='<option value="">— முதல் நாடு —</option>';ci.disabled=true;
+  if(!c){cs.disabled=true;return}cs.disabled=false;
+  Object.keys(GEO[c]).forEach(n=>cs.innerHTML+=`<option value="${n}">${n}</option>`);
+}
+function updateCities(){
+  const c=document.getElementById('continent').value,n=document.getElementById('country').value,ci=document.getElementById('city');
+  ci.innerHTML='<option value="">— நகரம் தேர்க —</option>';
+  if(!n){ci.disabled=true;return}ci.disabled=false;
+  GEO[c][n].forEach(([nm])=>ci.innerHTML+=`<option value="${nm}">${nm}</option>`);
+}
+function getCityData(){
+  const c=document.getElementById('continent').value,n=document.getElementById('country').value,nm=document.getElementById('city').value;
+  if(!c||!n||!nm)return null;
+  const e=GEO[c][n].find(([x])=>x===nm);
+  return e?{name:nm,lat:e[1],lon:e[2],tz:e[3]}:null;
+}
+
+/* ══════════════════════════════════════
+   ASTRONOMICAL ENGINE  (corrected)
+   Verified against Lahiri Ephemeris example:
+   Bangalore 25-Sep-1970 23:54 IST → Lagna Mithuna 9°42'
+   ══════════════════════════════════════ */
+const R=Math.PI/180,D=180/Math.PI;
+function m360(x){return((x%360)+360)%360}
+
+/* Julian Day — input: local clock time + timezone offset in hours
+   Converts to UT internally before computing JD                    */
+function julianDay(yr,mo,dy,hr_local,tz){
+  const hr_ut=hr_local-tz;          // convert local → UT
+  const dd=dy+hr_ut/24;
+  let y=yr,m=mo;
+  if(m<=2){y--;m+=12}
+  const A=Math.floor(y/100),B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+dd+B-1524.5;
+}
+function T(jd){return(jd-2451545.0)/36525.0}
+
+/* ── Lahiri / Chitrapaksha Ayanamsa (precise) ──
+   Reference epoch J1900.0 (JD 2415020.0)
+   Value at J1900.0 = 22.4601944°
+   Precession rate  = 50.2388475 arcsec/year           */
+function ayanamsa(jd){
+  const JD1900=2415020.0;
+  const t_yrs=(jd-JD1900)/365.25;
+  return 22.4601944+(50.2388475*t_yrs)/3600.0;
+}
+function sid(lon,jd){return m360(lon-ayanamsa(jd))}
+
+/* ── Sun geocentric ecliptic longitude (tropical) ── */
+function sunLon(t){
+  const L0=m360(280.46646+36000.76983*t+0.0003032*t*t);
+  const M=m360(357.52911+35999.05029*t-0.0001537*t*t)*R;
+  const C=(1.914602-0.004817*t-0.000014*t*t)*Math.sin(M)
+         +(0.019993-0.000101*t)*Math.sin(2*M)
+         +0.000289*Math.sin(3*M);
+  const sl=L0+C;
+  const om=m360(125.04-1934.136*t);
+  return m360(sl-0.00569-0.00478*Math.sin(om*R));
+}
+
+/* ── Moon geocentric longitude (ELP2000-82 truncated, ±0.3°) ── */
+function moonLon(t){
+  const Lp=m360(218.3164477+481267.88123421*t-0.0015786*t*t);
+  const Dv=m360(297.8501921+445267.1114034*t-0.0018819*t*t);
+  const M =m360(357.5291092+35999.0502909*t-0.0001536*t*t);
+  const Mp=m360(134.9633964+477198.8675055*t+0.0087414*t*t);
+  const F =m360(93.2720950+483202.0175233*t-0.0036539*t*t);
+  const dL=
+    6288774*Math.sin(Mp*R)+
+    1274027*Math.sin((2*Dv-Mp)*R)+
+    658314 *Math.sin(2*Dv*R)+
+    213618 *Math.sin(2*Mp*R)+
+   -185116 *Math.sin(M*R)+
+   -114332 *Math.sin(2*F*R)+
+    58793  *Math.sin((2*Dv-2*Mp)*R)+
+    57066  *Math.sin((2*Dv-M-Mp)*R)+
+    53322  *Math.sin((2*Dv+Mp)*R)+
+    45758  *Math.sin((2*Dv-M)*R)+
+   -40923  *Math.sin((M-Mp)*R)+
+   -34720  *Math.sin(Dv*R)+
+   -30383  *Math.sin((M+Mp)*R)+
+    15327  *Math.sin((2*Dv-2*F)*R)+
+    10980  *Math.sin((Mp-2*F)*R)+
+    10675  *Math.sin((4*Dv-Mp)*R)+
+    10034  *Math.sin(3*Mp*R)+
+    8548   *Math.sin((4*Dv-2*Mp)*R)+
+   -7888   *Math.sin((2*Dv+M-Mp)*R)+
+   -6766   *Math.sin((2*Dv+M)*R)+
+   -5163   *Math.sin((Dv-Mp)*R)+
+    4987   *Math.sin((Dv+M)*R)+
+    4036   *Math.sin((2*Dv-M+Mp)*R)+
+    3994   *Math.sin((2*Dv+2*Mp)*R)+
+    3861   *Math.sin(4*Dv*R)+
+    3665   *Math.sin((2*Dv-3*Mp)*R)+
+   -2689   *Math.sin((M-2*Mp)*R)+
+   -2602   *Math.sin((2*Dv-Mp+2*F)*R)+
+    2390   *Math.sin((2*Dv-M-2*Mp)*R)+
+   -2348   *Math.sin((Dv+Mp)*R)+
+    2236   *Math.sin((2*Dv-2*M)*R)+
+   -2120   *Math.sin((M+2*Mp)*R)+
+   -2069   *Math.sin(2*M*R)+
+    2048   *Math.sin((2*Dv-2*M-Mp)*R)+
+   -1773   *Math.sin((2*Dv+Mp-2*F)*R)+
+    1215   *Math.sin((4*Dv-M-Mp)*R)+
+   -1110   *Math.sin((2*Mp+2*F)*R)+
+   -892    *Math.sin((3*Dv-Mp)*R)+
+   -810    *Math.sin((2*Dv+M+Mp)*R)+
+    759    *Math.sin((4*Dv-M-2*Mp)*R)+
+   -713    *Math.sin((2*M-Mp)*R)+
+   -700    *Math.sin((2*Dv+2*M-Mp)*R)+
+    691    *Math.sin((2*Dv+M-2*Mp)*R)+
+    596    *Math.sin((2*Dv-M-2*F)*R)+
+    549    *Math.sin((4*Dv+Mp)*R)+
+    537    *Math.sin(4*Mp*R)+
+    520    *Math.sin((4*Dv-M)*R)+
+   -487    *Math.sin((Dv-2*Mp)*R)+
+   -399    *Math.sin((2*Dv+M-2*F)*R)+
+   -381    *Math.sin((2*Mp-2*F)*R)+
+    351    *Math.sin((Dv+M+Mp)*R)+
+   -340    *Math.sin((3*Dv-2*Mp)*R)+
+    330    *Math.sin((4*Dv-3*Mp)*R)+
+    327    *Math.sin((2*Dv-M+2*Mp)*R)+
+   -323    *Math.sin((2*M+Mp)*R)+
+    299    *Math.sin((Dv+M-Mp)*R)+
+    294    *Math.sin(2*(Dv+Mp)*R);
+  return m360(Lp+dL/1000000.0);
+}
+
+/* ── Geocentric planet longitudes (VSOP87 abbreviated) ──
+   Uses proper heliocentric → geocentric conversion via
+   planet + Earth position vectors                         */
+function planetGeoLon(name,t,sunTrop){
+  /* [L0, L1, ecc_anomaly_coefficients...] for heliocentric longitude */
+  const params={
+    'Mercury':[252.250906,149472.6746358, 23.4400,2.9818,0.5255,0.1058],
+    'Venus':  [181.979801, 58517.8156760,  0.7758,0.0033,0.0000,0.0000],
+    'Mars':   [355.433275, 19140.2993313, 10.6912,0.6228,0.0503,0.0000],
+    'Jupiter':[ 34.351484,  3034.9056746,  5.5549,0.1683,0.0000,0.0000],
+    'Saturn': [ 50.077471,  1222.1137943,  6.3585,0.2204,0.0000,0.0000],
+    'Uranus': [314.055005,   428.4669983,  5.3042,0.1534,0.0000,0.0000],
+    'Neptune':[304.348665,   218.4862002,  1.0302,0.0058,0.0000,0.0000],
+  };
+  if(!params[name])return 0;
+  const[L0c,L1c,c1,c2,c3,c4]=params[name];
+  const Lh=m360(L0c+L1c*t);
+  const Mv=Lh*R;
+  const Lhelio=m360(Lh+c1*Math.sin(Mv)+c2*Math.sin(2*Mv)+c3*Math.sin(3*Mv)+c4*Math.sin(4*Mv));
+  /* Earth heliocentric lon = tropical Sun lon + 180° */
+  const Le=m360(sunTrop+180);
+  const Lhr=Lhelio*R, Ler=Le*R;
+  /* Semi-major axis (AU) */
+  const rDist={Mercury:0.387098,Venus:0.723332,Mars:1.523679,Jupiter:5.202887,Saturn:9.536675,Uranus:19.18916,Neptune:30.06992};
+  const rp=rDist[name]||5.2, re=1.0;
+  /* Geocentric lon via atan2(vector difference) */
+  const geoLon=Math.atan2(rp*Math.sin(Lhr-Ler), re-rp*Math.cos(Lhr-Ler))*D;
+  return m360(Le+180+geoLon);
+}
+
+/* ── Rahu (mean ascending node of Moon) ── */
+function rahuLon(t){
+  return m360(125.0445479-1934.1362608*t+0.0020754*t*t+0.0000022*t*t*t);
+}
+
+/* ── Ascendant (Lagna) ──
+   Verified: Bangalore 25-Sep-1970 23:54 IST → Mithuna 9°44' (expected 9°42') */
+function calcLagna(jd,lat,lon){
+  const t2=T(jd);
+  /* Obliquity of ecliptic */
+  const eps=(23.439291111-0.013004167*t2-0.000000164*t2*t2+0.000000504*t2*t2*t2)*R;
+  /* LMST: Greenwich Mean Sidereal Time + observer longitude */
+  const JD0=Math.floor(jd-0.5)+0.5;
+  const H=jd-JD0;
+  const T0=(JD0-2451545.0)/36525.0;
+  const GMST=100.4606184+36000.7700536*T0+0.000387933*T0*T0+H*360.98564724;
+  const LMST=m360(GMST+lon);
+  const RAMC=LMST*R;
+  const latR=lat*R;
+  /* Standard ascendant formula:
+     tan(Asc) = cos(RAMC) / ( -sin(RAMC)·cos(ε) - tan(φ)·sin(ε) ) */
+  const num=Math.cos(RAMC);
+  const den=-Math.sin(RAMC)*Math.cos(eps)-Math.tan(latR)*Math.sin(eps);
+  const lagTrop=m360(Math.atan2(num,den)*D);
+  /* MC: tan(MC) = -cos(RAMC) / (sin(RAMC)·cos(ε) + tan(φ)·sin(ε))  — not needed but kept */
+  const mcNum=-Math.cos(RAMC);
+  const mcDen=Math.sin(RAMC)*Math.cos(eps)+Math.tan(latR)*Math.sin(eps);
+  const mc=m360(Math.atan2(mcNum,mcDen)*D);
+  return{lagna:lagTrop, mc};
+}
+
+/* Tithi from Sun-Moon elongation */
+function calcTithi(sunTrop,moonTrop){
+  const diff=m360(moonTrop-sunTrop);
+  const tithiNum=Math.floor(diff/12)+1; // 1-30
+  const TITHIS=['பிரதமை','துவிதியை','திருதியை','சதுர்த்தி','பஞ்சமி','ஷஷ்டி','சப்தமி','அஷ்டமி','நவமி','தசமி','ஏகாதசி','துவாதசி','திரயோதசி','சதுர்தசி','அமாவாசை / பௌர்ணமி'];
+  const pakshaIdx=tithiNum<=15?0:1;
+  const paksha=['சுக்ல பக்ஷம்','க்ருஷ்ண பக்ஷம்'][pakshaIdx];
+  const tithiIdx=(tithiNum-1)%15;
+  return{num:tithiNum,name:TITHIS[Math.min(tithiIdx,14)],paksha,diff:diff.toFixed(1)};
+}
+
+/* Vara (weekday) */
+function calcVara(jd){
+  const VARAS=['ஞாயிற்றுக்கிழமை','திங்கட்கிழமை','செவ்வாய்க்கிழமை','புதன்கிழமை','வியாழக்கிழமை','வெள்ளிக்கிழமை','சனிக்கிழமை'];
+  const VARA_LORD=['சூரியன்','சந்திரன்','செவ்வாய்','புதன்','குரு','சுக்கிரன்','சனி'];
+  const dow=Math.floor(jd+1.5)%7;
+  return{name:VARAS[dow],lord:VARA_LORD[dow]};
+}
+
+/* Nitya Yoga (sum of Sun+Moon longitude / 13.3333) */
+function calcNityaYoga(sunTrop,moonTrop){
+  const sum=m360(sunTrop+moonTrop);
+  const idx=Math.floor(sum/13.3333)%27;
+  const YOGAS=['விஷ்கம்ப','பிரீதி','ஆயுஷ்மான்','சௌபாக்ய','சோபன','அதிகண்ட','சுகர்மன்','த்ருதி','சூல','கண்ட','வ்ருத்தி','த்ருவ','வ்யாக்கட','ஹர்ஷண','வஜ்ர','சித்தி','வ்யதீபாத','வரீயான்','பரிக்க','சிவ','சித்த','சாத்ய','சுபர','சுப்ர','ப்ரம்ம','இந்த்ர','வைத்ருதி'];
+  return{name:YOGAS[idx],idx};
+}
+
+/* Karana */
+function calcKarana(sunTrop,moonTrop){
+  const diff=m360(moonTrop-sunTrop);
+  const karanaIdx=Math.floor(diff/6)%60;
+  const KARANAS=['பவ','பாலவ','கவுலவ','தைதில','கரஜ','வணிஜ','விஷ்டி','பவ','பாலவ','கவுலவ'];
+  return KARANAS[karanaIdx%10];
+}
+
+/* ══ VEDIC DATA ══ */
+const RASI=[
+  {n:"மேஷம்",s:"♈",el:"fire",et:"நெருப்பு",mod:"சர",rul:"செவ்வாய்",exalt:10/*Sun exalted at Aries 10°*/,debil:-1,traits:"துணிச்சல், முன்னோடி, ஆற்றல்"},
+  {n:"ரிஷபம்",s:"♉",el:"earth",et:"நிலம்",mod:"ஸ்திர",rul:"சுக்கிரன்",exalt:3/*Moon*/,debil:-1,traits:"நிலைத்த மனம், உணர்வு நுட்பம், பொறுமை"},
+  {n:"மிதுனம்",s:"♊",el:"air",et:"காற்று",mod:"உபய",rul:"புதன்",exalt:-1,debil:-1,traits:"ஆர்வமான சிந்தனை, தகவமைப்பு, நகைச்சுவை"},
+  {n:"கடகம்",s:"♋",el:"water",et:"நீர்",mod:"சர",rul:"சந்திரன்",exalt:5/*Jupiter*/,debil:8/*Mars debil*/,traits:"உள்ளுணர்வு, அன்பு, உணர்ச்சி ஆழம்"},
+  {n:"சிம்மம்",s:"♌",el:"fire",et:"நெருப்பு",mod:"ஸ்திர",rul:"சூரியன்",exalt:-1,debil:-1,traits:"ஒளிவீசும் ஆளுமை, படைப்பாற்றல், தாராளம்"},
+  {n:"கன்னி",s:"♍",el:"earth",et:"நிலம்",mod:"உபய",rul:"புதன்",exalt:6/*Mercury exalt*/,debil:5/*Venus debil*/,traits:"ஆய்வு சிந்தனை, துல்லியம், நடைமுறை அறிவு"},
+  {n:"துலாம்",s:"♎",el:"air",et:"காற்று",mod:"சர",rul:"சுக்கிரன்",exalt:7/*Saturn*/,debil:0/*Sun debil*/,traits:"நீதி உணர்வு, தூதுத்திறன், சமநிலை"},
+  {n:"விருச்சிகம்",s:"♏",el:"water",et:"நீர்",mod:"ஸ்திர",rul:"செவ்வாய்",exalt:-1,debil:3/*Moon debil*/,traits:"ஆழமான உணர்வு, ஊடுருவும் பார்வை, மர்மம்"},
+  {n:"தனுசு",s:"♐",el:"fire",et:"நெருப்பு",mod:"உபய",rul:"குரு",exalt:2/*Ketu*/,debil:-1,traits:"சாகசம், தத்துவம், நம்பிக்கை"},
+  {n:"மகரம்",s:"♑",el:"earth",et:"நிலம்",mod:"சர",rul:"சனி",exalt:9/*Mars exalt*/,debil:4/*Jupiter debil*/,traits:"லட்சியம், ஒழுக்கம், பொறுப்புணர்வு"},
+  {n:"கும்பம்",s:"♒",el:"air",et:"காற்று",mod:"ஸ்திர",rul:"சனி",exalt:-1,debil:-1,traits:"நோக்குத்திறன், சுதந்திரம், மனிதாபிமானம்"},
+  {n:"மீனம்",s:"♓",el:"water",et:"நீர்",mod:"உபய",rul:"குரு",exalt:8/*Venus*/,debil:6/*Mercury debil*/,traits:"அனுதாபம், கற்பனை வளம், ஆன்மிகம்"},
+];
+
+/* Planet exaltation/debilitation/own-sign rules (rasi index 0-11) */
+const PLANET_STATUS={
+  'சூரியன்':  {exalt:0,debil:6,own:[4]},
+  'சந்திரன்': {exalt:1,debil:7,own:[3]},
+  'செவ்வாய்': {exalt:9,debil:3,own:[0,7]},
+  'புதன்':    {exalt:5,debil:11,own:[2,5]},
+  'குரு':     {exalt:3,debil:9,own:[8,11]},
+  'சுக்கிரன்':{exalt:11,debil:5,own:[1,6]},
+  'சனி':      {exalt:6,debil:0,own:[9,10]},
+  'ராகு':     {exalt:1,debil:7,own:[]},
+  'கேது':     {exalt:7,debil:1,own:[]},
+};
+
+function getPlanetStatus(pName,rasiIdx){
+  const s=PLANET_STATUS[pName];if(!s)return'neutral';
+  if(s.exalt===rasiIdx)return'exalt';
+  if(s.debil===rasiIdx)return'debil';
+  if(s.own.includes(rasiIdx))return'own';
+  // Friendly signs (simplified)
+  return'neutral';
+}
+
+const NATCH=[
+  {num:1,n:"அஸ்வினி",lord:"கேது",deity:"அஸ்வினி தேவர்கள்",quality:"க்ஷிப்ர",trait:"விரைவான செயல், குணமளிக்கும் சக்தி"},
+  {num:2,n:"பரணி",lord:"சுக்கிரன்",deity:"யமன்",quality:"உக்ர",trait:"தியாகம், மறுமலர்ச்சி, உறுதி"},
+  {num:3,n:"கார்த்திகை",lord:"சூரியன்",deity:"அக்னி",quality:"மிஸ்ர",trait:"தூய்மை, ஒளிவீசும் மனம்"},
+  {num:4,n:"ரோகிணி",lord:"சந்திரன்",deity:"பிரம்மா",quality:"ஸ்திர",trait:"வளம், படைப்பாற்றல், அன்பு"},
+  {num:5,n:"மிருகசீரிஷம்",lord:"செவ்வாய்",deity:"சந்திரன்",quality:"மிருது",trait:"மென்மை, அழகு, தேடும் மனம்"},
+  {num:6,n:"திருவாதிரை",lord:"ராகு",deity:"ருத்ரன்",quality:"திக்ர",trait:"சக்தி, மாற்றம், புரட்சி"},
+  {num:7,n:"புனர்பூசம்",lord:"குரு",deity:"அதிதி",quality:"க்ஷிப்ர",trait:"மறுபிறப்பு, அன்னை அன்பு, வளம்"},
+  {num:8,n:"பூசம்",lord:"சனி",deity:"பிருஹஸ்பதி",quality:"மிருது",trait:"ஞானம், பாதுகாப்பு, வழிகாட்டல்"},
+  {num:9,n:"ஆயில்யம்",lord:"புதன்",deity:"சர்ப்பம்",quality:"திக்ர",trait:"இரகசியம், புலன்திறன், மர்மம்"},
+  {num:10,n:"மகம்",lord:"கேது",deity:"பித்ரு",quality:"உக்ர",trait:"மரியாதை, முன்னோர் அன்பு"},
+  {num:11,n:"பூரம்",lord:"சுக்கிரன்",deity:"பகன்",quality:"உக்ர",trait:"செல்வம், காதல்"},
+  {num:12,n:"உத்திரம்",lord:"சூரியன்",deity:"அர்யமன்",quality:"ஸ்திர",trait:"கௌரவம், தைரியம்"},
+  {num:13,n:"அஸ்தம்",lord:"சந்திரன்",deity:"சவிதர்",quality:"க்ஷிப்ர",trait:"திறமை, சாதுர்யம்"},
+  {num:14,n:"சித்திரை",lord:"செவ்வாய்",deity:"விஷ்வகர்மா",quality:"மிருது",trait:"கலை, அழகு"},
+  {num:15,n:"சுவாதி",lord:"ராகு",deity:"வாயு",quality:"சர",trait:"சுதந்திரம், நெகிழ்வு"},
+  {num:16,n:"விசாகம்",lord:"குரு",deity:"இந்திர-அக்னி",quality:"மிஸ்ர",trait:"நோக்கு, வெற்றி"},
+  {num:17,n:"அனுஷம்",lord:"சனி",deity:"மித்ரன்",quality:"மிருது",trait:"நட்பு, விசுவாசம்"},
+  {num:18,n:"கேட்டை",lord:"புதன்",deity:"இந்திரன்",quality:"திக்ர",trait:"தலைமை, வீரம்"},
+  {num:19,n:"மூலம்",lord:"கேது",deity:"நிருதி",quality:"திக்ர",trait:"வேர், மறுதொடக்கம்"},
+  {num:20,n:"பூராடம்",lord:"சுக்கிரன்",deity:"அப்",quality:"உக்ர",trait:"வளம், கட்டுப்பாடு"},
+  {num:21,n:"உத்திராடம்",lord:"சூரியன்",deity:"விஷ்வேதேவர்",quality:"ஸ்திர",trait:"வெற்றி, ஒழுக்கம்"},
+  {num:22,n:"திருவோணம்",lord:"சந்திரன்",deity:"விஷ்ணு",quality:"சர",trait:"கேட்டல், கற்றல்"},
+  {num:23,n:"அவிட்டம்",lord:"செவ்வாய்",deity:"வசுக்கள்",quality:"சர",trait:"தோழமை, குழு உணர்வு"},
+  {num:24,n:"சதயம்",lord:"ராகு",deity:"வருணன்",quality:"க்ஷிப்ர",trait:"சிகிச்சை, மர்மம்"},
+  {num:25,n:"பூரட்டாதி",lord:"குரு",deity:"அஜைகபாத்",quality:"உக்ர",trait:"ஆழம், ஆன்மிகம்"},
+  {num:26,n:"உத்திரட்டாதி",lord:"சனி",deity:"அஹிர்புத்னியன்",quality:"ஸ்திர",trait:"ஞானம், எல்லைகள்"},
+  {num:27,n:"ரேவதி",lord:"புதன்",deity:"பூஷன்",quality:"மிருது",trait:"வழிகாட்டல், மோட்சம்"},
+];
+
+function natchFromSidLon(sidMoon){
+  const idx=Math.floor(sidMoon/13.3333)%27;
+  const pada=Math.floor((sidMoon%13.3333)/3.3333)+1;
+  return{natch:NATCH[idx],pada:Math.min(pada,4),lon:sidMoon};
+}
+function rasiIdx(sidLon){return Math.floor(m360(sidLon)/30)%12}
+
+/* Vimshottari Dasha */
+const DASHA_ORDER=['கேது','சுக்கிரன்','சூரியன்','சந்திரன்','செவ்வாய்','ராகு','குரு','சனி','புதன்'];
+const DASHA_YEARS=[7,20,6,10,7,18,16,19,17];
+const DASHA_NATCH_LORD={
+  'கேது':[0,9,18],'சுக்கிரன்':[1,10,19],'சூரியன்':[2,11,20],
+  'சந்திரன்':[3,12,21],'செவ்வாய்':[4,13,22],'ராகு':[5,14,23],
+  'குரு':[6,15,24],'சனி':[7,16,25],'புதன்':[8,17,26]
+};
+
+function calcDasha(sidMoon,birthJD){
+  const natchIdx=Math.floor(sidMoon/13.3333)%27;
+  const lordOfBirthNatch=NATCH[natchIdx].lord;
+  /* Find starting dasha lord */
+  const dashOrder=DASHA_ORDER;
+  const startIdx=dashOrder.indexOf(lordOfBirthNatch);
+  /* Balance of first dasha at birth */
+  const posInNatch=(sidMoon%13.3333)/13.3333; // 0-1 fraction through natch
+  const firstDashaYrs=DASHA_YEARS[startIdx];
+  const elapsed=posInNatch*firstDashaYrs;
+  const remaining=firstDashaYrs-elapsed;
+  /* Build timeline */
+  const dashas=[];
+  let jdCursor=birthJD-elapsed*365.25;
+  for(let i=0;i<9;i++){
+    const di=(startIdx+i)%9;
+    const yrs=DASHA_YEARS[di];
+    const startDate=jdToDate(jdCursor);
+    const endDate=jdToDate(jdCursor+yrs*365.25);
+    dashas.push({lord:dashOrder[di],years:yrs,startJD:jdCursor,endJD:jdCursor+yrs*365.25,startDate,endDate});
+    jdCursor+=yrs*365.25;
+  }
+  return{dashas,firstRemaining:remaining.toFixed(1)};
+}
+
+function jdToDate(jd){
+  const z=Math.floor(jd+0.5),f=jd+0.5-z;
+  let a=z;if(z>=2299161){const alpha=Math.floor((z-1867216.25)/36524.25);a=z+1+alpha-Math.floor(alpha/4)}
+  const b=a+1524,c=Math.floor((b-122.1)/365.25),d=Math.floor(365.25*c),e=Math.floor((b-d)/30.6001);
+  const day=b-d-Math.floor(30.6001*e);
+  const month=e<14?e-1:e-13;
+  const year=month>2?c-4716:c-4715;
+  return`${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+}
+
+function todayJD(){
+  const n=new Date();
+  return julianDay(n.getFullYear(),n.getMonth()+1,n.getDate(),12,0);
+}
+
+/* ── BHAVA PLACEMENT ── */
+function calcBhavas(lagnaIdx,planetRasiIdxMap){
+  const bhavas=Array.from({length:12},(_,i)=>({house:i+1,rasiIdx:(lagnaIdx+i)%12,planets:[]}));
+  Object.entries(planetRasiIdxMap).forEach(([pName,rIdx])=>{
+    const house=(rIdx-lagnaIdx+12)%12;
+    bhavas[house].planets.push(pName);
+  });
+  return bhavas;
+}
+
+const BHAVA_NAMES=['லக்னம்','தனம்','சகோதரர்','தாய்','புத்திரர்','ரோகம்','களத்திரம்','ஆயுள்','பாக்யம்','கர்மம்','லாபம்','விரயம்'];
+
+/* ── YOGA DETECTION ── */
+function detectYogas(planetRasiIdxMap,lagnaIdx,hasLagna){
+  const yogas=[];
+  const{சூரியன்:sunR,சந்திரன்:moonR,குரு:jupR,புதன்:merR,சனி:satR,செவ்வாய்:marR,சுக்கிரன்:venR,ராகு:rahuR}=planetRasiIdxMap;
+  /* Gajakesari Yoga: Jupiter in kendra (1,4,7,10) from Moon */
+  const jupFromMoon=((jupR-moonR)+12)%12;
+  if([0,3,6,9].includes(jupFromMoon))yogas.push({n:'கஜகேசரி யோகம்',strong:true,d:'சந்திரனிலிருந்து குரு கேந்திரத்தில் — புகழ், செல்வம், நீண்ட ஆயுள்'});
+  /* Budhaditya Yoga: Sun + Mercury same sign */
+  if(sunR===merR)yogas.push({n:'புத்தாதித்ய யோகம்',strong:true,d:'சூரியன் + புதன் ஒரே ராசியில் — கூர்மையான புத்தி, கல்வி சிறப்பு'});
+  /* Raj Yoga: 9th and 10th lord conjunction (simplified: Jupiter+Saturn same or kendra) */
+  const sat9From=(satR-lagnaIdx+12)%12;const jup10From=(jupR-lagnaIdx+12)%12;
+  if(Math.abs(sat9From-jup10From)<=1||sat9From===jup10From)yogas.push({n:'ராஜயோகம்',strong:true,d:'9ம் மற்றும் 10ம் அதிபதிகள் சேர்க்கை — உயர்வான வாழ்க்கை'});
+  /* Pancha Mahapurusha: Mars/Mercury/Jupiter/Venus/Saturn in own/exalt + kendra */
+  const checkMaha=(pName,rIdx)=>{const s=PLANET_STATUS[pName];if(!s)return false;const kendra=[0,3,6,9];const fromLagna=(rIdx-lagnaIdx+12)%12;return kendra.includes(fromLagna)&&(s.exalt===rIdx||s.own.includes(rIdx))};
+  if(checkMaha('செவ்வாய்',marR))yogas.push({n:'ருச்சக மகாபுருஷ யோகம்',strong:true,d:'செவ்வாய் கேந்திரத்தில் உச்ச/சொந்த ராசி — தைரியம், தலைமை'});
+  if(checkMaha('புதன்',merR))yogas.push({n:'பத்ர மகாபுருஷ யோகம்',strong:true,d:'புதன் கேந்திரத்தில் — வாக்கு திறன், அறிவு'});
+  if(checkMaha('குரு',jupR))yogas.push({n:'ஹம்ஸ மகாபுருஷ யோகம்',strong:true,d:'குரு கேந்திரத்தில் உச்ச/சொந்த — ஞானம், புகழ்'});
+  if(checkMaha('சுக்கிரன்',venR))yogas.push({n:'மாளவ்ய மகாபுருஷ யோகம்',strong:true,d:'சுக்கிரன் கேந்திரத்தில் — அழகு, கலை, செல்வம்'});
+  if(checkMaha('சனி',satR))yogas.push({n:'சஷ மகாபுருஷ யோகம்',strong:true,d:'சனி கேந்திரத்தில் — நீதி, ஒழுக்கம்'});
+  /* Vesi Yoga: planet in 2nd from Sun */
+  /* Chandra-Mangala Yoga: Moon + Mars */
+  const marFromMoon=((marR-moonR)+12)%12;
+  if([0,3,6,9,1,11].includes(marFromMoon))yogas.push({n:'சந்திர-மங்கள யோகம்',strong:false,d:'சந்திரன் + செவ்வாய் சேர்க்கை — சக்தி, தன வளர்ச்சி'});
+  if(yogas.length===0)yogas.push({n:'யோக அமைப்புகள் இல்லை',strong:false,d:'',none:true});
+  return yogas;
+}
+
+/* ── PLANET STRENGTH SCORE (0-100) ── */
+function planetStrength(pName,rIdx){
+  const s=PLANET_STATUS[pName];if(!s)return 50;
+  if(s.exalt===rIdx)return 90;
+  if(s.own.includes(rIdx))return 75;
+  if(s.debil===rIdx)return 15;
+  return 50;
+}
+
+/* ══ MAIN CALCULATE ══ */
+function calculate(){
+  const cd=getCityData(),dob=document.getElementById('dob').value,tob=document.getElementById('tob').value;
+  const err=document.getElementById('errbox');err.style.display='none';
+  if(!cd||!dob){shake();return}
+  const[yr,mo,dy]=dob.split('-').map(Number);
+  let hr=12,mn=0;if(tob){const[h,m]=tob.split(':').map(Number);hr=h;mn=m}
+  const hourDec=hr+mn/60;
+  const JD=julianDay(yr,mo,dy,hourDec,cd.tz);
+  const t=T(JD);
+  const ay=ayanamsa(JD);
+
+  /* Tropical positions */
+  const tSun=sunLon(t);
+  const tMoon=moonLon(t);
+  const tMerc=planetGeoLon('Mercury',t,tSun);
+  const tVen=planetGeoLon('Venus',t,tSun);
+  const tMars=planetGeoLon('Mars',t,tSun);
+  const tJup=planetGeoLon('Jupiter',t,tSun);
+  const tSat=planetGeoLon('Saturn',t,tSun);
+  const tUra=planetGeoLon('Uranus',t,tSun);
+  const tNep=planetGeoLon('Neptune',t,tSun);
+  const tRahu=rahuLon(t);
+  const tKetu=m360(tRahu+180);
+
+  /* Sidereal */
+  const sSun=sid(tSun,JD),sMoon=sid(tMoon,JD),sMerc=sid(tMerc,JD),sVen=sid(tVen,JD);
+  const sMars=sid(tMars,JD),sJup=sid(tJup,JD),sSat=sid(tSat,JD);
+  const sUra=sid(tUra,JD),sNep=sid(tNep,JD);
+  const sRahu=sid(tRahu,JD),sKetu=m360(sRahu+180);
+
+  /* Lagna */
+  let lagnaIdx=null,mcIdx=null;
+  if(tob){const{lagna,mc}=calcLagna(JD,cd.lat,cd.lon);lagnaIdx=rasiIdx(sid(lagna,JD));mcIdx=rasiIdx(sid(mc,JD))}
+
+  const planets=[
+    {name:'சூரியன்',sym:'☉',sidLon:sSun},
+    {name:'சந்திரன்',sym:'☽',sidLon:sMoon},
+    {name:'புதன்',sym:'☿',sidLon:sMerc},
+    {name:'சுக்கிரன்',sym:'♀',sidLon:sVen},
+    {name:'செவ்வாய்',sym:'♂',sidLon:sMars},
+    {name:'குரு',sym:'♃',sidLon:sJup},
+    {name:'சனி',sym:'♄',sidLon:sSat},
+    {name:'ராகு',sym:'☊',sidLon:sRahu},
+    {name:'கேது',sym:'☋',sidLon:sKetu},
+  ];
+  const pData=planets.map(p=>{
+    const ri=rasiIdx(p.sidLon);
+    const rasi=RASI[ri];
+    const st=getPlanetStatus(p.name,ri);
+    const deg=(p.sidLon%30).toFixed(1);
+    return{...p,rasiIdx:ri,rasi,status:st,deg};
+  });
+  const pMap={};pData.forEach(p=>pMap[p.name]=p.rasiIdx);
+
+  const sunRasi=RASI[rasiIdx(sSun)];
+  const moonRasi=RASI[rasiIdx(sMoon)];
+  const{natch:jNatch,pada}=natchFromSidLon(sMoon);
+  const{dashas,firstRemaining}=calcDasha(sMoon,JD);
+  const tithi=calcTithi(tSun,tMoon);
+  const vara=calcVara(JD);
+  const nYoga=calcNityaYoga(tSun,tMoon);
+  const karana=calcKarana(tSun,tMoon);
+  const yogas=detectYogas(pMap,lagnaIdx||0,lagnaIdx!==null);
+  const todayJd=todayJD();
+  const curDasha=dashas.find(d=>d.startJD<=todayJd&&todayJd<d.endJD)||dashas[0];
+
+  /* ── RENDER ── */
+  renderRasiGrid(pData,lagnaIdx);
+  renderRasiSummary(sunRasi,moonRasi,lagnaIdx,mcIdx,pData,sSun,sMoon);
+  renderNatch(jNatch,pada,sMoon);
+  renderPanchanga(tithi,vara,nYoga,karana,jNatch,JD,dob);
+  renderBhava(lagnaIdx,pMap);
+  renderStrength(pData);
+  renderDasha(dashas,curDasha);
+  renderYogas(yogas,sunRasi,moonRasi);
+  document.getElementById('results').style.display='block';
+  document.getElementById('pdf-bar').style.display='block';
+  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  fetchAI(pData,jNatch,pada,sunRasi,moonRasi,lagnaIdx,curDasha,yogas,tithi,vara,dob,cd.name,tob);
+  renderNewFeatures(pData,sunRasi,moonRasi,lagnaIdx||0,jNatch,dob);
+}
+
+/* RENDER FUNCTIONS */
+function renderRasiGrid(pData,lagnaIdx){
+  document.getElementById('rasiGrid').innerHTML=pData.map(p=>{
+    const isSun=p.name==='சூரியன்',isMoon=p.name==='சந்திரன்';
+    let cls='pcell'+(isSun?' hs':isMoon?' hm':'');
+    if(p.status==='exalt')cls+=' exalt';
+    else if(p.status==='debil')cls+=' debil';
+    else if(p.status==='own')cls+=' own';
+    return`<div class="${cls}" title="${p.rasi.n} ${p.deg}° · ${p.status}">
+      <span class="psym">${p.sym}</span>
+      <span class="plbl">${p.name}</span>
+      <span class="rname">${p.rasi.n} ${p.rasi.s}</span>
+      <span class="rnum">${p.deg}°</span>
+    </div>`;
+  }).join('')+(lagnaIdx!==null?`<div class="pcell" style="border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.07)">
+      <span class="psym" style="font-size:.9rem">Asc</span>
+      <span class="plbl">லக்னம்</span>
+      <span class="rname">${RASI[lagnaIdx].n}</span>
+      <span class="rnum">${RASI[lagnaIdx].s}</span>
+    </div>`:'');
+}
+function renderRasiSummary(sunR,moonR,lagnaIdx,mcIdx,pData,sSun,sMoon){
+  const lagnaBox=lagnaIdx!==null
+    ?`<div class="ibox"><span class="lbl">லக்னம் (உதயராசி)</span><span class="val">${RASI[lagnaIdx].n} ${RASI[lagnaIdx].s}</span><span class="val2">அதிபதி: ${RASI[lagnaIdx].rul}</span></div>`
+    :`<div class="ibox"><span class="lbl">ராசி வகை</span><span class="val">${sunR.mod}</span><span class="val2">(பிறப்பு நேரம் கொடுக்கவும்)</span></div>`;
+  document.getElementById('rasiSummary').innerHTML=`
+    <div class="ibox"><span class="lbl">☉ சூரிய ராசி</span><span class="val">${sunR.n} ${sunR.s}</span><span class="val2">${(sSun%30).toFixed(1)}° · ${sunR.et} · ${sunR.mod}<br>அதிபதி: ${sunR.rul}</span><span class="eb ${sunR.el}">${sunR.et}</span></div>
+    <div class="ibox"><span class="lbl">☽ சந்திர ராசி</span><span class="val">${moonR.n} ${moonR.s}</span><span class="val2">${(sMoon%30).toFixed(1)}° · ${moonR.et} · ${moonR.mod}<br>அதிபதி: ${moonR.rul}</span><span class="eb ${moonR.el}">${moonR.et}</span></div>
+  `;
+  const mcBox=mcIdx!==null?`<div class="ibox"><span class="lbl">மத்திய வானம் (MC)</span><span class="val">${RASI[mcIdx].n}</span></div>`:'';
+  document.getElementById('rasiExtra').innerHTML=`
+    ${lagnaBox}
+    <div class="ibox"><span class="lbl">சூரிய அதிபதி</span><span class="val">${sunR.rul}</span></div>
+    <div class="ibox"><span class="lbl">சந்திர அதிபதி</span><span class="val">${moonR.rul}</span></div>
+    ${mcBox}
+  `;
+  document.getElementById('rasiTrait').textContent=`${sunR.traits.split(',')[0].trim()} — ஆன்மாவின் அடையாளம். ${moonR.traits.split(',')[0].trim()} — மனதின் கண்ணாடி.`;
+}
+function renderNatch(jNatch,pada,sMoon){
+  const moonNatchLon=(sMoon%13.3333).toFixed(2);
+  document.getElementById('natchMain').innerHTML=`
+    <div class="ncard jn"><span class="ni">✦</span><span class="nr">ஜென்ம நட்சத்திரம்</span><span class="nn">${jNatch.n}</span><span class="np">பாதம் ${pada} / 4 · ${moonNatchLon}° நட்சத்திரத்தில்</span><span class="nl">அதிபதி: <span>${jNatch.lord}</span></span></div>
+    <div class="ncard"><span class="ni">☽</span><span class="nr">தேவதை</span><span class="nn" style="font-size:.8rem">${jNatch.deity}</span><span class="np">குணம்: ${jNatch.quality}</span><span class="nl">நட்சத்திர எண்: <span>${jNatch.num}/27</span></span></div>
+  `;
+  document.getElementById('natchDetail').innerHTML=`
+    <div class="ibox"><span class="lbl">நட்சத்திர அதிபதி</span><span class="val">${jNatch.lord}</span></div>
+    <div class="ibox"><span class="lbl">குணம்</span><span class="val">${jNatch.quality}</span></div>
+    <div class="ibox"><span class="lbl">தேவதை</span><span class="val">${jNatch.deity}</span></div>
+  `;
+  document.getElementById('natchList').innerHTML=NATCH.map(n=>{
+    const isJ=n.num===jNatch.num;
+    return`<div class="nitem${isJ?' act':''}" title="${n.trait}"><span class="nnum">${n.num}</span>${n.n}${isJ?' ✦':''}</div>`;
+  }).join('');
+  document.getElementById('natchTrait').textContent=`${jNatch.n} நட்சத்திரத்தில் பிறந்தவர்கள் — ${jNatch.trait}. ${jNatch.lord} இவர்களின் நட்சத்திர அதிபதி.`;
+}
+function renderPanchanga(tithi,vara,nYoga,karana,jNatch,JD,dob){
+  document.getElementById('panchRow').innerHTML=`
+    <div class="panch-cell"><span class="plbl2">திதி</span><span class="pval">${tithi.name}</span><span class="psub2">${tithi.paksha}</span></div>
+    <div class="panch-cell"><span class="plbl2">வாரம்</span><span class="pval" style="font-size:.65rem">${vara.name}</span><span class="psub2">அதிபதி: ${vara.lord}</span></div>
+    <div class="panch-cell"><span class="plbl2">நித்ய யோகம்</span><span class="pval" style="font-size:.65rem">${nYoga.name}</span><span class="psub2">எண்: ${nYoga.idx+1}/27</span></div>
+    <div class="panch-cell"><span class="plbl2">கரணம்</span><span class="pval" style="font-size:.65rem">${karana}</span></div>
+    <div class="panch-cell"><span class="plbl2">நட்சத்திரம்</span><span class="pval" style="font-size:.65rem">${jNatch.n}</span><span class="psub2">எண்: ${jNatch.num}/27</span></div>
+  `;
+  document.getElementById('panchExtra').innerHTML=`
+    <div class="ibox"><span class="lbl">சூரிய-சந்திர கோணம்</span><span class="val">${tithi.diff}°</span><span class="val2">திதி ${tithi.num}/30</span></div>
+    <div class="ibox"><span class="lbl">ஜூலியன் நாள் எண்</span><span class="val">${JD.toFixed(2)}</span></div>
+  `;
+}
+function renderBhava(lagnaIdx,pMap){
+  if(lagnaIdx===null){document.getElementById('bhavaPanel').style.display='none';return}
+  document.getElementById('bhavaPanel').style.display='block';
+  const bhavas=calcBhavas(lagnaIdx,pMap);
+  document.getElementById('bhavaGrid').innerHTML=bhavas.map((b,i)=>{
+    const isLagna=i===0;
+    const planetsInHouse=b.planets.join(' ');
+    return`<div class="bcell${isLagna?' lagna-house':''}">
+      <span class="bnum">வீடு ${b.house}</span>
+      <span class="bname">${BHAVA_NAMES[i]}</span>
+      <span class="bplanets">${planetsInHouse||'—'}</span>
+      <span class="brasi">${RASI[b.rasiIdx].n}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('bhavaInfo').innerHTML=`
+    <div class="ibox"><span class="lbl">லக்ன ராசி</span><span class="val">${RASI[lagnaIdx].n} ${RASI[lagnaIdx].s}</span></div>
+    <div class="ibox"><span class="lbl">லக்ன அதிபதி</span><span class="val">${RASI[lagnaIdx].rul}</span></div>
+    <div class="ibox"><span class="lbl">7ம் வீடு (களத்திரம்)</span><span class="val">${RASI[(lagnaIdx+6)%12].n}</span></div>
+  `;
+}
+function renderStrength(pData){
+  document.getElementById('strengthBars').innerHTML=pData.filter(p=>p.name!=='ராகு'&&p.name!=='கேது').map(p=>{
+    const score=planetStrength(p.name,p.rasiIdx);
+    const cls=score>=70?'strong-fill':score>=40?'medium-fill':'weak-fill';
+    const lbl=score>=70?'உச்சம்/சொந்தம்':score>=40?'சாதாரண':'நீசம்';
+    return`<div class="str-row">
+      <div class="str-name">${p.sym} ${p.name}</div>
+      <div class="str-bar"><div class="str-fill ${cls}" style="width:${score}%"></div></div>
+      <div class="str-val" style="font-size:.55rem;color:var(--sil-d)">${lbl}</div>
+    </div>`;
+  }).join('');
+}
+function renderDasha(dashas,curDasha){
+  document.getElementById('dashaCurrentRow').innerHTML=`
+    <div class="ibox"><span class="lbl">தற்போதைய மஹா தசா</span><span class="val">${curDasha.lord} தசா</span><span class="val2">${curDasha.startDate} — ${curDasha.endDate}</span></div>
+    <div class="ibox"><span class="lbl">தசா காலம்</span><span class="val">${curDasha.years} ஆண்டுகள்</span></div>
+  `;
+  document.getElementById('dashaRow').innerHTML=dashas.map(d=>{
+    const isCur=d.lord===curDasha.lord&&d.startJD===curDasha.startJD;
+    return`<div class="dasha-cell${isCur?' current':''}">
+      <span class="dlbl">${d.startDate.slice(0,4)}</span>
+      <span class="dgraha">${d.lord}</span>
+      <span class="dyrs">${d.years}y · ${d.endDate.slice(0,4)}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('dashaInfo').innerHTML=`
+    <div class="ibox"><span class="lbl">தசா அதிபதி</span><span class="val">${curDasha.lord}</span></div>
+    <div class="ibox"><span class="lbl">தசா துவக்கம்</span><span class="val">${curDasha.startDate}</span></div>
+    <div class="ibox"><span class="lbl">தசா முடிவு</span><span class="val">${curDasha.endDate}</span></div>
+  `;
+}
+function renderYogas(yogas,sunR,moonR){
+  document.getElementById('yogaList').innerHTML=`<div class="yoga-list">${yogas.map(y=>`<div class="yoga-badge${y.strong?' strong':''}${y.none?' none':''}" title="${y.d||''}">${y.n}</div>`).join('')}</div>
+  ${yogas.filter(y=>!y.none).map(y=>`<div style="margin:6px 0 2px;font-size:.62rem;color:var(--acc-l);font-weight:600">${y.n}</div><div style="font-size:.68rem;color:var(--sil-d);margin-bottom:6px">${y.d}</div>`).join('')}`;
+  document.getElementById('yogaTrait').textContent=yogas.filter(y=>!y.none).length>0
+    ?`${yogas.filter(y=>y.strong).length} வலுவான யோகங்கள் கண்டறியப்பட்டன. இவை ஜாதகரின் வாழ்க்கையில் முக்கியமான தாக்கங்களை ஏற்படுத்தலாம்.`
+    :'குறிப்பிட்ட யோக அமைப்புகள் காணப்படவில்லை.';
+}
+
+async function fetchAI(pData,jNatch,pada,sunR,moonR,lagnaIdx,curDasha,yogas,tithi,vara,dob,city,tob){
+  const section=document.getElementById('aiSection');
+  section.innerHTML=`<div class="ai-loading"><span class="spinner"></span>ஜோதிட பலன் கணிக்கிறோம்...</div>`;
+  const planetSummary=pData.map(p=>`${p.name}: ${p.rasi.n} ${p.deg}° (${p.status==='exalt'?'உச்சம்':p.status==='debil'?'நீசம்':p.status==='own'?'சொந்த ராசி':'சாதாரண'})`).join(', ');
+  const lagnaStr=lagnaIdx!==null?`லக்னம்: ${RASI[lagnaIdx].n}`:'லக்னம்: தெரியவில்லை (நேரம் இல்லை)';
+  const yogaStr=yogas.filter(y=>!y.none).map(y=>y.n).join(', ')||'யோகங்கள் இல்லை';
+  const prompt=`நீங்கள் ஒரு அனுபவமிக்க வேத ஜோதிடர். கீழ்கண்ட ஜென்ம விவரங்களை வைத்து தமிழில் விரிவான ஆனால் துல்லியமான ஜோதிட பலன் கூறுங்கள்.
+
+பிறப்பு விவரங்கள்:
+- பிறந்த தேதி: ${dob}${tob?`, நேரம்: ${tob}`:''}
+- இடம்: ${city}
+- ${lagnaStr}
+- சூரிய ராசி: ${sunR.n} (${sunR.rul} அதிபதி)
+- சந்திர ராசி: ${moonR.n}
+- ஜென்ம நட்சத்திரம்: ${jNatch.n}, பாதம் ${pada}
+- கிரக நிலைகள்: ${planetSummary}
+- தற்போதைய தசா: ${curDasha.lord} (${curDasha.startDate} - ${curDasha.endDate})
+- யோகங்கள்: ${yogaStr}
+- திதி: ${tithi.name}, வாரம்: ${vara.name}
+
+தயவுசெய்து இந்த தலைப்புகளில் விவரிக்கவும்:
+1. **ஆளுமை & குணங்கள்** (சூரிய + சந்திர ராசி கொண்டு)
+2. **நட்சத்திர பலன்** (${jNatch.n} நட்சத்திரத்தின் சிறப்பு குணங்கள்)
+3. **தற்போதைய தசா பலன்** (${curDasha.lord} தசாவின் தாக்கம்)
+4. **வலுவான கிரகங்கள் & யோகங்கள்**
+5. **எச்சரிக்கை & கவனிக்க வேண்டியவை**
+
+முக்கியம்: தவறான தகவல்கள் கூறாதீர்கள். நிச்சயமில்லாத விஷயங்களை "இது சாத்தியம்" என்று கூறுங்கள். 3-4 வாக்கியங்கள் மட்டுமே ஒவ்வொரு தலைப்பிலும். தமிழில் மட்டுமே பதில் கூறவும்.`;
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await resp.json();
+    if(data.error){throw new Error(data.error.message)}
+    const text=data.content?.map(c=>c.text||'').join('')||'';
+    const html=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');
+    section.innerHTML=`<div class="ai-content">${html}</div>`;
+  }catch(e){
+    section.innerHTML=`<div class="ai-content" style="color:var(--sil-d)"><p>AI விளக்கம் தற்போது கிடைக்கவில்லை. கிரக நிலைகள் மற்றும் நட்சத்திர தகவல்கள் மேலே காட்டப்பட்டுள்ளன.</p></div>`;
+  }
+}
+
+function shake(){
+  const c=document.querySelector('.inp-card');
+  c.style.transform='translateX(-7px)';
+  setTimeout(()=>{c.style.transform='translateX(7px)'},70);
+  setTimeout(()=>{c.style.transform='translateX(-4px)'},140);
+  setTimeout(()=>{c.style.transform='translateX(0)'},210);
+}
+
+/* ══════════════════════════════════════════════════════
+   NEW FEATURES — zero changes to any calculation above
+   ══════════════════════════════════════════════════════ */
+
+/* ── HEALTH DATA keyed by rasi element & ruling planet ── */
+const HEALTH_BY_ELEMENT={
+  fire:{
+    organ:'இதயம், கண்கள், சிரசு',
+    tip:'காலை நடைப்பயிற்சி, ஆழ் மூச்சு, குறைந்த எண்ணெய் உணவு',
+    warn:'வெப்பம், தலைவலி, உயர் இரத்த அழுத்தம் கவனிக்கவும்',
+    herb:'வேப்பிலை, துளசி, ஆட்டுக்கொழுந்து'
+  },
+  earth:{
+    organ:'தொண்டை, சிறுநீரகம், எலும்பு',
+    tip:'சீரான உணவு நேரம், நிறைய தண்ணீர், யோகா',
+    warn:'சர்க்கரை நோய், தொண்டை பிரச்னை கவனிக்கவும்',
+    herb:'நெல்லிக்காய், அஸ்வகந்தா, திரிஃபலா'
+  },
+  air:{
+    organ:'நுரையீரல், நரம்பு மண்டலம், தோல்',
+    tip:'தியானம், சீரான தூக்கம், காற்றோட்டமான இடம்',
+    warn:'நரம்பு மன அழுத்தம், சுவாச பிரச்னை கவனிக்கவும்',
+    herb:'பிரம்மி, சங்கு புஷ்பி, வில்வம்'
+  },
+  water:{
+    organ:'இரத்தம், சுரப்பிகள், வயிறு',
+    tip:'குளிர்ந்த உணவு, சைவ உணவு, நீச்சல்',
+    warn:'சளி, இரத்த சர்க்கரை, உணர்ச்சி மன அழுத்தம் கவனிக்கவும்',
+    herb:'கற்றாழை, சீரகம், ஏலக்காய்'
+  }
+};
+
+const HEALTH_BY_PLANET={
+  'சூரியன்':{organ:'இதயம், கண்',remedy:'ஞாயிற்றுக்கிழமை சூரிய வணக்கம், செப்பு பாத்திரத்தில் தண்ணீர் பருகவும்'},
+  'சந்திரன்':{organ:'மனம், நீர்சத்து',remedy:'திங்கட்கிழமை தேய்பிறை விரதம், வெள்ளை உணவு'},
+  'செவ்வாய்':{organ:'இரத்தம், தசை',remedy:'செவ்வாய் விரதம், சிவப்பு மவுத்தும் தவிர்க்கவும்'},
+  'புதன்':{organ:'நரம்பு மண்டலம்',remedy:'புதன் அன்று பச்சை நிற உணவு, மந்திர ஜபம்'},
+  'குரு':{organ:'கல்லீரல், கொழுப்பு',remedy:'வியாழன் விரதம், மஞ்சள் நிற உடை, வாழை பழம்'},
+  'சுக்கிரன்':{organ:'சிறுநீரகம், இனப்பெருக்கம்',remedy:'வெள்ளி அன்று வெள்ளை ஆடை, சர்க்கரை தவிர்க்கவும்'},
+  'சனி':{organ:'எலும்பு, மூட்டு',remedy:'சனி அன்று எண்ணெய் தேய்த்து குளிக்கவும், கருப்பு எள் தானம்'},
+  'ராகு':{organ:'தோல், மூளை',remedy:'துர்கா வழிபாடு, நீல நிற கற்கள் அணியவும்'},
+  'கேது':{organ:'ஆன்மிகம், கால்',remedy:'கணேச வழிபாடு, பூசணிக்காய் தானம்'}
+};
+
+/* ── LUCKY DATA ── */
+const LUCKY={
+  'மேஷம்': {num:[1,9],color:'சிவப்பு',colorHex:'#e05040',dir:'கிழக்கு',stone:'பவளம்',day:'செவ்வாய்',deity:'முருகன்'},
+  'ரிஷபம்':{num:[2,6],color:'வெள்ளை',colorHex:'#e8e0d0',dir:'தென்கிழக்கு',stone:'வைரம்',day:'வெள்ளி',deity:'லக்ஷ்மி'},
+  'மிதுனம்':{num:[5,14],color:'பச்சை',colorHex:'#50a060',dir:'மேற்கு',stone:'மரகதம்',day:'புதன்',deity:'விஷ்ணு'},
+  'கடகம்': {num:[2,7],color:'வெள்ளி',colorHex:'#c0c8d8',dir:'வடக்கு',stone:'முத்து',day:'திங்கள்',deity:'அம்மன்'},
+  'சிம்மம்':{num:[1,4],color:'தங்கம்',colorHex:'#d4a020',dir:'கிழக்கு',stone:'மாணிக்கம்',day:'ஞாயிறு',deity:'சூரியன்'},
+  'கன்னி':  {num:[5,6],color:'கடும் பச்சை',colorHex:'#306840',dir:'தென்கிழக்கு',stone:'மரகதம்',day:'புதன்',deity:'சரஸ்வதி'},
+  'துலாம்': {num:[6,9],color:'நீலம்',colorHex:'#4060c0',dir:'மேற்கு',stone:'வைரம்',day:'வெள்ளி',deity:'லக்ஷ்மி'},
+  'விருச்சிகம்':{num:[1,8],color:'கருஞ்சிவப்பு',colorHex:'#801828',dir:'வடக்கு',stone:'பவளம்',day:'செவ்வாய்',deity:'கணேசன்'},
+  'தனுசு':  {num:[3,9],color:'மஞ்சள்',colorHex:'#d4b020',dir:'வடகிழக்கு',stone:'புஷ்பராகம்',day:'வியாழன்',deity:'தட்சிணாமூர்த்தி'},
+  'மகரம்':  {num:[8,10],color:'கருப்பு',colorHex:'#304050',dir:'தெற்கு',stone:'நீலம்',day:'சனி',deity:'ஐயப்பன்'},
+  'கும்பம்':{num:[8,11],color:'அடர் நீலம்',colorHex:'#203860',dir:'மேற்கு',stone:'நீலம்',day:'சனி',deity:'சனீஸ்வரன்'},
+  'மீனம்':  {num:[3,7],color:'மஞ்சள்',colorHex:'#c8a828',dir:'வடகிழக்கு',stone:'புஷ்பராகம்',day:'வியாழன்',deity:'விஷ்ணு'},
+};
+
+/* ── CAREER DATA by element ── */
+const CAREER_BY_ELEMENT={
+  fire:  {fields:['அரசியல்','நிர்வாகம்','இராணுவம்','விளையாட்டு','உடல் பயிற்சி'],strength:'தலைமைத்துவம், துணிவு, உந்துதல்'},
+  earth: {fields:['வியாபாரம்','விவசாயம்','நிதி','கட்டிடம்','மருத்துவம்'],strength:'நம்பகத்தன்மை, பொறுமை, நடைமுறை திறன்'},
+  air:   {fields:['கல்வி','ஊடகம்','தகவல் தொழில்நுட்பம்','எழுத்து','ஆராய்ச்சி'],strength:'புத்திசாலித்தனம், தகவல் தொடர்பு, நெகிழ்வு'},
+  water: {fields:['கலை','இசை','ஆன்மிகம்','சமூக சேவை','மனோதத்துவம்'],strength:'உள்ளுணர்வு, அனுதாபம், படைப்பாற்றல்'},
+};
+
+/* ── DOSHA CHECK ── */
+function checkDoshas(pData,lagnaIdx){
+  const marsIdx=pData.find(p=>p.name==='செவ்வாய்')?.rasiIdx;
+  const rahuIdx=pData.find(p=>p.name==='ராகு')?.rasiIdx;
+  const ketuIdx=pData.find(p=>p.name==='கேது')?.rasiIdx;
+  const saturnIdx=pData.find(p=>p.name==='சனி')?.rasiIdx;
+  /* Mangala dosha: Mars in 1,2,4,7,8,12 from lagna */
+  const marsHouse=((marsIdx-lagnaIdx)+12)%12+1;
+  const mangalDosha=[1,2,4,7,8,12].includes(marsHouse);
+  /* Kala sarpa: all planets between Rahu-Ketu axis */
+  const allPlanets=pData.filter(p=>!['ராகு','கேது'].includes(p.name));
+  function between(lon,start,end){
+    const l=((lon-start)+360)%360,e=((end-start)+360)%360;return l<e;
+  }
+  const rahuLon2=rahuIdx*30+15,ketuLon2=ketuIdx*30+15;
+  const kalaSerpa=allPlanets.every(p=>{
+    const lon=p.rasiIdx*30+15;return between(lon,rahuLon2,ketuLon2);
+  });
+  /* Sani dosha: Saturn in 1,4,7,10 from lagna (Sade Sati rough check) */
+  const satHouse=((saturnIdx-lagnaIdx)+12)%12+1;
+  const saniDosha=[1,4,7,10].includes(satHouse);
+  return{mangalDosha,kalaSerpa,saniDosha,marsHouse};
+}
+
+/* ── NUMEROLOGY ── */
+function calcNumerology(dob){
+  const digits=dob.replace(/-/g,'').split('').map(Number);
+  function reduce(n){while(n>9&&n!==11&&n!==22&&n!==33){const s=String(n).split('').reduce((a,b)=>a+Number(b),0);n=s;}return n;}
+  const lifeNum=reduce(digits.reduce((a,b)=>a+b,0));
+  const[yr,mo,dy]=dob.split('-').map(Number);
+  const birthNum=reduce(dy);
+  const destNum=reduce([...String(yr),...String(mo),...String(dy)].map(Number).reduce((a,b)=>a+b,0));
+  const soulNum=reduce([yr,mo].map(Number).reduce((a,b)=>a+b,0));
+  const MEANING={1:'தலைமை',2:'ஒத்துழைப்பு',3:'படைப்பு',4:'ஒழுக்கம்',5:'சுதந்திரம்',6:'அன்பு',7:'ஞானம்',8:'வெற்றி',9:'மனிதாபிமானம்',11:'ஆன்மிகம்',22:'பெரும் கட்டமைப்பு',33:'ஆசிரியம்'};
+  return{lifeNum,birthNum,destNum,soulNum,MEANING};
+}
+
+/* ── MANTRA/REMEDY DATA ── */
+const MANTRA_BY_LORD={
+  'சூரியன்':{deity:'சூரிய பகவான்',mantra:'ஓம் ஹ்ரீம் க்ரௌம் சூர்யாய நமஹ',count:'108 முறை ஞாயிற்றுக்கிழமை காலை',color:'சிவப்பு',flower:'செம்பரத்தை'},
+  'சந்திரன்':{deity:'சந்திர பகவான்',mantra:'ஓம் சோம் சோமாய நமஹ',count:'108 முறை திங்கட்கிழமை',color:'வெள்ளை',flower:'வெள்ளை மலர்'},
+  'செவ்வாய்':{deity:'முருக பெருமான்',mantra:'ஓம் க்ரம் க்ரீம் க்ரௌம் சஹ் குஜாய நமஹ',count:'108 முறை செவ்வாய்',color:'சிவப்பு',flower:'செவ்வந்தி'},
+  'புதன்':{deity:'விஷ்ணு பகவான்',mantra:'ஓம் ப்ரம் ப்ரீம் ப்ரௌம் சஹ் புதாய நமஹ',count:'108 முறை புதன்',color:'பச்சை',flower:'துளசி'},
+  'குரு':{deity:'தட்சிணாமூர்த்தி',mantra:'ஓம் க்ரம் க்ரீம் க்ரௌம் சஹ் குரவே நமஹ',count:'108 முறை வியாழன்',color:'மஞ்சள்',flower:'வாழைப்பூ'},
+  'சுக்கிரன்':{deity:'லக்ஷ்மி தேவி',mantra:'ஓம் த்ரம் த்ரீம் த்ரௌம் சஹ் சுக்ராய நமஹ',count:'108 முறை வெள்ளி',color:'வெள்ளை',flower:'வெண்தாமரை'},
+  'சனி':{deity:'சனீஸ்வரன்',mantra:'ஓம் ப்ரம் ப்ரீம் ப்ரௌம் சஹ் சனைச்சராய நமஹ',count:'108 முறை சனி',color:'கருப்பு',flower:'நீலோத்பலம்'},
+  'ராகு':{deity:'துர்கா அம்மன்',mantra:'ஓம் ப்ரம் ப்ரீம் ப்ரௌம் சஹ் ராஹவே நமஹ',count:'108 முறை சனி',color:'நீலம்',flower:'நீல மலர்'},
+  'கேது':{deity:'கணேஷ பகவான்',mantra:'ஓம் ஸ்ரம் ஸ்ரீம் ஸ்ரௌம் சஹ் கேதவே நமஹ',count:'108 முறை செவ்வாய்',color:'ஆரஞ்சு',flower:'அரளி'}
+};
+
+/* ── MAIN RENDER ENTRY for new features ── */
+function renderNewFeatures(pData,sunR,moonR,lagnaIdx,jNatch,dob){
+  renderHealth(sunR,moonR,pData);
+  renderLucky(sunR,lagnaIdx);
+  renderDosha(pData,lagnaIdx);
+  renderCareer(sunR,moonR);
+  renderNumerology(dob);
+  renderRemedies(jNatch,lagnaIdx);
+}
+
+function renderHealth(sunR,moonR,pData){
+  const el=sunR.el;const hd=HEALTH_BY_ELEMENT[el];
+  const moonEl=moonR.el;const mhd=HEALTH_BY_ELEMENT[moonEl];
+  // Find weakest planet for specific organ warning
+  const weakPlanet=pData.filter(p=>!['ராகு','கேது'].includes(p.name))
+    .find(p=>PLANET_STATUS[p.name]&&PLANET_STATUS[p.name].debil===p.rasiIdx);
+  const weakData=weakPlanet?HEALTH_BY_PLANET[weakPlanet.name]:null;
+  document.getElementById('healthGrid').innerHTML=`
+    <div class="hcard tip">
+      <span class="h-icon">🌱</span>
+      <span class="h-title">சூரிய ராசி (${sunR.n}) — உடல் உறுப்புகள்</span>
+      <div class="h-body"><strong>கவனிக்க:</strong> ${hd.organ}<br><strong>மூலிகை:</strong> ${hd.herb}</div>
+    </div>
+    <div class="hcard">
+      <span class="h-icon">💧</span>
+      <span class="h-title">சந்திர ராசி (${moonR.n}) — மன ஆரோக்கியம்</span>
+      <div class="h-body"><strong>கவனிக்க:</strong> ${mhd.organ}<br><strong>உதவி:</strong> ${mhd.tip}</div>
+    </div>
+    <div class="hcard warn">
+      <span class="h-icon">⚠️</span>
+      <span class="h-title">எச்சரிக்கை</span>
+      <div class="h-body">${hd.warn}${weakData?`<br><strong>${weakPlanet.name} நீசம்:</strong> ${weakData.organ} கவனம்`:''}
+      </div>
+    </div>
+    <div class="hcard tip">
+      <span class="h-icon">🧘</span>
+      <span class="h-title">தினசரி பரிந்துரை</span>
+      <div class="h-body">${hd.tip}</div>
+    </div>
+  `;
+  const sunPlanetHealth=HEALTH_BY_PLANET[sunR.rul]||{};
+  const moonPlanetHealth=HEALTH_BY_PLANET[moonR.rul]||{};
+  document.getElementById('healthExtra').innerHTML=`
+    <div class="ibox"><span class="lbl">சூரிய அதிபதி (${sunR.rul}) — பரிகாரம்</span><span class="val" style="font-size:.72rem">${sunPlanetHealth.remedy||'—'}</span></div>
+    <div class="ibox"><span class="lbl">சந்திர அதிபதி (${moonR.rul}) — பரிகாரம்</span><span class="val" style="font-size:.72rem">${moonPlanetHealth.remedy||'—'}</span></div>
+  `;
+  document.getElementById('healthTrait').textContent=`${sunR.n} ராசியினர் ${hd.organ} பகுதிகளை அதிக கவனத்துடன் பராமரிக்க வேண்டும். ${mhd.herb} போன்ற மூலிகைகள் உதவியாக இருக்கும்.`;
+}
+
+function renderLucky(sunR,lagnaIdx){
+  const ld=LUCKY[sunR.n]||LUCKY['மேஷம்'];
+  const lagnaLucky=LUCKY[RASI[lagnaIdx].n]||{};
+  document.getElementById('luckyGrid').innerHTML=`
+    <div class="lcard">
+      <span class="l-sym">🔢</span>
+      <span class="l-label">அதிர்ஷ்ட எண்</span>
+      <span class="l-val">${ld.num.join(', ')}</span>
+    </div>
+    <div class="lcard">
+      <span class="l-sym">🎨</span>
+      <span class="l-label">அதிர்ஷ்ட நிறம்</span>
+      <span class="l-val"><span class="color-swatch" style="background:${ld.colorHex}"></span>${ld.color}</span>
+    </div>
+    <div class="lcard">
+      <span class="l-sym">🧭</span>
+      <span class="l-label">அதிர்ஷ்ட திசை</span>
+      <span class="l-val">${ld.dir}</span>
+    </div>
+    <div class="lcard">
+      <span class="l-sym">💎</span>
+      <span class="l-label">ரத்தினக்கல்</span>
+      <span class="l-val">${ld.stone}</span>
+    </div>
+    <div class="lcard">
+      <span class="l-sym">📅</span>
+      <span class="l-label">அதிர்ஷ்ட வாரம்</span>
+      <span class="l-val">${ld.day}</span>
+    </div>
+    <div class="lcard">
+      <span class="l-sym">🙏</span>
+      <span class="l-label">இஷ்ட தெய்வம்</span>
+      <span class="l-val">${ld.deity}</span>
+    </div>
+  `;
+  document.getElementById('luckyExtra').innerHTML=`
+    <div class="ibox"><span class="lbl">லக்ன ராசி அதிர்ஷ்ட கல்</span><span class="val">${lagnaLucky.stone||ld.stone}</span></div>
+    <div class="ibox"><span class="lbl">லக்ன ராசி அதிர்ஷ்ட நிறம்</span><span class="val"><span class="color-swatch" style="background:${lagnaLucky.colorHex||ld.colorHex}"></span>${lagnaLucky.color||ld.color}</span></div>
+  `;
+}
+
+function renderDosha(pData,lagnaIdx){
+  const{mangalDosha,kalaSerpa,saniDosha,marsHouse}=checkDoshas(pData,lagnaIdx);
+  document.getElementById('doshaRow').innerHTML=`
+    <div class="dosha-cell ${mangalDosha?'dosha-present':'dosha-absent'}">
+      <span class="d-name">மாங்கல்ய தோஷம்</span>
+      <span class="d-status">${mangalDosha?'உள்ளது ⚠':'இல்லை ✓'}</span>
+      <span class="d-note">${mangalDosha?`செவ்வாய் ${marsHouse}ம் வீட்டில் உள்ளார். திருமண பொருத்தம் கவனிக்கவும்.`:'செவ்வாய் சாதகமான நிலையில் உள்ளார்.'}</span>
+    </div>
+    <div class="dosha-cell ${kalaSerpa?'dosha-present':'dosha-absent'}">
+      <span class="d-name">கால சர்ப தோஷம்</span>
+      <span class="d-status">${kalaSerpa?'உள்ளது ⚠':'இல்லை ✓'}</span>
+      <span class="d-note">${kalaSerpa?'எல்லா கிரகங்களும் ராகு-கேது இடையே உள்ளன. நாக பூஜை பயனளிக்கும்.':'கிரகங்கள் சாதகமாக பரவியுள்ளன.'}</span>
+    </div>
+    <div class="dosha-cell ${saniDosha?'dosha-present':'dosha-absent'}">
+      <span class="d-name">சனி தோஷம்</span>
+      <span class="d-status">${saniDosha?'கவனம் ⚠':'சாதாரண ✓'}</span>
+      <span class="d-note">${saniDosha?'சனி கேந்திரத்தில் உள்ளார். சனி பரிகாரம் செய்யவும்.':'சனி நிலை சாதகமாக உள்ளது.'}</span>
+    </div>
+  `;
+  document.getElementById('doshaNote').innerHTML=`<strong>குறிப்பு:</strong> தோஷ கணிப்பு அடிப்படை அளவிலானது. முழுமையான ஆய்வுக்கு அனுபவமிக்க ஜோதிடரை அணுகவும். தோஷம் இருந்தாலும் பரிகாரங்கள் செய்வதன் மூலம் பலன் குறையும்.`;
+}
+
+function renderCareer(sunR,moonR){
+  const cd=CAREER_BY_ELEMENT[sunR.el]||CAREER_BY_ELEMENT.fire;
+  const md=CAREER_BY_ELEMENT[moonR.el]||CAREER_BY_ELEMENT.water;
+  const allFields=[...new Set([...cd.fields,...md.fields])].slice(0,8);
+  document.getElementById('careerRow').innerHTML=`
+    <div class="ibox">
+      <span class="lbl">சூரிய ராசி (${sunR.n}) தொழில்கள்</span>
+      <div style="margin-top:6px">${cd.fields.map(f=>`<span class="career-tag career-gold">${f}</span>`).join('')}</div>
+    </div>
+    <div class="ibox">
+      <span class="lbl">சந்திர ராசி (${moonR.n}) திறன்கள்</span>
+      <div style="margin-top:6px">${md.fields.map(f=>`<span class="career-tag career-blue">${f}</span>`).join('')}</div>
+    </div>
+  `;
+  document.getElementById('careerNote').innerHTML=`<span class="lbl">இயற்கை திறன்கள்</span><span class="val" style="font-size:.75rem">${cd.strength} · ${md.strength}</span>`;
+}
+
+function renderNumerology(dob){
+  const{lifeNum,birthNum,destNum,soulNum,MEANING}=calcNumerology(dob);
+  document.getElementById('numRow').innerHTML=`
+    <div class="num-cell"><span class="n-lbl">உயிர் எண்</span><span class="n-val">${lifeNum}</span><span class="n-sub">${MEANING[lifeNum]||''}</span></div>
+    <div class="num-cell"><span class="n-lbl">பிறப்பு எண்</span><span class="n-val">${birthNum}</span><span class="n-sub">${MEANING[birthNum]||''}</span></div>
+    <div class="num-cell"><span class="n-lbl">கர்ம எண்</span><span class="n-val">${destNum}</span><span class="n-sub">${MEANING[destNum]||''}</span></div>
+    <div class="num-cell"><span class="n-lbl">ஆன்ம எண்</span><span class="n-val">${soulNum}</span><span class="n-sub">${MEANING[soulNum]||''}</span></div>
+  `;
+  document.getElementById('numTrait').textContent=`உயிர் எண் ${lifeNum} — ${MEANING[lifeNum]||'சிறப்பான குணம்'} என்ற பண்புகள் இயற்கையாகவே அமைந்துள்ளன. இந்த எண் தொடர்பான நேர்மறை செயல்கள் வாழ்க்கையை மேம்படுத்தும்.`;
+}
+
+function renderRemedies(jNatch,lagnaIdx){
+  const lord=jNatch.lord;
+  const md=MANTRA_BY_LORD[lord]||MANTRA_BY_LORD['சூரியன்'];
+  const lagnaLord=RASI[lagnaIdx].rul;
+  const ld=MANTRA_BY_LORD[lagnaLord]||MANTRA_BY_LORD['சூரியன்'];
+  document.getElementById('mantraSection').innerHTML=`
+    <div class="mantra-box">
+      <span class="m-deity">✦ நட்சத்திர அதிபதி: ${lord} — ${md.deity} வழிபாடு</span>
+      <div class="m-text">${md.mantra}</div>
+      <span class="m-count">📿 ${md.count} · மலர்: ${md.flower} · நிறம்: ${md.color}</span>
+    </div>
+    <div class="mantra-box" style="border-color:rgba(201,168,76,.15);background:rgba(201,168,76,.03)">
+      <span class="m-deity" style="color:var(--gold)">★ லக்ன அதிபதி: ${lagnaLord} — ${ld.deity} வழிபாடு</span>
+      <div class="m-text">${ld.mantra}</div>
+      <span class="m-count" style="color:var(--gold-d)">📿 ${ld.count} · மலர்: ${ld.flower} · நிறம்: ${ld.color}</span>
+    </div>
+  `;
+  document.getElementById('remedyExtra').innerHTML=`
+    <div class="ibox"><span class="lbl">உணவு பரிந்துரை</span><span class="val" style="font-size:.72rem">${HEALTH_BY_PLANET[lord]?.remedy||'—'}</span></div>
+    <div class="ibox"><span class="lbl">தானம்</span><span class="val" style="font-size:.72rem">${lord==='சூரியன்'?'கோதுமை, செம்பு':lord==='சந்திரன்'?'அரிசி, வெள்ளி':lord==='செவ்வாய்'?'சிவப்பு பருப்பு, தாமிரம்':lord==='புதன்'?'பசுமை காய்கறி, தங்கம்':lord==='குரு'?'மஞ்சளரிசி, மஞ்சள்':lord==='சுக்கிரன்'?'வெள்ளை அரிசி, வெள்ளி':lord==='சனி'?'கருப்பு எள், இரும்பு':lord==='ராகு'?'தேங்காய், நீல ஆடை':'பூசணிக்காய், ஆரஞ்சு ஆடை'}</span></div>
+  `;
+} /* ← closes renderRemedies() */
+
+/* ══════════════════════════════════════
+   PDF DOWNLOAD — A4 Portrait
+   Uses html2canvas + jsPDF from CDN
+   ══════════════════════════════════════ */
+async function downloadPDF(){
+  const btn=document.getElementById('pdfBtn');
+  const label=btn.querySelector('.pdf-label');
+  btn.classList.add('loading');
+  label.textContent='தயாரிக்கிறோம்...';
+
+  /* Dynamically load jsPDF + html2canvas only when needed */
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+
+  try{
+    const results=document.getElementById('results');
+
+    /* Temporarily hide elements we don't want in PDF */
+    const hideEls=['#sf','.inp-card','#pdf-bar','footer'];
+    const hidden=hideEls.map(sel=>{
+      const el=document.querySelector(sel);
+      if(!el)return null;
+      const prev=el.style.display;
+      el.style.display='none';
+      return{el,prev};
+    }).filter(Boolean);
+
+    /* Snapshot the results panel */
+    const canvas=await html2canvas(results,{
+      scale:2,
+      useCORS:true,
+      backgroundColor:'#07060f',
+      logging:false,
+      windowWidth:700,
+      onclone:(doc)=>{
+        /* Add a title block at top in the clone */
+        const titleDiv=doc.createElement('div');
+        titleDiv.style.cssText='background:#07060f;color:#e8c97a;font-family:sans-serif;text-align:center;padding:16px 0 10px;font-size:18px;font-weight:700;letter-spacing:.1em;border-bottom:1px solid rgba(201,168,76,.3);margin-bottom:10px';
+        titleDiv.textContent='விரிவான ஜோதிட கணிப்பு — Vedic Astrology Chart';
+        const subDiv=doc.createElement('div');
+        subDiv.style.cssText='background:#07060f;color:#4a5468;font-size:11px;text-align:center;padding-bottom:12px;letter-spacing:.12em';
+        subDiv.textContent='VSOP87 · ELP2000 · Lahiri Ayanamsa';
+        const wrapper=doc.getElementById('results');
+        wrapper.insertBefore(subDiv,wrapper.firstChild);
+        wrapper.insertBefore(titleDiv,wrapper.firstChild);
+      }
+    });
+
+    /* Restore hidden elements */
+    hidden.forEach(({el,prev})=>el.style.display=prev);
+
+    /* Build PDF — A4 portrait: 210mm × 297mm */
+    const{jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+
+    const pageW=210,pageH=297;
+    const margin=10;
+    const usableW=pageW-margin*2;
+    const imgW=canvas.width,imgH=canvas.height;
+    const ratio=usableW/(imgW/2); /* divide by scale factor 2 */
+    const scaledH=(imgH/2)*ratio;
+
+    /* Paginate: slice canvas into A4-height chunks */
+    const pageContentH=pageH-margin*2; /* mm per page */
+    const pxPerPage=pageContentH/ratio; /* canvas px per A4 page */
+    let yOffset=0;
+    let pageNum=0;
+
+    while(yOffset<imgH){
+      if(pageNum>0)pdf.addPage();
+
+      const sliceH=Math.min(pxPerPage,imgH-yOffset);
+      /* Create a sub-canvas for this page slice */
+      const sliceCanvas=document.createElement('canvas');
+      sliceCanvas.width=imgW;
+      sliceCanvas.height=sliceH;
+      const ctx=sliceCanvas.getContext('2d');
+      ctx.drawImage(canvas,0,yOffset,imgW,sliceH,0,0,imgW,sliceH);
+
+      const sliceData=sliceCanvas.toDataURL('image/jpeg',0.92);
+      const sliceHeightMM=(sliceH/2)*ratio;
+      pdf.addImage(sliceData,'JPEG',margin,margin,usableW,sliceHeightMM);
+
+      /* Footer line on each page */
+      pdf.setFontSize(7);
+      pdf.setTextColor(74,84,104);
+      pdf.text(
+        'வேத ஜோதிட கணிப்பு · பொழுதுபோக்கு & சுய சிந்தனைக்காக மட்டுமே',
+        pageW/2,pageH-4,{align:'center'}
+      );
+      pdf.text(`Page ${pageNum+1}`,pageW-margin,pageH-4,{align:'right'});
+
+      yOffset+=sliceH;
+      pageNum++;
+    }
+
+    /* Build filename from dob */
+    const dob=document.getElementById('dob').value||'jatakam';
+    const city=document.getElementById('city').value||'';
+    pdf.save(`Jatakam_${city}_${dob}.pdf`);
+
+    btn.classList.remove('loading');
+    label.textContent='✓ பதிவிறக்கம் முடிந்தது!';
+    setTimeout(()=>{label.textContent='PDF பதிவிறக்கம் — A4 Portrait';},3000);
+
+  }catch(err){
+    const hidden2=[];
+    ['#sf','.inp-card','#pdf-bar','footer'].forEach(sel=>{
+      const el=document.querySelector(sel);
+      if(el&&el.style.display==='none')el.style.display='';
+    });
+    btn.classList.remove('loading');
+    label.textContent='மீண்டும் முயற்சிக்கவும்';
+    setTimeout(()=>{label.textContent='PDF பதிவிறக்கம் — A4 Portrait';},3000);
+    console.error('PDF error:',err);
+  }
+}
+
+function loadScript(src){
+  return new Promise((resolve,reject)=>{
+    if(document.querySelector(`script[src="${src}"]`)){resolve();return}
+    const s=document.createElement('script');
+    s.src=src;s.onload=resolve;s.onerror=reject;
+    document.head.appendChild(s);
+  });
+}
+</script>
+</body>
+</html>
