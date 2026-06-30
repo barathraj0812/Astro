@@ -29,7 +29,8 @@ body.bright-mode #sf .star-p{background:#8a7050;opacity:.12!important}
 body.bright-mode .nebula{opacity:.04!important}
 body.bright-mode .panel{box-shadow:0 8px 40px rgba(0,0,0,.12)!important}
 body.bright-mode .inp-card{box-shadow:0 8px 40px rgba(0,0,0,.15)!important}
-body.bright-mode select,body.bright-mode input[type=date],body.bright-mode input[type=time]{background:#fff;color:#1a1008;border-color:rgba(138,94,16,.3)}
+body.bright-mode select,body.bright-mode input[type=date],body.bright-mode input[type=time],body.bright-mode input[type=text]{background:#fff;color:#1a1008;border-color:rgba(138,94,16,.3)}
+body.bright-mode input[type=text]::placeholder{color:#8a6e3a;opacity:.85}
 body.bright-mode .pg-gold{background:linear-gradient(155deg,rgba(255,248,230,.97),rgba(255,242,210,.99));border-color:rgba(138,94,16,.25)}
 body.bright-mode .pg-blue{background:linear-gradient(155deg,rgba(230,242,255,.97),rgba(210,232,255,.99));border-color:rgba(26,111,160,.22)}
 body.bright-mode .pg-grn{background:linear-gradient(155deg,rgba(230,248,238,.97),rgba(210,240,225,.99));border-color:rgba(26,112,64,.2)}
@@ -67,6 +68,47 @@ body.bright-mode .trc-lagna-mark{color:#6b3a08}
 body.bright-mode #modeToggle{background:rgba(255,248,230,.85);border-color:#8a5e10;color:#6b3a08;box-shadow:0 0 20px rgba(138,94,16,.25)}
 body.bright-mode #modeToggle .icon-moon{display:none}
 body.bright-mode #modeToggle .icon-sun{display:block}
+
+/* ── LANGUAGE TOGGLE (EN / TA premium pill switch) ── */
+#langToggle{
+  position:fixed;top:18px;right:78px;z-index:999;
+  width:74px;height:34px;border-radius:20px;border:1.5px solid var(--gold);
+  background:rgba(7,6,15,.7);backdrop-filter:blur(10px);
+  cursor:pointer;padding:3px;display:flex;align-items:center;
+  box-shadow:0 0 20px rgba(201,168,76,.2);
+  transition:all var(--mode-transition);
+  animation:modeBtnAppear .6s ease both .65s;
+}
+#langToggle:hover{box-shadow:0 0 30px rgba(201,168,76,.45);border-color:var(--gold-l)}
+#langToggle .lt-knob{
+  position:absolute;top:3px;left:3px;width:34px;height:26px;border-radius:16px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-l));
+  transition:transform .38s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 2px 8px rgba(0,0,0,.35);
+}
+#langToggle.is-en .lt-knob{transform:translateX(34px)}
+#langToggle .lt-labels{
+  position:relative;width:100%;display:flex;justify-content:space-between;
+  font-size:.62rem;font-weight:700;letter-spacing:.04em;
+  color:var(--gold-l);z-index:1;pointer-events:none;
+}
+#langToggle .lt-labels span{width:32px;text-align:center;transition:color .3s,opacity .3s}
+#langToggle:not(.is-en) .lt-labels span:first-child,
+#langToggle.is-en .lt-labels span:last-child{color:#1a1408;opacity:1}
+#langToggle.is-en .lt-labels span:first-child,
+#langToggle:not(.is-en) .lt-labels span:last-child{opacity:.55}
+body.bright-mode #langToggle{background:rgba(255,248,230,.85);border-color:#8a5e10;box-shadow:0 0 20px rgba(138,94,16,.25)}
+body.bright-mode #langToggle .lt-labels{color:#6b3a08}
+body.bright-mode #langToggle:not(.is-en) .lt-labels span:first-child,
+body.bright-mode #langToggle.is-en .lt-labels span:last-child{color:#fffaf0}
+@media (max-width:520px){
+  #langToggle{top:14px;right:64px;width:62px;height:30px}
+  #langToggle .lt-knob{width:28px;height:22px}
+  #langToggle.is-en .lt-knob{transform:translateX(28px)}
+  #langToggle .lt-labels{font-size:.54rem}
+  #langToggle .lt-labels span{width:28px}
+  #modeToggle{top:14px;right:14px;width:42px;height:42px}
+}
 
 /* ── TRANSITION ON MODE SWITCH ── */
 body,body *{transition-property:background,background-color,border-color,color,box-shadow;transition-duration:0.35s;transition-timing-function:ease}
@@ -197,9 +239,68 @@ h1{font-size:clamp(1.6rem,5vw,2.6rem);font-weight:700;color:var(--gold-l);text-s
 .fg{margin-bottom:20px}
 label{display:block;font-size:.65rem;font-weight:600;color:var(--gold);margin-bottom:6px;letter-spacing:.08em}
 label span{color:var(--sil-d);font-weight:300;font-size:.7rem;margin-left:4px}
-select,input[type=date],input[type=time]{width:100%;background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.16);border-radius:2px;color:var(--star);font-family:'Noto Serif Tamil',serif;font-size:.88rem;padding:10px 12px;outline:none;transition:border-color .2s,background .2s;appearance:none;-webkit-appearance:none;cursor:pointer}
+select,input[type=date],input[type=time],input[type=text]{width:100%;background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.16);border-radius:2px;color:var(--star);font-family:'Noto Serif Tamil',serif;font-size:.88rem;padding:10px 12px;outline:none;transition:border-color .2s,background .2s;appearance:none;-webkit-appearance:none;cursor:pointer}
+input[type=text]{cursor:text}
+input[type=text]::placeholder{color:var(--sil-d);opacity:.85}
 select:focus,input:focus{border-color:var(--gold);background:rgba(201,168,76,.05);box-shadow:0 0 0 3px rgba(201,168,76,.08)}
+/* ── ACCESSIBILITY: visible keyboard focus on every interactive element ──
+   :focus-visible (not plain :focus) so mouse/touch clicks stay clean and
+   only keyboard/AT navigation shows the ring — standard accessible
+   pattern, doesn't change the existing mouse-hover/active visuals above. */
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--gold-l);outline-offset:2px;border-radius:2px;
+}
+body.bright-mode button:focus-visible,body.bright-mode a:focus-visible,body.bright-mode select:focus-visible,body.bright-mode input:focus-visible{
+  outline-color:#8a5e10;
+}
+/* ── ACCESSIBILITY + PERFORMANCE: respect prefers-reduced-motion ──
+   Disables all decorative entrance/loop animations and shortens
+   transitions to near-instant for anyone who has asked their OS for
+   reduced motion (vestibular disorders, motion sensitivity, or simply
+   battery/performance preference on low-power devices). Layout/content
+   is unaffected — only animation and transition duration are zeroed,
+   so every panel/result still renders, just without the motion. */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:0.001ms!important;
+    scroll-behavior:auto!important;
+  }
+  .dasha-cell:hover,.pbtn:hover,.calc-btn:hover{transform:none!important}
+}
 .sw{position:relative}.sw::after{content:'⌄';position:absolute;right:11px;top:50%;transform:translateY(-52%);color:var(--gold-d);pointer-events:none;font-size:.9rem}
+.place-ac{position:relative}
+.place-ac::after{display:none}
+.place-ac input{width:100%}
+.place-ac-list{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:260px;overflow-y:auto;background:var(--card);border:1px solid rgba(201,168,76,.35);border-radius:6px;box-shadow:0 16px 40px rgba(0,0,0,.5);z-index:50;animation:rise .22s ease both}
+.pac-row{padding:9px 14px;font-size:.82rem;color:var(--sil);cursor:pointer;border-bottom:1px solid rgba(201,168,76,.08);transition:background .15s,color .15s}
+.pac-row:last-child{border-bottom:none}
+.pac-row:hover{background:rgba(201,168,76,.12);color:var(--gold-l)}
+.pac-msg{padding:10px 14px;font-size:.78rem;color:var(--sil-d);text-align:center}
+.place-selected-info{display:none;margin-top:8px;font-size:.72rem;color:var(--grn);opacity:.85;letter-spacing:.01em}
+.manual-toggle{background:none;border:none;color:var(--gold-d);font-size:.74rem;cursor:pointer;padding:10px 2px 2px;text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.manual-toggle:hover{color:var(--gold-l)}
+.manual-toggle .mpb-hide{display:none}
+.manual-toggle.expanded .mpb-show{display:none}
+.manual-toggle.expanded .mpb-hide{display:inline}
+.manual-place-row{margin-top:16px}
+.profile-bar{display:flex;align-items:center;gap:8px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(201,168,76,.14)}
+.profile-select-wrap{flex:1;min-width:0}
+.profile-select-wrap select{font-size:.8rem;padding:8px 30px 8px 12px}
+.profile-actions{display:flex;gap:4px;flex-shrink:0}
+.pbtn{width:30px;height:30px;border-radius:4px;border:1px solid rgba(201,168,76,.22);background:rgba(255,255,255,.025);color:var(--gold-d);font-size:.82rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s,border-color .2s,transform .15s}
+.pbtn:hover{background:rgba(201,168,76,.14);color:var(--gold-l);border-color:rgba(201,168,76,.4);transform:translateY(-1px)}
+.pbtn:active{transform:translateY(0)}
+.pbtn.is-default{color:#e8c94a;background:rgba(232,201,74,.14);border-color:rgba(232,201,74,.45)}
+.pbtn-danger:hover{color:#f08080;border-color:rgba(240,128,128,.4);background:rgba(240,128,128,.1)}
+body.bright-mode .pbtn{background:rgba(0,0,0,.03)}
+.profile-summary{font-size:.68rem;color:var(--sil-d);margin:-10px 0 16px;letter-spacing:.02em;min-height:14px}
+.profile-search-wrap{margin:-8px 0 14px}
+.profile-search-wrap input{font-size:.76rem;padding:7px 12px}
+.profile-io-row{display:flex;gap:8px;flex-wrap:wrap;margin:-6px 0 20px}
+.profile-io-btn{flex:1;min-width:140px;background:rgba(255,255,255,.02);border:1px dashed rgba(201,168,76,.3);color:var(--sil-d);font-family:'Noto Serif Tamil',serif;font-size:.66rem;letter-spacing:.04em;padding:8px 10px;border-radius:4px;cursor:pointer;transition:all .2s}
+.profile-io-btn:hover{color:var(--gold-l);border-color:rgba(201,168,76,.55);background:rgba(201,168,76,.07)}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 input::-webkit-calendar-picker-indicator{filter:invert(.6) sepia(1) saturate(2) hue-rotate(10deg);opacity:.6;cursor:pointer}
@@ -209,7 +310,27 @@ input::-webkit-calendar-picker-indicator{filter:invert(.6) sepia(1) saturate(2) 
 .calc-btn:hover{border-color:var(--acc-l);color:var(--star);box-shadow:0 0 24px rgba(107,79,160,.28)}
 .calc-btn:active{transform:scale(.99)}
 /* RESULTS */
-#results{width:100%;max-width:660px;margin-top:18px;display:none}
+#results{width:100%;max-width:660px;margin-top:18px}
+/* ── RESULTS LAYOUT (AI panel + results) ── */
+.results-layout{display:none;width:100%;max-width:1060px;margin-top:18px;gap:22px;flex-direction:column;align-items:flex-start}
+.results-layout.active{display:flex}
+.ai-panel{order:-1;width:100%;background:linear-gradient(155deg,rgba(22,15,40,.92),rgba(16,11,28,.96));border:1px solid rgba(155,127,212,.22);border-radius:8px;padding:24px 22px 20px;position:relative;backdrop-filter:blur(10px);box-shadow:0 18px 50px rgba(0,0,0,.45);opacity:0;transform:translateY(14px);animation:panelIn .55s cubic-bezier(.16,1,.3,1) .03s forwards}
+body.bright-mode .ai-panel{background:linear-gradient(155deg,rgba(240,230,255,.97),rgba(228,212,255,.99))}
+.ai-panel-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(155,127,212,.18);position:relative}
+.ai-panel-head .ptitle-icon{font-size:1.3rem;color:var(--acc-l);filter:drop-shadow(0 0 6px rgba(155,127,212,.5))}
+.ai-panel-head h2{font-size:1rem;color:var(--acc-l);font-weight:700;letter-spacing:.02em;margin-bottom:2px}
+.ai-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(155,127,212,.14)}
+.ai-act-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(155,127,212,.08);border:1px solid rgba(155,127,212,.25);color:var(--acc-l);font-family:'Noto Serif Tamil',serif;font-size:.64rem;font-weight:600;letter-spacing:.03em;padding:7px 12px;border-radius:20px;cursor:pointer;transition:all .2s}
+.ai-act-btn:hover{background:rgba(155,127,212,.18);border-color:rgba(155,127,212,.5);transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.ai-act-btn:active{transform:scale(.96)}
+.ai-act-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.ai-act-btn.copied{background:rgba(94,196,144,.18);border-color:rgba(94,196,144,.5);color:var(--grn)}
+@media(min-width:1000px){
+  .results-layout{flex-direction:row;align-items:flex-start}
+  .ai-panel{order:0;flex:0 0 360px;position:sticky;top:18px;max-height:calc(100vh - 36px);overflow-y:auto}
+  #results{flex:1;min-width:0}
+}
+@media print{.ai-actions{display:none!important}.results-layout{max-width:100%!important}}
 /* PANEL BASE */
 .panel{border-radius:3px;padding:28px 32px 32px;position:relative;margin-bottom:12px}
 .panel::before,.panel::after{content:'';position:absolute;width:16px;height:16px;border-style:solid}
@@ -357,6 +478,15 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
 .calc-btn:hover{border-color:var(--acc-l);color:var(--star);box-shadow:0 0 35px rgba(107,79,160,.4),0 0 70px rgba(107,79,160,.15);transform:translateY(-1px)}
 .calc-btn:active{transform:scale(.99) translateY(0)}
 
+/* ── RESET BUTTON + BUTTON ROW ── */
+.btn-row{display:flex;align-items:stretch;gap:10px;margin-top:22px}
+.btn-row .calc-btn{width:auto;flex:1;margin-top:0}
+.reset-btn{flex:0 0 auto;background:rgba(255,255,255,.025);border:1px solid rgba(201,168,76,.22);color:var(--sil-d);font-family:'Noto Serif Tamil',serif;font-size:.8rem;font-weight:600;letter-spacing:.04em;padding:0 18px;cursor:pointer;border-radius:4px;transition:all .25s;white-space:nowrap}
+.reset-btn:hover{border-color:rgba(240,128,128,.45);color:#f08080;background:rgba(240,128,128,.08)}
+.reset-btn:active{transform:scale(.97)}
+body.bright-mode .reset-btn{background:rgba(0,0,0,.025)}
+@media(max-width:480px){.btn-row{flex-direction:column}.reset-btn{padding:12px;order:2}.btn-row .calc-btn{order:1}}
+
 /* ── PANEL ENHANCED ── */
 .panel{border-radius:6px;padding:28px 32px 32px;position:relative;margin-bottom:14px;transition:box-shadow .3s}
 .panel:hover{box-shadow:0 0 0 1px rgba(201,168,76,.14),0 28px 70px rgba(0,0,0,.7)!important}
@@ -384,8 +514,8 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
 /* ── LOADING OVERLAY ── */
 #loadingOverlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(7,6,15,.93);backdrop-filter:blur(12px);align-items:center;justify-content:center;flex-direction:column;gap:20px}
 #loadingOverlay.active{display:flex}
-.load-ring{width:80px;height:80px;border-radius:50%;border:2px solid rgba(201,168,76,.1);border-top-color:var(--gold);border-right-color:rgba(201,168,76,.4);animation:spin .9s linear infinite;position:relative;display:flex;align-items:center;justify-content:center}
-.load-ring span{font-size:1.5rem;animation:spin .9s linear infinite reverse;color:var(--gold)}
+.load-ring{width:80px;height:80px;border-radius:50%;border:2px solid rgba(201,168,76,.1);border-top-color:var(--gold);border-right-color:rgba(201,168,76,.4);animation:spin .9s linear infinite;position:relative;display:flex;align-items:center;justify-content:center;will-change:transform}
+.load-ring span{font-size:1.5rem;animation:spin .9s linear infinite reverse;color:var(--gold);will-change:transform}
 .load-text{color:var(--gold-d);font-size:.75rem;letter-spacing:.18em;animation:loadFade 1.5s ease-in-out infinite alternate;text-align:center}
 @keyframes loadFade{from{opacity:.35}to{opacity:1}}
 .load-zodiac{display:flex;gap:8px;font-size:1.1rem}
@@ -397,17 +527,26 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
 @keyframes zodGlow{to{color:var(--gold-l);filter:drop-shadow(0 0 8px rgba(201,168,76,.7))}}
 
 /* ── DASHA ENHANCED ── */
-.dasha-cell{background:rgba(94,196,144,.03);border:1px solid rgba(94,196,144,.1);padding:10px 12px;border-radius:3px;flex:1;min-width:70px;transition:all .2s;cursor:default}
+.dasha-cell{background:rgba(94,196,144,.03);border:1px solid rgba(94,196,144,.1);padding:10px 12px;border-radius:3px;flex:1;min-width:70px;transition:all .2s;cursor:pointer}
 .dasha-cell:hover{border-color:rgba(94,196,144,.3);background:rgba(94,196,144,.07);transform:translateY(-2px)}
 .dasha-cell.current{background:rgba(94,196,144,.12);border-color:rgba(94,196,144,.42);box-shadow:0 0 18px rgba(94,196,144,.12)}
+.dasha-cell.selected{border-color:rgba(201,168,76,.55);box-shadow:0 0 0 1px rgba(201,168,76,.35) inset}
 
-/* ── ANTARDASHA TABLE ── */
+/* ── ANTARDASHA TABLE (interactive — click a row for Pratyantardasha) ── */
 .antar-wrap{margin-top:14px;overflow-x:auto}
 .antar-table{width:100%;border-collapse:collapse;font-size:.62rem}
 .antar-table th{background:rgba(94,196,144,.07);color:var(--grn);font-weight:600;padding:7px 8px;text-align:left;letter-spacing:.05em;border-bottom:1px solid rgba(94,196,144,.12)}
 .antar-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--sil-d);transition:background .15s}
+.antar-table tr.antar-row{cursor:pointer}
 .antar-table tr:hover td{background:rgba(94,196,144,.04);color:var(--sil)}
 .antar-table tr.cur-antar td{background:rgba(94,196,144,.1);color:var(--grn);font-weight:600}
+.antar-table tr.expanded td{background:rgba(201,168,76,.06);color:var(--gold-l)}
+.antar-caret{display:inline-block;width:1em;color:var(--gold-d);font-size:.85em}
+.pratyantar-wrap-row td{padding:0;border-bottom:1px solid rgba(255,255,255,.04)}
+.praty-table{width:100%;border-collapse:collapse;font-size:.95em;background:rgba(201,168,76,.025);animation:rise .2s ease both}
+.praty-table th{background:rgba(201,168,76,.06);color:var(--gold-d);font-weight:600;padding:6px 8px 6px 26px;text-align:left;letter-spacing:.04em;border-bottom:1px solid rgba(201,168,76,.1);font-size:.92em}
+.praty-table td{padding:5px 8px 5px 26px;color:var(--sil-d);border-bottom:1px dashed rgba(255,255,255,.03);font-size:.96em}
+.praty-table tr.cur-praty td{background:rgba(201,168,76,.1);color:var(--gold-l);font-weight:600}
 
 /* ── YOGA BADGE ENHANCED ── */
 .yoga-badge{background:rgba(155,127,212,.1);border:1px solid rgba(155,127,212,.25);color:var(--acc-l);padding:5px 12px;border-radius:4px;font-size:.65rem;font-weight:600;transition:all .2s;cursor:default}
@@ -507,6 +646,11 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
 .dosha-absent{background:rgba(94,196,144,.05);border:1px solid rgba(94,196,144,.15)}
 .dosha-absent .d-name{color:var(--grn)}
 .dosha-absent .d-status{color:var(--grn)}
+.dosha-cancelled{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.22)}
+.dosha-cancelled .d-name{color:var(--gold-l)}
+.dosha-cancelled .d-status{color:var(--gold-l)}
+.dosha-row{grid-template-columns:repeat(3,1fr);row-gap:10px}
+@media(max-width:600px){.dosha-row{grid-template-columns:1fr 1fr!important}}
 @media(max-width:520px){
   .inp-card,.panel{padding:20px 14px 24px}
   .r2,.r3{grid-template-columns:1fr}
@@ -519,8 +663,13 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
 </style>
 </head>
 <body>
+<!-- LANGUAGE TOGGLE -->
+<button id="langToggle" onclick="setLanguage(currentLang==='ta'?'en':'ta')" title="Language / மொழி" aria-label="Toggle language">
+  <span class="lt-knob"></span>
+  <span class="lt-labels"><span>த</span><span>EN</span></span>
+</button>
 <!-- MODE TOGGLE -->
-<button id="modeToggle" onclick="toggleMode()" title="ஒளிர்வு / இருள் மாற்று">
+<button id="modeToggle" onclick="toggleMode()" title="ஒளிர்வு / இருள் மாற்று" data-i18n-title="modeToggleTitle" aria-label="Toggle dark / light mode">
   <span class="icon-moon">🌙</span>
   <span class="icon-sun">☀️</span>
 </button>
@@ -530,7 +679,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="load-zodiac">
     <span>♈</span><span>♉</span><span>♊</span><span>♋</span><span>♌</span><span>♍</span><span>♎</span><span>♏</span>
   </div>
-  <div class="load-text">கிரக நிலைகள் கணிக்கிறோம்…<br><span style="font-size:.6rem;opacity:.6">VSOP87 · ELP2000 · லாஹிரி அயனாம்சம்</span></div>
+  <div class="load-text" data-i18n="loadingText">கிரக நிலைகள் கணிக்கிறோம்…<br><span style="font-size:.6rem;opacity:.6">VSOP87 · ELP2000 · லாஹிரி அயனாம்சம்</span></div>
 </div>
 
 <div id="sf"></div>
@@ -553,77 +702,130 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
     <circle cx="21" cy="55" r="1.2" fill="#c9a84c" opacity=".6"/>
     <circle cx="12" cy="26" r="1.2" fill="#c9a84c" opacity=".6"/>
   </svg>
-  <h1>விரிவான ஜோதிட கணிப்பு</h1>
-  <p class="sub">வேத ஜோதிடம் · VSOP87 · ELP2000 · லாஹிரி அயனாம்சம்</p>
+  <h1 data-i18n="headerTitle">விரிவான ஜோதிட கணிப்பு</h1>
+  <p class="sub" data-i18n="headerSub">வேத ஜோதிடம் · VSOP87 · ELP2000 · லாஹிரி அயனாம்சம்</p>
 </header>
 
 <div class="inp-card">
-  <div class="r3">
+  <div class="profile-bar" id="profileBar">
+    <div class="sw profile-select-wrap">
+      <select id="profileSelect" onchange="onProfileSelectChange(this.value)" data-i18n-title="profileSelectTitle" title="Profile"></select>
+    </div>
+    <div class="profile-actions">
+      <button type="button" class="pbtn" onclick="createProfile()" data-i18n-title="profileNewTitle" title="New profile" aria-label="New profile">＋</button>
+      <button type="button" class="pbtn" onclick="renameProfile()" data-i18n-title="profileRenameTitle" title="Rename" aria-label="Rename profile">✎</button>
+      <button type="button" class="pbtn" onclick="duplicateProfile()" data-i18n-title="profileDuplicateTitle" title="Duplicate" aria-label="Duplicate profile">⧉</button>
+      <button type="button" class="pbtn" id="profileDefaultBtn" onclick="setDefaultProfile()" data-i18n-title="profileDefaultTitle" title="Set as default" aria-label="Set as default profile">☆</button>
+      <button type="button" class="pbtn pbtn-danger" onclick="deleteProfile()" data-i18n-title="profileDeleteTitle" title="Delete" aria-label="Delete profile">🗑</button>
+    </div>
+  </div>
+  <div class="profile-summary" id="profileSummary"></div>
+  <div class="profile-search-wrap" id="profileSearchWrap" style="display:none">
+    <input type="text" id="profileSearchBox" data-i18n-ph="profileSearchPh" placeholder="Search profiles…" oninput="renderProfileSelect(this.value)">
+  </div>
+  <div class="profile-io-row">
+    <button type="button" class="profile-io-btn" onclick="exportProfiles()" data-i18n="profileExportBtn">⬇ Export all profiles</button>
+    <button type="button" class="profile-io-btn" onclick="document.getElementById('profileImportFile').click()" data-i18n="profileImportBtn">⬆ Import profiles</button>
+    <input type="file" id="profileImportFile" accept="application/json" style="display:none" onchange="importProfiles(this.files[0])">
+  </div>
+  <div class="fg">
+    <label for="placeSearch" data-i18n="lblPlaceSearch">பிறந்த இடம் <span data-i18n="lblPlaceSearchSpan">— நகரத்தைத் தேடவும்</span></label>
+    <div class="sw place-ac">
+      <input type="text" id="placeSearch" autocomplete="off" data-i18n-ph="phPlaceSearch"
+        placeholder="நகரத்தின் பெயரைத் தட்டச்சு செய்யவும்… (எ.கா. Chennai)"
+        oninput="onPlaceSearchInput(this.value)" onfocus="onPlaceSearchInput(this.value)">
+      <div id="placeSearchResults" class="place-ac-list" role="listbox"></div>
+    </div>
+    <div id="placeSelectedInfo" class="place-selected-info"></div>
+  </div>
+  <button type="button" id="manualPlaceBtn" class="manual-toggle" onclick="toggleManualPlace()">
+    <span class="mpb-show" data-i18n="btnManualPlace">▾ பட்டியலிலிருந்து தேர்வு செய்ய</span>
+    <span class="mpb-hide" data-i18n="btnHideManualPlace">▴ பட்டியலை மறை</span>
+  </button>
+  <div class="r3 manual-place-row" id="manualPlaceRow" style="display:none">
     <div class="fg">
-      <label for="continent">கண்டம்</label>
-      <div class="sw"><select id="continent" onchange="updateCountries()">
-        <option value="">— தேர்க —</option>
-        <option value="asia">ஆசியா</option>
-        <option value="europe">ஐரோப்பா</option>
-        <option value="namerica">வட அமெரிக்கா</option>
-        <option value="samerica">தென் அமெரிக்கா</option>
-        <option value="africa">ஆப்பிரிக்கா</option>
-        <option value="oceania">ஓசியானியா</option>
+      <label for="continent" data-i18n="lblContinent">கண்டம்</label>
+      <div class="sw"><select id="continent" onchange="updateCountries();clearSearchPlace()">
+        <option value="" data-i18n="optChooseContinent">— தேர்க —</option>
+        <option value="asia" data-i18n="contAsia">ஆசியா</option>
+        <option value="europe" data-i18n="contEurope">ஐரோப்பா</option>
+        <option value="namerica" data-i18n="contNAmerica">வட அமெரிக்கா</option>
+        <option value="samerica" data-i18n="contSAmerica">தென் அமெரிக்கா</option>
+        <option value="africa" data-i18n="contAfrica">ஆப்பிரிக்கா</option>
+        <option value="oceania" data-i18n="contOceania">ஓசியானியா</option>
       </select></div>
     </div>
     <div class="fg">
-      <label for="country">நாடு</label>
-      <div class="sw"><select id="country" onchange="updateCities()" disabled>
-        <option value="">— முதல் கண்டம் —</option>
+      <label for="country" data-i18n="lblCountry">நாடு</label>
+      <div class="sw"><select id="country" onchange="updateCities();clearSearchPlace()" disabled>
+        <option value="" data-i18n="optFirstContinent">— முதல் கண்டம் —</option>
       </select></div>
     </div>
     <div class="fg">
-      <label for="city">நகரம் <span>— பிறந்த இடம்</span></label>
-      <div class="sw"><select id="city" disabled>
-        <option value="">— முதல் நாடு —</option>
+      <label for="city" data-i18n="lblCity">நகரம் <span data-i18n="lblCitySpan">— பிறந்த இடம்</span></label>
+      <div class="sw"><select id="city" onchange="clearSearchPlace()" disabled>
+        <option value="" data-i18n="optFirstCountry">— முதல் நாடு —</option>
       </select></div>
     </div>
   </div>
   <div class="div">✦</div>
   <div class="r2">
     <div class="fg">
-      <label for="dob">பிறந்த தேதி <span class="def-badge">இயல்புநிலை</span></label>
-      <input type="date" id="dob" min="1900-01-01" max="2100-12-31" value="1974-06-22">
+      <label for="dob" data-i18n="lblDob">பிறந்த தேதி</label>
+      <input type="date" id="dob" min="1900-01-01" max="2100-12-31" onchange="saveActiveProfileFromForm()">
     </div>
     <div class="fg">
-      <label for="tob">பிறந்த நேரம் <span>(லக்னத்திற்கு அவசியம்)</span></label>
-      <input type="time" id="tob" value="07:18">
+      <label for="tob" data-i18n="lblTob">பிறந்த நேரம் <span data-i18n="lblTobSpan">(லக்னத்திற்கு அவசியம்)</span></label>
+      <input type="time" id="tob" onchange="saveActiveProfileFromForm()">
     </div>
   </div>
   <div class="div">✦</div>
   <div class="r2">
     <div class="fg">
-      <label for="nodeType">ராகு/கேது கணிப்பு முறை <span class="def-badge">இயல்புநிலை: உண்மை</span></label>
-      <div class="sw"><select id="nodeType">
-        <option value="true" selected>உண்மை க்ரஹணி (True Node)</option>
-        <option value="mean">சராசரி க்ரஹணி (Mean Node)</option>
+      <label for="nodeType" data-i18n="lblNodeType">ராகு/கேது கணிப்பு முறை <span class="def-badge" data-i18n="badgeNodeDefault">இயல்புநிலை: உண்மை</span></label>
+      <div class="sw"><select id="nodeType" onchange="saveActiveProfileFromForm()">
+        <option value="true" selected data-i18n="optTrueNode">உண்மை க்ரஹணி (True Node)</option>
+        <option value="mean" data-i18n="optMeanNode">சராசரி க்ரஹணி (Mean Node)</option>
       </select></div>
     </div>
   </div>
-  <button class="calc-btn" onclick="calculate()">✦ &nbsp; விரிவான ஜாதகம் காட்டு &nbsp; ✦</button>
-  <div id="errbox"></div>
+  <div class="btn-row">
+    <button type="button" class="reset-btn" onclick="resetForm()" data-i18n="btnReset">↺ Reset</button>
+    <button class="calc-btn" onclick="calculate()" data-i18n="btnCalculate">✦ &nbsp; விரிவான ஜாதகம் காட்டு &nbsp; ✦</button>
+  </div>
+  <div id="errbox" role="alert" aria-live="assertive"></div>
 </div>
 
+<div class="results-layout" id="resultsLayout">
+<aside class="ai-panel" id="aiPanel">
+  <div class="ai-panel-head">
+    <span class="ptitle-icon">✧</span>
+    <div><h2 data-i18n="panTitle11">AI ஜோதிட விளக்கம்</h2><div class="psub" data-i18n="panSub11">உங்கள் ஜாதகத்தின் தனிப்பட்ட தமிழ் பலன்</div></div>
+  </div>
+  <div id="aiSection"><div class="ai-loading"><span class="spinner"></span><span data-i18n="aiLoadingText">ஜோதிட பலன் கணிக்கிறோம்...</span></div></div>
+  <div class="ai-actions" id="aiActions">
+    <button type="button" class="ai-act-btn" id="aiCopyBtn" onclick="copyAIText()" disabled>📋 <span data-i18n="aiCopyBtn">Copy</span></button>
+    <button type="button" class="ai-act-btn" id="aiShareBtn" onclick="shareAIText()" disabled>🔗 <span data-i18n="aiShareBtn">Share</span></button>
+    <button type="button" class="ai-act-btn" id="aiMdBtn" onclick="downloadAIText('md')" disabled>⬇ <span data-i18n="aiMdBtn">Markdown</span></button>
+    <button type="button" class="ai-act-btn" id="aiTxtBtn" onclick="downloadAIText('txt')" disabled>⬇ <span data-i18n="aiTxtBtn">TXT</span></button>
+    <button type="button" class="ai-act-btn" id="aiPdfBtn" onclick="downloadAIPDF()" disabled>⬇ <span data-i18n="aiPdfBtn">PDF</span></button>
+  </div>
+</aside>
 <div id="results">
 
   <!-- 1. PLANET RASI -->
   <div class="panel pg-gold">
     <div class="ptitle gold-c">
       <span class="ptitle-icon">♈</span>
-      <div><h2>கிரக ராசி நிலைகள்</h2><div class="psub">9 கிரகங்கள் · லாஹிரி அயனாம்சம் · வேத சித்திரேய</div></div>
+      <div><h2 data-i18n="panTitle1">கிரக ராசி நிலைகள்</h2><div class="psub" data-i18n="panSub1">9 கிரகங்கள் · லாஹிரி அயனாம்சம் · வேத சித்திரேய</div></div>
     </div>
     <div class="pgrid" id="rasiGrid"></div>
     <div class="legend">
-      <div class="leg-item"><div class="leg-dot" style="background:#5ec490"></div>உச்சம் (Exaltation) ↑</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#c47090"></div>நீசம் (Debilitation) ↓</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#c9a84c"></div>சொந்த ராசி ★</div>
-      <div class="leg-item"><div class="leg-dot" style="background:rgba(220,160,40,.5)"></div>சூரியன் (highlighted)</div>
-      <div class="leg-item"><div class="leg-dot" style="background:rgba(180,200,255,.4)"></div>சந்திரன் (highlighted)</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#5ec490"></div><span data-i18n="legExalt">உச்சம் (Exaltation) ↑</span></div>
+      <div class="leg-item"><div class="leg-dot" style="background:#c47090"></div><span data-i18n="legDebil">நீசம் (Debilitation) ↓</span></div>
+      <div class="leg-item"><div class="leg-dot" style="background:#c9a84c"></div><span data-i18n="legOwn">சொந்த ராசி ★</span></div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(220,160,40,.5)"></div><span data-i18n="legSun">சூரியன் (highlighted)</span></div>
+      <div class="leg-item"><div class="leg-dot" style="background:rgba(180,200,255,.4)"></div><span data-i18n="legMoon">சந்திரன் (highlighted)</span></div>
     </div>
   </div>
 
@@ -631,7 +833,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-gold">
     <div class="ptitle gold-c">
       <span class="ptitle-icon">☉</span>
-      <div><h2>ராசி சுருக்கம்</h2><div class="psub">சூரிய ராசி · சந்திர ராசி · லக்னம் · அதிபதி</div></div>
+      <div><h2 data-i18n="panTitle2">ராசி சுருக்கம்</h2><div class="psub" data-i18n="panSub2">சூரிய ராசி · சந்திர ராசி · லக்னம் · அதிபதி</div></div>
     </div>
     <div class="irow" id="rasiSummary"></div>
     <div class="irow3" id="rasiExtra"></div>
@@ -642,7 +844,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-blue">
     <div class="ptitle blue-c">
       <span class="ptitle-icon">✦</span>
-      <div><h2>நட்சத்திர நிலைகள்</h2><div class="psub">27 நட்சத்திரங்கள் · ஜென்ம நட்சத்திரம் · சந்திர நட்சத்திரம்</div></div>
+      <div><h2 data-i18n="panTitle3">நட்சத்திர நிலைகள்</h2><div class="psub" data-i18n="panSub3">27 நட்சத்திரங்கள் · ஜென்ம நட்சத்திரம் · சந்திர நட்சத்திரம்</div></div>
     </div>
     <div class="r2" style="margin-bottom:14px" id="natchMain"></div>
     <div class="irow3" id="natchDetail"></div>
@@ -655,7 +857,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-rose">
     <div class="ptitle rose-c">
       <span class="ptitle-icon">☽</span>
-      <div><h2>பஞ்சாங்கம்</h2><div class="psub">திதி · வாரம் · யோகம் · கரணம் · நட்சத்திரம்</div></div>
+      <div><h2 data-i18n="panTitle4">பஞ்சாங்கம்</h2><div class="psub" data-i18n="panSub4">திதி · வாரம் · யோகம் · கரணம் · நட்சத்திரம்</div></div>
     </div>
     <div class="panch-row" id="panchRow"></div>
     <div class="irow" style="margin-top:10px" id="panchExtra"></div>
@@ -665,7 +867,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-gold" id="bhavaPanel" style="display:none">
     <div class="ptitle gold-c">
       <span class="ptitle-icon">⌂</span>
-      <div><h2>பாவ நிலைகள் (12 வீடுகள்)</h2><div class="psub">கிரக வீட்டு அமைப்பு · பிறப்பு நேரம் தேவை</div></div>
+      <div><h2 data-i18n="panTitle5">பாவ நிலைகள் (12 வீடுகள்)</h2><div class="psub" data-i18n="panSub5">கிரக வீட்டு அமைப்பு · பிறப்பு நேரம் தேவை</div></div>
     </div>
     <div class="bhava-grid" id="bhavaGrid"></div>
     <div class="irow3" id="bhavaInfo"></div>
@@ -675,11 +877,11 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-gold" id="kundliPanel" style="display:none">
     <div class="ptitle gold-c">
       <span class="ptitle-icon">◈</span>
-      <div><h2>குண்டலி சக்கரம்</h2><div class="psub">வட இந்திய / தென் இந்திய பாணி</div></div>
+      <div><h2 data-i18n="panTitle6">குண்டலி சக்கரம்</h2><div class="psub" data-i18n="panSub6">வட இந்திய / தென் இந்திய பாணி</div></div>
     </div>
     <div class="kundli-toggle">
-      <button class="kundli-btn active" onclick="switchKundli('north',this)">வட இந்திய</button>
-      <button class="kundli-btn" onclick="switchKundli('south',this)">தென் இந்திய</button>
+      <button class="kundli-btn active" onclick="switchKundli('north',this)" data-i18n="btnNorthIndian">வட இந்திய</button>
+      <button class="kundli-btn" onclick="switchKundli('south',this)" data-i18n="btnSouthIndian">தென் இந்திய</button>
     </div>
     <div class="kundli-wrap" id="kundliWrap"></div>
   </div>
@@ -688,7 +890,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-gold" id="tamilRasiPanel" style="display:none">
     <div class="ptitle gold-c">
       <span class="ptitle-icon">🔯</span>
-      <div><h2>தமிழ் ராசி சக்கரம்</h2><div class="psub">தென் இந்திய பாணி · ராசிகளும் அவற்றில் அடங்கும் நட்சத்திரங்களும்</div></div>
+      <div><h2 data-i18n="panTitle7">தமிழ் ராசி சக்கரம்</h2><div class="psub" data-i18n="panSub7">தென் இந்திய பாணி · ராசிகளும் அவற்றில் அடங்கும் நட்சத்திரங்களும்</div></div>
     </div>
     <div id="tamilRasiChartWrap"></div>
   </div>
@@ -697,7 +899,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-gold">
     <div class="ptitle gold-c">
       <span class="ptitle-icon">⚖</span>
-      <div><h2>கிரக பலம்</h2><div class="psub">உச்சம் · நீசம் · சொந்த ராசி · நட்பு · பகை</div></div>
+      <div><h2 data-i18n="panTitle8">கிரக பலம்</h2><div class="psub" data-i18n="panSub8">உச்சம் · நீசம் · சொந்த ராசி · நட்பு · பகை</div></div>
     </div>
     <div id="strengthBars"></div>
   </div>
@@ -706,7 +908,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-grn">
     <div class="ptitle grn-c">
       <span class="ptitle-icon">⏱</span>
-      <div><h2>விம்சோத்தரி தசா</h2><div class="psub">120 ஆண்டு சுழற்சி · மஹா தசா · அந்தர் தசா</div></div>
+      <div><h2 data-i18n="panTitle9">விம்சோத்தரி தசா</h2><div class="psub" data-i18n="panSub9">120 ஆண்டு சுழற்சி · மஹா தசா · அந்தர் தசா</div></div>
     </div>
     <div class="irow" style="margin-bottom:12px" id="dashaCurrentRow"></div>
     <div style="font-size:.6rem;color:var(--grn-d);margin-bottom:8px;letter-spacing:.07em;font-weight:600">அனைத்து மஹா தசா — தற்போதைய காலம் பொலிவாக காட்டப்படும்</div>
@@ -719,26 +921,17 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-acc">
     <div class="ptitle acc-c">
       <span class="ptitle-icon">◈</span>
-      <div><h2>யோக அமைப்புகள்</h2><div class="psub">ராஜயோகம் · கஜகேசரி · புத்தாதித்ய · அதிக யோகங்கள்</div></div>
+      <div><h2 data-i18n="panTitle10">யோக அமைப்புகள்</h2><div class="psub" data-i18n="panSub10">ராஜயோகம் · கஜகேசரி · புத்தாதித்ய · அதிக யோகங்கள்</div></div>
     </div>
     <div id="yogaList"></div>
     <p class="trait" id="yogaTrait" style="border-top-color:rgba(155,127,212,.1);color:var(--acc-l);opacity:.8"></p>
-  </div>
-
-  <!-- 9. AI INTERPRETATION -->
-  <div class="panel pg-acc">
-    <div class="ptitle acc-c">
-      <span class="ptitle-icon">✧</span>
-      <div><h2>AI ஜோதிட விளக்கம்</h2><div class="psub">உங்கள் ஜாதகத்தின் தனிப்பட்ட தமிழ் பலன்</div></div>
-    </div>
-    <div id="aiSection"><div class="ai-loading"><span class="spinner"></span>ஜோதிட பலன் கணிக்கிறோம்...</div></div>
   </div>
 
   <!-- 10. HEALTH SUGGESTIONS -->
   <div class="panel pg-grn">
     <div class="ptitle grn-c">
       <span class="ptitle-icon">🌿</span>
-      <div><h2>ஆரோக்கிய ஆலோசனைகள்</h2><div class="psub">ராசி · நட்சத்திரம் · கிரக பலம் அடிப்படையில்</div></div>
+      <div><h2 data-i18n="panTitle12">ஆரோக்கிய ஆலோசனைகள்</h2><div class="psub" data-i18n="panSub12">ராசி · நட்சத்திரம் · கிரக பலம் அடிப்படையில்</div></div>
     </div>
     <div class="health-grid" id="healthGrid"></div>
     <div class="irow" id="healthExtra"></div>
@@ -749,7 +942,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-gold">
     <div class="ptitle gold-c">
       <span class="ptitle-icon">🍀</span>
-      <div><h2>அதிர்ஷ்ட விவரங்கள்</h2><div class="psub">நம்பர் · நிறம் · திசை · கல் · வாரம்</div></div>
+      <div><h2 data-i18n="panTitle13">அதிர்ஷ்ட விவரங்கள்</h2><div class="psub" data-i18n="panSub13">நம்பர் · நிறம் · திசை · கல் · வாரம்</div></div>
     </div>
     <div class="lucky-grid" id="luckyGrid"></div>
     <div class="irow" id="luckyExtra"></div>
@@ -759,7 +952,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-rose">
     <div class="ptitle rose-c">
       <span class="ptitle-icon">⚠</span>
-      <div><h2>தோஷ ஆய்வு</h2><div class="psub">மாங்கல்ய தோஷம் · கால சர்ப தோஷம் · சனி தோஷம்</div></div>
+      <div><h2 data-i18n="panTitle14">தோஷ ஆய்வு</h2><div class="psub" data-i18n="panSub14">மாங்கல்ய தோஷம் · கால சர்ப தோஷம் · சனி தோஷம்</div></div>
     </div>
     <div class="dosha-row" id="doshaRow"></div>
     <div class="ibox" id="doshaNote" style="margin-top:4px;font-size:.7rem;color:var(--sil-d);line-height:1.7"></div>
@@ -769,7 +962,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-blue">
     <div class="ptitle blue-c">
       <span class="ptitle-icon">💼</span>
-      <div><h2>தொழில் & திறன்கள்</h2><div class="psub">பொருத்தமான தொழில் · இயற்கை திறன்கள்</div></div>
+      <div><h2 data-i18n="panTitle15">தொழில் & திறன்கள்</h2><div class="psub" data-i18n="panSub15">பொருத்தமான தொழில் · இயற்கை திறன்கள்</div></div>
     </div>
     <div class="career-row" id="careerRow"></div>
     <div class="ibox" id="careerNote" style="margin-top:4px"></div>
@@ -779,7 +972,7 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-acc">
     <div class="ptitle acc-c">
       <span class="ptitle-icon">🔢</span>
-      <div><h2>எண் கணிதம்</h2><div class="psub">உயிர் எண் · கர்ம எண் · பெயர் எண் · ஆன்ம எண்</div></div>
+      <div><h2 data-i18n="panTitle16">எண் கணிதம்</h2><div class="psub" data-i18n="panSub16">உயிர் எண் · கர்ம எண் · பெயர் எண் · ஆன்ம எண்</div></div>
     </div>
     <div class="num-row" id="numRow"></div>
     <p class="trait" id="numTrait" style="border-top-color:rgba(155,127,212,.1);color:var(--acc-l);opacity:.8"></p>
@@ -789,24 +982,25 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   <div class="panel pg-acc">
     <div class="ptitle acc-c">
       <span class="ptitle-icon">🪔</span>
-      <div><h2>பரிகாரம் & மந்திரங்கள்</h2><div class="psub">நட்சத்திர அதிபதி · லக்ன ராசி அடிப்படையில்</div></div>
+      <div><h2 data-i18n="panTitle17">பரிகாரம் & மந்திரங்கள்</h2><div class="psub" data-i18n="panSub17">நட்சத்திர அதிபதி · லக்ன ராசி அடிப்படையில்</div></div>
     </div>
     <div id="mantraSection"></div>
     <div class="irow" style="margin-top:10px" id="remedyExtra"></div>
   </div>
 
 </div><!-- #results -->
+</div><!-- #resultsLayout -->
 
 <!-- PDF DOWNLOAD BAR -->
 <div id="pdf-bar">
   <button class="pdf-btn" id="pdfBtn" onclick="downloadPDF()">
     <span class="pdf-icon">⬇</span>
     <span class="pdf-spinner"></span>
-    <span class="pdf-label">PDF பதிவிறக்கம் — A4 Portrait</span>
+    <span class="pdf-label" data-i18n="btnPdfDownload">PDF பதிவிறக்கம் — A4 Portrait</span>
   </button>
 </div>
 
-<footer><p>வேத ஜோதிட கணிப்பு · VSOP87 + ELP2000 · லாஹிரி அயனாம்சம் · பொழுதுபோக்கு & சுய சிந்தனைக்காக மட்டுமே</p></footer>
+<footer><p data-i18n="footerText">வேத ஜோதிட கணிப்பு · VSOP87 + ELP2000 · லாஹிரி அயனாம்சம் · பொழுதுபோக்கு & சுய சிந்தனைக்காக மட்டுமே</p></footer>
 </div>
 
 <script>
@@ -838,7 +1032,281 @@ h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient
   }
 })();
 
-/* ══ GEO DATA [name, lat, lon, timezone_offset] ══ */
+/* ══════════════════════════════════════════════════════════════
+   I18N — CENTRALIZED TRANSLATION ENGINE (English / Tamil)
+   - I18N_STATIC: keys for every data-i18n tagged DOM element + a few
+     JS-set strings (error/loading text). Looked up directly, no
+     fallback risk since both languages are always defined here.
+   - TR_MAP: Tamil → English substring dictionary for content that is
+     generated dynamically inside render*() functions (planet/rasi/
+     nakshatra/yoga/dosha names, panchanga terms, lucky/career data,
+     etc). Applied as a post-render DOM text-node sweep (translateDynamicContent),
+     so the underlying calculation/render code — which is keyed on the
+     original Tamil strings — never has to change.
+   - User-entered/selected data (place names) are handled separately
+     via PLACE_EN: only the *displayed* option label is translated,
+     the underlying <option value> (and therefore GEO[] lookups) stays
+     untouched.
+   ══════════════════════════════════════════════════════════════ */
+let currentLang = localStorage.getItem('astro-lang') || 'ta';
+
+const I18N_STATIC = {
+  ta:{
+    modeToggleTitle:'ஒளிர்வு / இருள் மாற்று',
+    loadingText:'கிரக நிலைகள் கணிக்கிறோம்…<br><span style="font-size:.6rem;opacity:.6">VSOP87 · ELP2000 · லாஹிரி அயனாம்சம்</span>',
+    headerTitle:'விரிவான ஜோதிட கணிப்பு',
+    headerSub:'வேத ஜோதிடம் · VSOP87 · ELP2000 · லாஹிரி அயனாம்சம்',
+    lblContinent:'கண்டம்', optChooseContinent:'— தேர்க —',
+    contAsia:'ஆசியா', contEurope:'ஐரோப்பா', contNAmerica:'வட அமெரிக்கா',
+    contSAmerica:'தென் அமெரிக்கா', contAfrica:'ஆப்பிரிக்கா', contOceania:'ஓசியானியா',
+    lblCountry:'நாடு', optFirstContinent:'— முதல் கண்டம் —', optChooseCountry:'— நாடு தேர்க —',
+    lblCity:'நகரம்', lblCitySpan:'— பிறந்த இடம்', optFirstCountry:'— முதல் நாடு —', optChooseCity:'— நகரம் தேர்க —',
+    lblDob:'பிறந்த தேதி',
+    lblTob:'பிறந்த நேரம்', lblTobSpan:'(லக்னத்திற்கு அவசியம்)',
+    lblNodeType:'ராகு/கேது கணிப்பு முறை', badgeNodeDefault:'இயல்புநிலை: உண்மை',
+    optTrueNode:'உண்மை க்ரஹணி (True Node)', optMeanNode:'சராசரி க்ரஹணி (Mean Node)',
+    btnCalculate:'✦ \u00a0 விரிவான ஜாதகம் காட்டு \u00a0 ✦',
+    btnReset:'↺ மீட்டமை',
+    panTitle1:'கிரக ராசி நிலைகள்', panSub1:'9 கிரகங்கள் · லாஹிரி அயனாம்சம் · வேத சித்திரேய',
+    panTitle2:'ராசி சுருக்கம்', panSub2:'சூரிய ராசி · சந்திர ராசி · லக்னம் · அதிபதி',
+    panTitle3:'நட்சத்திர நிலைகள்', panSub3:'27 நட்சத்திரங்கள் · ஜென்ம நட்சத்திரம் · சந்திர நட்சத்திரம்',
+    panTitle4:'பஞ்சாங்கம்', panSub4:'திதி · வாரம் · யோகம் · கரணம் · நட்சத்திரம்',
+    panTitle5:'பாவ நிலைகள் (12 வீடுகள்)', panSub5:'கிரக வீட்டு அமைப்பு · பிறப்பு நேரம் தேவை',
+    panTitle6:'குண்டலி சக்கரம்', panSub6:'வட இந்திய / தென் இந்திய பாணி',
+    panTitle7:'தமிழ் ராசி சக்கரம்', panSub7:'தென் இந்திய பாணி · ராசிகளும் அவற்றில் அடங்கும் நட்சத்திரங்களும்',
+    panTitle8:'கிரக பலம்', panSub8:'உச்சம் · நீசம் · சொந்த ராசி · நட்பு · பகை',
+    panTitle9:'விம்சோத்தரி தசா', panSub9:'120 ஆண்டு சுழற்சி · மஹா · அந்தர் · பிரத்யந்தர் தசா',
+    panTitle10:'யோக அமைப்புகள்', panSub10:'ராஜயோகம் · கஜகேசரி · புத்தாதித்ய · அதிக யோகங்கள்',
+    panTitle11:'AI ஜோதிட விளக்கம்', panSub11:'உங்கள் ஜாதகத்தின் தனிப்பட்ட தமிழ் பலன்',
+    panTitle12:'ஆரோக்கிய ஆலோசனைகள்', panSub12:'ராசி · நட்சத்திரம் · கிரக பலம் அடிப்படையில்',
+    panTitle13:'அதிர்ஷ்ட விவரங்கள்', panSub13:'நம்பர் · நிறம் · திசை · கல் · வாரம்',
+    panTitle14:'தோஷ ஆய்வு', panSub14:'மாங்கல்ய தோஷம் · கால சர்ப தோஷம் · சனி தோஷம்',
+    panTitle15:'தொழில் & திறன்கள்', panSub15:'பொருத்தமான தொழில் · இயற்கை திறன்கள்',
+    panTitle16:'எண் கணிதம்', panSub16:'உயிர் எண் · கர்ம எண் · பெயர் எண் · ஆன்ம எண்',
+    panTitle17:'பரிகாரம் & மந்திரங்கள்', panSub17:'நட்சத்திர அதிபதி · லக்ன ராசி அடிப்படையில்',
+    btnNorthIndian:'வட இந்திய', btnSouthIndian:'தென் இந்திய',
+    btnPdfDownload:'PDF பதிவிறக்கம் — A4 Portrait',
+    footerText:'வேத ஜோதிட கணிப்பு · VSOP87 + ELP2000 · லாஹிரி அயனாம்சம் · பொழுதுபோக்கு & சுய சிந்தனைக்காக மட்டுமே',
+    legExalt:'உச்சம் (Exaltation) ↑', legDebil:'நீசம் (Debilitation) ↓', legOwn:'சொந்த ராசி ★',
+    legSun:'சூரியன் (highlighted)', legMoon:'சந்திரன் (highlighted)',
+    errMissingFields:'பிறந்த இடம் (தேடல் அல்லது பட்டியல்) மற்றும் பிறந்த தேதி உள்ளிடவும்',
+    errMissingPlace:'பிறந்த இடத்தைத் தேர்வு செய்யவும் — மேலே தேடுபெட்டியில் தட்டச்சு செய்யவும் அல்லது பட்டியலிலிருந்து தேர்ந்தெடுக்கவும்',
+    errMissingDob:'பிறந்த தேதியை உள்ளிடவும்',
+    aiLoadingText:'ஜோதிட பலன் கணிக்கிறோம்...',
+    aiCopyBtn:'நகலெடு', aiCopiedBtn:'நகலெடுக்கப்பட்டது ✓', aiShareBtn:'பகிர்',
+    aiMdBtn:'Markdown', aiTxtBtn:'TXT', aiPdfBtn:'PDF',
+    lblPlaceSearch:'பிறந்த இடம்', lblPlaceSearchSpan:'— நகரத்தைத் தேடவும்',
+    phPlaceSearch:'நகரத்தின் பெயரைத் தட்டச்சு செய்யவும்… (எ.கா. Chennai)',
+    btnManualPlace:'▾ பட்டியலிலிருந்து தேர்வு செய்ய', btnHideManualPlace:'▴ பட்டியலை மறை',
+    placeSearching:'தேடுகிறோம்…', placeNoResults:'முடிவுகள் இல்லை',
+    placeSearchError:'தேடலில் பிழை — மீண்டும் முயற்சிக்கவும்',
+    placeResolving:'நேர மண்டலம் கண்டறிகிறோம்…', placeTzFailed:'நேர மண்டலம் கிடைக்கவில்லை — UTC+0 பயன்படுத்தப்படுகிறது',
+    profileSelectTitle:'சுயவிவரம்', profileNewTitle:'புதிய சுயவிவரம்', profileRenameTitle:'பெயர் மாற்று',
+    profileDuplicateTitle:'நகலெடு', profileDefaultTitle:'இயல்புநிலையாக அமை', profileDeleteTitle:'நீக்கு',
+    profileNamePrompt:'சுயவிவர பெயரை உள்ளிடவும்:', profileDefaultName:'புதிய சுயவிவரம்',
+    profileRenamePrompt:'புதிய பெயரை உள்ளிடவும்:', profileDuplicateSuffix:' (நகல்)',
+    profileDeleteLastAlert:'குறைந்தது ஒரு சுயவிவரம் வேண்டும் — கடைசி சுயவிவரத்தை நீக்க முடியாது.',
+    profileDeleteConfirm:'இந்த சுயவிவரத்தை நீக்கவா?', profileMyHoroscope:'என் ஜாதகம்',
+    profileSearchPh:'சுயவிவரங்களைத் தேடு…',
+    profileExportBtn:'⬇ அனைத்து சுயவிவரங்களையும் ஏற்றுமதி செய்', profileImportBtn:'⬆ சுயவிவரங்களை இறக்குமதி செய்',
+    profileImportSuccess:'சுயவிவரங்கள் இறக்குமதி செய்யப்பட்டன', profileImportError:'இறக்குமதி தோல்வியடைந்தது — செல்லுபடியான கோப்பு அல்ல',
+    profileNoMatch:'பொருந்தும் சுயவிவரங்கள் இல்லை', profileNoDob:'தேதி இன்னும் அமைக்கப்படவில்லை',
+  },
+  en:{
+    modeToggleTitle:'Light / Dark mode',
+    loadingText:'Computing planetary positions…<br><span style="font-size:.6rem;opacity:.6">VSOP87 · ELP2000 · Lahiri Ayanamsa</span>',
+    headerTitle:'Comprehensive Astrology Reading',
+    headerSub:'Vedic Astrology · VSOP87 · ELP2000 · Lahiri Ayanamsa',
+    lblContinent:'Continent', optChooseContinent:'— Select —',
+    contAsia:'Asia', contEurope:'Europe', contNAmerica:'North America',
+    contSAmerica:'South America', contAfrica:'Africa', contOceania:'Oceania',
+    lblCountry:'Country', optFirstContinent:'— Select continent first —', optChooseCountry:'— Select country —',
+    lblCity:'City', lblCitySpan:'— Birth place', optFirstCountry:'— Select country first —', optChooseCity:'— Select city —',
+    lblDob:'Date of Birth',
+    lblTob:'Time of Birth', lblTobSpan:'(required for Lagna)',
+    lblNodeType:'Rahu/Ketu calculation method', badgeNodeDefault:'Default: True',
+    optTrueNode:'True Node', optMeanNode:'Mean Node',
+    btnCalculate:'✦ \u00a0 Show Full Horoscope \u00a0 ✦',
+    btnReset:'↺ Reset',
+    panTitle1:'Planetary Rāśi Positions', panSub1:'9 Grahas · Lahiri Ayanamsa · Vedic Chitrapaksha',
+    panTitle2:'Rāśi Summary', panSub2:'Sun sign · Moon sign · Ascendant · Lord',
+    panTitle3:'Nakshatra Positions', panSub3:'27 Nakshatras · Birth star · Moon nakshatra',
+    panTitle4:'Panchānga', panSub4:'Tithi · Vāra · Yoga · Karana · Nakshatra',
+    panTitle5:'Bhāva Positions (12 Houses)', panSub5:'Planetary house placement · birth time required',
+    panTitle6:'Kundli Chart', panSub6:'North Indian / South Indian style',
+    panTitle7:'Tamil Rāśi Chart', panSub7:'South Indian style · signs with their nakshatras',
+    panTitle8:'Planetary Strength', panSub8:'Exaltation · Debilitation · Own sign · Friend · Enemy',
+    panTitle9:'Vimshottari Dasha', panSub9:'120-year cycle · Mahadasha · Antardasha · Pratyantardasha',
+    panTitle10:'Yoga Combinations', panSub10:'Raja Yoga · Gajakesari · Budhaditya · more Yogas',
+    panTitle11:'AI Astrology Explanation', panSub11:'Personalized reading of your horoscope',
+    panTitle12:'Health Suggestions', panSub12:'Based on Rāśi · Nakshatra · planetary strength',
+    panTitle13:'Lucky Details', panSub13:'Number · Color · Direction · Stone · Day',
+    panTitle14:'Dosha Analysis', panSub14:'Mangal Dosha · Kala Sarpa Dosha · Shani Dosha',
+    panTitle15:'Career & Strengths', panSub15:'Suited careers · natural strengths',
+    panTitle16:'Numerology', panSub16:'Life number · Karma number · Name number · Soul number',
+    panTitle17:'Remedies & Mantras', panSub17:'Based on Nakshatra lord · Lagna sign',
+    btnNorthIndian:'North Indian', btnSouthIndian:'South Indian',
+    btnPdfDownload:'Download PDF — A4 Portrait',
+    footerText:'Vedic Astrology Calculator · VSOP87 + ELP2000 · Lahiri Ayanamsa · for entertainment & self-reflection only',
+    legExalt:'Exaltation ↑', legDebil:'Debilitation ↓', legOwn:'Own sign ★',
+    legSun:'Sun (highlighted)', legMoon:'Moon (highlighted)',
+    errMissingFields:'Please enter your birth place (search or list) and Date of Birth',
+    errMissingPlace:'Please select your birth place — type in the search box above or choose from the list',
+    errMissingDob:'Please enter your Date of Birth',
+    aiLoadingText:'Computing astrological reading...',
+    aiCopyBtn:'Copy', aiCopiedBtn:'Copied ✓', aiShareBtn:'Share',
+    aiMdBtn:'Markdown', aiTxtBtn:'TXT', aiPdfBtn:'PDF',
+    lblPlaceSearch:'Birth Place', lblPlaceSearchSpan:'— search for a city',
+    phPlaceSearch:'Type a city name… (e.g. Chennai)',
+    btnManualPlace:'▾ Choose from list instead', btnHideManualPlace:'▴ Hide list',
+    placeSearching:'Searching…', placeNoResults:'No results found',
+    placeSearchError:'Search failed — please try again',
+    placeResolving:'Resolving time zone…', placeTzFailed:'Time zone unavailable — using UTC+0',
+    profileSelectTitle:'Profile', profileNewTitle:'New profile', profileRenameTitle:'Rename',
+    profileDuplicateTitle:'Duplicate', profileDefaultTitle:'Set as default', profileDeleteTitle:'Delete',
+    profileNamePrompt:'Enter profile name:', profileDefaultName:'New Profile',
+    profileRenamePrompt:'Enter new name:', profileDuplicateSuffix:' (copy)',
+    profileDeleteLastAlert:'You need at least one profile — the last profile cannot be deleted.',
+    profileDeleteConfirm:'Delete this profile?', profileMyHoroscope:'My Horoscope',
+    profileSearchPh:'Search profiles…',
+    profileExportBtn:'⬇ Export all profiles', profileImportBtn:'⬆ Import profiles',
+    profileImportSuccess:'Profiles imported', profileImportError:'Import failed — not a valid file',
+    profileNoMatch:'No matching profiles', profileNoDob:'Date not set yet',
+  },
+};
+
+/* Tamil place-name → English display label. Internal GEO[] keys and
+   <option value> stay Tamil (unchanged) — only the visible <option>
+   text is translated, so no calculation/lookup code is touched. */
+const PLACE_EN = {
+  "இந்தியா":"India",
+  "சென்னை":"Chennai",
+  "மும்பை":"Mumbai",
+  "டெல்லி":"Delhi",
+  "பெங்களூரு":"Bengaluru",
+  "ஹைதராபாத்":"Hyderabad",
+  "கொல்கத்தா":"Kolkata",
+  "கோயம்புத்தூர்":"Coimbatore",
+  "மதுரை":"Madurai",
+  "திருச்சிராப்பள்ளி":"Tiruchirappalli",
+  "திருநெல்வேலி":"Tirunelveli",
+  "சேலம்":"Salem",
+  "ஈரோடு":"Erode",
+  "வேலூர்":"Vellore",
+  "திருவனந்தபுரம்":"Thiruvananthapuram",
+  "கோழிக்கோடு":"Kozhikode",
+  "ஜெய்ப்பூர்":"Jaipur",
+  "புனே":"Pune",
+  "அஹமதாபாத்":"Ahmedabad",
+  "விசாகப்பட்டணம்":"Visakhapatnam",
+  "நாகர்கோவில்":"Nagercoil",
+  "சீனா":"China",
+  "பெய்ஜிங்":"Beijing",
+  "ஷாங்காய்":"Shanghai",
+  "குவாங்சோ":"Guangzhou",
+  "ஹாங்காங்":"Hong Kong",
+  "ஜப்பான்":"Japan",
+  "டோக்கியோ":"Tokyo",
+  "ஒசாகா":"Osaka",
+  "கியோட்டோ":"Kyoto",
+  "யோகோஹாமா":"Yokohama",
+  "தென் கொரியா":"South Korea",
+  "சியோல்":"Seoul",
+  "புசான்":"Busan",
+  "பாகிஸ்தான்":"Pakistan",
+  "கராச்சி":"Karachi",
+  "லாகூர்":"Lahore",
+  "இஸ்லாமாபாத்":"Islamabad",
+  "துருக்கி":"Turkey",
+  "இஸ்தான்புல்":"Istanbul",
+  "அங்கரா":"Ankara",
+  "தாய்லாந்து":"Thailand",
+  "பாங்காக்":"Bangkok",
+  "சியாங் மாய்":"Chiang Mai",
+  "வியட்நாம்":"Vietnam",
+  "ஹனோய்":"Hanoi",
+  "ஹோ சி மின் சிட்டி":"Ho Chi Minh City",
+  "சிங்கப்பூர்":"Singapore",
+  "இந்தோனேசியா":"Indonesia",
+  "ஜகார்த்தா":"Jakarta",
+  "பாலி":"Bali",
+  "பிரான்ஸ்":"France",
+  "பாரிஸ்":"Paris",
+  "லியோன்":"Lyon",
+  "நீஸ்":"Nice",
+  "ஜெர்மனி":"Germany",
+  "பர்லின்":"Berlin",
+  "ஹாம்பர்க்":"Hamburg",
+  "முனிக்":"Munich",
+  "யுனைடெட் கிங்டம்":"United Kingdom",
+  "லண்டன்":"London",
+  "மான்செஸ்டர்":"Manchester",
+  "எடின்பர்க்":"Edinburgh",
+  "இத்தாலி":"Italy",
+  "ரோம்":"Rome",
+  "மிலான்":"Milan",
+  "ஸ்பெயின்":"Spain",
+  "மாட்ரிட்":"Madrid",
+  "பார்சிலோனா":"Barcelona",
+  "நெதர்லாந்து":"Netherlands",
+  "ஆம்ஸ்டர்டாம்":"Amsterdam",
+  "ரஷ்யா":"Russia",
+  "மாஸ்கோ":"Moscow",
+  "செயின்ட் பீட்டர்ஸ்பர்க்":"Saint Petersburg",
+  "அமெரிக்கா":"United States",
+  "நியூயார்க்":"New York",
+  "லாஸ் ஏஞ்சலஸ்":"Los Angeles",
+  "சிகாகோ":"Chicago",
+  "ஹூஸ்டன்":"Houston",
+  "சான் ஃபிரான்சிஸ்கோ":"San Francisco",
+  "சியாட்டில்":"Seattle",
+  "போஸ்டன்":"Boston",
+  "மியாமி":"Miami",
+  "அட்லாண்டா":"Atlanta",
+  "டல்லாஸ்":"Dallas",
+  "கனடா":"Canada",
+  "டொரண்டோ":"Toronto",
+  "மாண்ட்ரியல்":"Montreal",
+  "வான்கூவர்":"Vancouver",
+  "கல்கேரி":"Calgary",
+  "மெக்சிகோ":"Mexico",
+  "மெக்சிகோ சிட்டி":"Mexico City",
+  "குவடலஜரா":"Guadalajara",
+  "பிரேசில்":"Brazil",
+  "சாவோ பாவ்லோ":"São Paulo",
+  "ரியோ டி ஜெனெய்ரோ":"Rio de Janeiro",
+  "அர்ஜென்டினா":"Argentina",
+  "புவேனாஸ் ஐரிஸ்":"Buenos Aires",
+  "கொலம்பியா":"Colombia",
+  "போகோட்டா":"Bogotá",
+  "சிலி":"Chile",
+  "சாண்டியாகோ":"Santiago",
+  "பெரு":"Peru",
+  "லிமா":"Lima",
+  "எகிப்து":"Egypt",
+  "கெய்ரோ":"Cairo",
+  "அலெக்சாண்டிரியா":"Alexandria",
+  "நைஜீரியா":"Nigeria",
+  "லாகோஸ்":"Lagos",
+  "அபுஜா":"Abuja",
+  "தென் ஆப்பிரிக்கா":"South Africa",
+  "ஜோகன்னஸ்பர்க்":"Johannesburg",
+  "கேப் டவுன்":"Cape Town",
+  "கென்யா":"Kenya",
+  "நைரோபி":"Nairobi",
+  "மொராக்கோ":"Morocco",
+  "கசாப்லாங்கா":"Casablanca",
+  "மரக்கேஷ்":"Marrakesh",
+  "ஆஸ்திரேலியா":"Australia",
+  "சிட்னி":"Sydney",
+  "மெல்போர்ன்":"Melbourne",
+  "பிரிஸ்பேன்":"Brisbane",
+  "பெர்த்":"Perth",
+  "நியூசிலாந்து":"New Zealand",
+  "ஆக்லாண்ட்":"Auckland",
+  "வெல்லிங்டன்":"Wellington"
+};
+
 const GEO={
   asia:{
     "இந்தியா":[
@@ -894,38 +1362,580 @@ const GEO={
   }
 };
 
+/* ── i18n core helpers ── */
+function gt(key){return(I18N_STATIC[currentLang]&&I18N_STATIC[currentLang][key])||I18N_STATIC.ta[key]||key}
+
+function applyStaticI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    el.innerHTML=gt(key);
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+    el.setAttribute('title',gt(el.getAttribute('data-i18n-title')));
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    el.setAttribute('placeholder',gt(el.getAttribute('data-i18n-ph')));
+  });
+}
+
+/* ── TR_MAP: Tamil → English dictionary for dynamically-rendered
+   content (render*() functions still produce Tamil first — that is
+   the single source of truth the calculations are keyed on — this
+   map is swept over the resulting DOM text afterwards). Longer
+   phrases are listed first in each group so they match before their
+   own substrings during the sweep. Known limitation: long free-form
+   yoga/dosha *explanation* sentences are partially covered (key terms
+   translate, connecting grammar stays Tamil) — see project notes. ── */
+const TR_MAP = {
+  // Planets (Navagraha)
+  'சூரியன்':'Sun','சந்திரன்':'Moon','புதன்':'Mercury','சுக்கிரன்':'Venus','செவ்வாய்':'Mars',
+  'குரு':'Jupiter','சனி':'Saturn','ராகு':'Rahu','கேது':'Ketu',
+  // Rāśi (zodiac signs)
+  'மேஷம்':'Aries','ரிஷபம்':'Taurus','மிதுனம்':'Gemini','கடகம்':'Cancer','சிம்மம்':'Leo',
+  'கன்னி':'Virgo','துலாம்':'Libra','விருச்சிகம்':'Scorpio','தனுசு':'Sagittarius',
+  'மகரம்':'Capricorn','கும்பம்':'Aquarius','மீனம்':'Pisces',
+  // Nakshatras (27)
+  'அஸ்வினி':'Ashwini','பரணி':'Bharani','கார்த்திகை':'Karthikai','ரோகிணி':'Rohini',
+  'மிருகசீரிஷம்':'Mrigashirsha','திருவாதிரை':'Thiruvathirai','புனர்பூசம்':'Punarpoosam',
+  'பூசம்':'Poosam','ஆயில்யம்':'Ayilyam','மகம்':'Magam','பூரம்':'Pooram','உத்திரம்':'Uthiram',
+  'அஸ்தம்':'Astham','சித்திரை':'Chithirai','சுவாதி':'Swathi','விசாகம்':'Vishakam',
+  'அனுஷம்':'Anusham','கேட்டை':'Kettai','மூலம்':'Moolam','பூராடம்':'Pooradam',
+  'உத்திராடம்':'Uthiradam','திருவோணம்':'Thiruvonam','அவிட்டம்':'Avittam','சதயம்':'Sathayam',
+  'பூரட்டாதி':'Poorattadhi','உத்திரட்டாதி':'Uthirattadhi','ரேவதி':'Revathi',
+  // Bhāva (house) names
+  'லக்னம்':'Ascendant','தனம்':'Wealth (2nd)','சகோதரர்':'Siblings (3rd)','தாய்':'Mother (4th)',
+  'புத்திரர்':'Children (5th)','ரோகம்':'Health (6th)','களத்திரம்':'Spouse (7th)','ஆயுள்':'Longevity (8th)',
+  'பாக்யம்':'Fortune (9th)','கர்மம்':'Career (10th)','லாபம்':'Gains (11th)','விரயம்':'Losses (12th)',
+  // Status / strength terms
+  'உச்சம்':'Exalted','நீசம்':'Debilitated','சொந்த ராசி':'Own sign','நட்பு':'Friendly','பகை':'Inimical','சமம்':'Neutral',
+  // Elements & modalities
+  'நெருப்பு':'Fire','நிலம்':'Earth','காற்று':'Air','நீர்':'Water','சர':'Movable','ஸ்திர':'Fixed','உபய':'Dual',
+  // Panchanga — Tithi
+  'பிரதமை':'Pratamai','துவிதியை':'Dvitiyai','திருதியை':'Tritiyai','சதுர்த்தி':'Chathurthi','பஞ்சமி':'Panchami',
+  'ஷஷ்டி':'Shashti','சப்தமி':'Saptami','அஷ்டமி':'Ashtami','நவமி':'Navami','தசமி':'Dasami',
+  'ஏகாதசி':'Ekadasi','துவாதசி':'Dvadasi','திரயோதசி':'Trayodasi','சதுர்தசி':'Chathurdasi',
+  'அமாவாசை / பௌர்ணமி':'Amavasai / Pournami',
+  // Panchanga — Vāra (weekday)
+  'ஞாயிற்றுக்கிழமை':'Sunday','திங்கட்கிழமை':'Monday','செவ்வாய்க்கிழமை':'Tuesday','புதன்கிழமை':'Wednesday',
+  'வியாழக்கிழமை':'Thursday','வெள்ளிக்கிழமை':'Friday','சனிக்கிழமை':'Saturday',
+  // Panchanga — Nitya Yoga (27)
+  'விஷ்கம்ப':'Vishkambha','பிரீதி':'Preeti','ஆயுஷ்மான்':'Ayushman','சௌபாக்ய':'Saubhagya','சோபன':'Shobhana',
+  'அதிகண்ட':'Atiganda','சுகர்மன்':'Sukarman','த்ருதி':'Dhriti','சூல':'Shoola','கண்ட':'Ganda','வ்ருத்தி':'Vriddhi',
+  'த்ருவ':'Dhruva','வ்யாக்கட':'Vyaghata','ஹர்ஷண':'Harshana','வஜ்ர':'Vajra','சித்தி':'Siddhi','வ்யதீபாத':'Vyatipata',
+  'வரீயான்':'Variyana','பரிக்க':'Parigha','சிவ':'Shiva','சித்த':'Siddha','சாத்ய':'Sadhya','சுபர':'Shubha',
+  'சுப்ர':'Shukla','ப்ரம்ம':'Brahma','இந்த்ர':'Indra','வைத்ருதி':'Vaidhriti',
+  // Panchanga — Karana
+  'பவ':'Bava','பாலவ':'Balava','கவுலவ':'Kaulava','தைதில':'Taitila','கரஜ':'Garaja','வணிஜ':'Vanija','விஷ்டி':'Vishti',
+  // Yoga combination names
+  'கஜகேசரி யோகம்':'Gajakesari Yoga','புத்தாதித்ய யோகம்':'Budhaditya Yoga',
+  'ருச்சக மகாபுருஷ யோகம்':'Ruchaka Mahapurusha Yoga','பத்ர மகாபுருஷ யோகம்':'Bhadra Mahapurusha Yoga',
+  'ஹம்ஸ மகாபுருஷ யோகம்':'Hamsa Mahapurusha Yoga','மாளவ்ய மகாபுருஷ யோகம்':'Malavya Mahapurusha Yoga',
+  'சஷ மகாபுருஷ யோகம்':'Sasa Mahapurusha Yoga','யோககாரக ராஜயோகம்':'Yogakaraka Raja Yoga',
+  'ராஜயோகம்':'Raja Yoga','தன யோகம்':'Dhana Yoga','பரிவர்தன யோகம்':'Parivartana Yoga',
+  'நீச பங்க ராஜயோகம்':'Neecha Bhanga Raja Yoga','விபரீத ராஜயோகம்':'Vipareeta Raja Yoga',
+  'ஆதி யோகம்':'Adhi Yoga','சந்திர-மங்கள யோகம்':'Chandra-Mangala Yoga','சரஸ்வதி யோகம்':'Saraswati Yoga','லட்சுமி யோகம்':'Lakshmi Yoga',
+  'யோக அமைப்புகள் இல்லை':'No yoga combinations found','தைன்ய':'Dainya','மஹா':'Maha','஖ால':'Khala',
+  // Dosha names
+  'மாங்கல்ய தோஷம்':'Mangal Dosha','கால சர்ப தோஷம்':'Kala Sarpa Dosha','சனி தோஷம்':'Shani Dosha',
+  'உள்ளது ⚠':'Present ⚠','இல்லை ✓':'Absent ✓','கவனம் ⚠':'Caution ⚠','சாதாரண ✓':'Normal ✓',
+  // Directions
+  'கிழக்கு':'East','தென்கிழக்கு':'Southeast','மேற்கு':'West','வடக்கு':'North','தெற்கு':'South',
+  'வடகிழக்கு':'Northeast','வடமேற்கு':'Northwest','தென்மேற்கு':'Southwest',
+  // Lucky data — gems / colors / deities (common values)
+  'சிவப்பு':'Red','வெள்ளை':'White','பச்சை':'Green','வெள்ளி':'Silver','தங்கம்':'Gold','கடும் பச்சை':'Dark green',
+  'நீலம்':'Blue','கருஞ்சிவப்பு':'Maroon','மஞ்சள்':'Yellow','கருப்பு':'Black','அடர் நீலம்':'Deep blue',
+  'பவளம்':'Coral','வைரம்':'Diamond','மரகதம்':'Emerald','முத்து':'Pearl','மாணிக்கம்':'Ruby',
+  'புஷ்பராகம்':'Yellow Sapphire',
+  'முருகன்':'Murugan','லக்ஷ்மி':'Lakshmi','விஷ்ணு':'Vishnu','அம்மன்':'Amman','சரஸ்வதி':'Saraswati',
+  'கணேசன்':'Ganesha','தட்சிணாமூர்த்தி':'Dakshinamurthy','ஐயப்பன்':'Ayyappan','சனீஸ்வரன்':'Saneeswaran',
+  // Career fields
+  'அரசியல்':'Politics','நிர்வாகம்':'Administration','இராணுவம்':'Military','விளையாட்டு':'Sports',
+  'உடல் பயிற்சி':'Fitness','வியாபாரம்':'Business','விவசாயம்':'Agriculture','நிதி':'Finance',
+  'கட்டிடம்':'Construction','மருத்துவம்':'Medicine','கல்வி':'Education','ஊடகம்':'Media',
+  'தகவல் தொழில்நுட்பம்':'Information Technology','எழுத்து':'Writing','ஆராய்ச்சி':'Research',
+};
+const TR_KEYS_SORTED = Object.keys(TR_MAP).sort((a,b)=>b.length-a.length);
+
+/* Sweep all text nodes inside a root element, replacing Tamil terms
+   with English ones via TR_MAP. Skips <script>/<style> and anything
+   explicitly marked data-no-translate (reserved for free-text place
+   names once real geocoding lands). No-op (and harmless) when a
+   render function's wording isn't in TR_MAP yet — original Tamil text
+   is simply left in place rather than breaking. */
+function translateDynamicContent(root){
+  if(currentLang!=='en')return;
+  const el=typeof root==='string'?document.getElementById(root):root;
+  if(!el)return;
+  const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{
+    acceptNode(node){
+      const p=node.parentElement;
+      if(!p)return NodeFilter.FILTER_REJECT;
+      if(p.closest('[data-no-translate]'))return NodeFilter.FILTER_REJECT;
+      if(p.tagName==='SCRIPT'||p.tagName==='STYLE')return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const nodes=[];let n;while((n=walker.nextNode()))nodes.push(n);
+  nodes.forEach(node=>{
+    let s=node.nodeValue;
+    if(!s||!s.trim())return;
+    let changed=false;
+    for(const k of TR_KEYS_SORTED){
+      if(s.indexOf(k)!==-1){s=s.split(k).join(TR_MAP[k]);changed=true}
+    }
+    if(changed)node.nodeValue=s;
+  });
+}
+
+/* Cache of the most recently computed chart, so toggling language can
+   re-render the dynamic panels from the canonical (Tamil) data without
+   re-running any astronomical calculation. Populated at the end of
+   _doCalculate(). */
+let __lastChartData=null;
+
+function setLanguage(lang){
+  currentLang=(lang==='en')?'en':'ta';
+  localStorage.setItem('astro-lang',currentLang);
+  document.documentElement.lang=currentLang;
+  const lt=document.getElementById('langToggle');
+  if(lt)lt.classList.toggle('is-en',currentLang==='en');
+  applyStaticI18n();
+  // Re-label the location dropdowns (values/GEO lookups untouched)
+  refreshPlaceDropdownLabels();
+  if(__lastChartData)renderAll(__lastChartData);
+}
+
+/* Re-labels already-populated continent/country/city <option> text in
+   place (without touching .value, so the user's current selection and
+   GEO[] lookups are unaffected). */
+function refreshPlaceDropdownLabels(){
+  ['country','city'].forEach(id=>{
+    const sel=document.getElementById(id);
+    if(!sel)return;
+    Array.from(sel.options).forEach(opt=>{
+      if(!opt.value)return; // leave placeholder options (handled by data-i18n re-render below)
+      opt.textContent=placeLabel(opt.value);
+    });
+  });
+}
+
+function placeLabel(name){
+  if(currentLang==='en')return PLACE_EN[name]||name;
+  return name;
+}
 function updateCountries(){
   const c=document.getElementById('continent').value,cs=document.getElementById('country'),ci=document.getElementById('city');
-  cs.innerHTML='<option value="">— நாடு தேர்க —</option>';ci.innerHTML='<option value="">— முதல் நாடு —</option>';ci.disabled=true;
+  cs.innerHTML=`<option value="">${gt('optChooseCountry')}</option>`;ci.innerHTML=`<option value="">${gt('optFirstCountry')}</option>`;ci.disabled=true;
   if(!c){cs.disabled=true;return}cs.disabled=false;
-  Object.keys(GEO[c]).forEach(n=>cs.innerHTML+=`<option value="${n}">${n}</option>`);
+  Object.keys(GEO[c]).forEach(n=>cs.innerHTML+=`<option value="${n}">${placeLabel(n)}</option>`);
 }
 function updateCities(){
   const c=document.getElementById('continent').value,n=document.getElementById('country').value,ci=document.getElementById('city');
-  ci.innerHTML='<option value="">— நகரம் தேர்க —</option>';
+  ci.innerHTML=`<option value="">${gt('optChooseCity')}</option>`;
   if(!n){ci.disabled=true;return}ci.disabled=false;
-  GEO[c][n].forEach(([nm])=>ci.innerHTML+=`<option value="${nm}">${nm}</option>`);
+  GEO[c][n].forEach(([nm])=>ci.innerHTML+=`<option value="${nm}">${placeLabel(nm)}</option>`);
 }
 function getCityData(){
+  if(__searchPlace)return __searchPlace;
   const c=document.getElementById('continent').value,n=document.getElementById('country').value,nm=document.getElementById('city').value;
   if(!c||!n||!nm)return null;
   const e=GEO[c][n].find(([x])=>x===nm);
-  return e?{name:nm,lat:e[1],lon:e[2],tz:e[3]}:null;
+  return e?{name:nm,nameEn:PLACE_EN[nm]||nm,lat:e[1],lon:e[2],tz:e[3]}:null;
 }
 
-/* ── DEFAULT: Chennai, India (22 Jun 1974, 07:18) ── */
-function setDefaults(){
-  const cont=document.getElementById('continent');
-  cont.value='asia';
-  updateCountries();
-  const coun=document.getElementById('country');
-  coun.value='இந்தியா';
-  updateCities();
-  const city=document.getElementById('city');
-  city.value='சென்னை';
-  // date & time already set via HTML value attributes
+/* ── Real-time place search (Nominatim geocoding + timeapi.io timezone) ──
+   Additive layer only: writes into __searchPlace, which getCityData()
+   checks first. The original continent/country/city GEO[] dropdowns
+   (and every astronomy function that consumes getCityData()'s output)
+   are completely untouched — this just gives a second way to fill the
+   exact same {name,nameEn,lat,lon,tz} shape. */
+let __searchPlace=null;
+let __placeSearchTimer=null;
+
+function onPlaceSearchInput(q){
+  clearTimeout(__placeSearchTimer);
+  const list=document.getElementById('placeSearchResults');
+  if(!q||q.trim().length<3){list.innerHTML='';list.style.display='none';return}
+  __placeSearchTimer=setTimeout(()=>doPlaceSearch(q.trim()),420);
 }
-window.addEventListener('DOMContentLoaded',()=>{ setDefaults(); });
+
+async function doPlaceSearch(q){
+  const list=document.getElementById('placeSearchResults');
+  list.innerHTML=`<div class="pac-msg">${gt('placeSearching')}</div>`;list.style.display='block';
+  try{
+    const url=`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=7&q=${encodeURIComponent(q)}`;
+    const res=await fetch(url,{headers:{'Accept-Language':'en'}});
+    const data=await res.json();
+    if(!Array.isArray(data)||!data.length){
+      list.innerHTML=`<div class="pac-msg">${gt('placeNoResults')}</div>`;return;
+    }
+    list.innerHTML='';
+    data.forEach(item=>{
+      const a=item.address||{};
+      const cityName=a.city||a.town||a.village||a.hamlet||a.municipality||a.county||(item.display_name||'').split(',')[0];
+      const region=a.state||a.region||'';
+      const country=a.country||'';
+      const display=[cityName,region,country].filter(Boolean).join(', ');
+      const row=document.createElement('div');
+      row.className='pac-row';row.setAttribute('role','option');row.textContent=display;
+      row.onclick=()=>selectPlace({display,lat:parseFloat(item.lat),lon:parseFloat(item.lon)});
+      list.appendChild(row);
+    });
+  }catch(e){
+    list.innerHTML=`<div class="pac-msg">${gt('placeSearchError')}</div>`;
+  }
+}
+
+async function selectPlace(item){
+  clearPlaceResults();
+  const inp=document.getElementById('placeSearch');
+  if(inp)inp.value=item.display;
+  const info=document.getElementById('placeSelectedInfo');
+  info.style.display='block';info.textContent=gt('placeResolving');
+  let tzHours=0,zoneName='';
+  try{
+    const tzRes=await fetch(`https://timeapi.io/api/TimeZone/coordinate?latitude=${item.lat}&longitude=${item.lon}`);
+    const tzData=await tzRes.json();
+    const offsetSec=(tzData.currentUtcOffset&&tzData.currentUtcOffset.seconds)
+      ??(tzData.standardUtcOffset&&tzData.standardUtcOffset.seconds)??0;
+    tzHours=offsetSec/3600;
+    zoneName=tzData.timeZone||'';
+    info.textContent=`${item.display} · ${item.lat.toFixed(4)}, ${item.lon.toFixed(4)} · UTC${tzHours>=0?'+':''}${tzHours}${zoneName?' ('+zoneName+')':''}`;
+  }catch(e){
+    info.textContent=`${item.display} — ${gt('placeTzFailed')}`;
+  }
+  __searchPlace={name:item.display,nameEn:item.display,lat:item.lat,lon:item.lon,tz:tzHours,zoneName};
+  // A search result supersedes any manual dropdown selection.
+  ['continent','country'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  const cou=document.getElementById('country'),cit=document.getElementById('city');
+  if(cou){cou.innerHTML=`<option value="">${gt('optFirstContinent')}</option>`;cou.disabled=true}
+  if(cit){cit.innerHTML=`<option value="">${gt('optFirstCountry')}</option>`;cit.disabled=true}
+}
+
+function clearPlaceResults(){
+  const list=document.getElementById('placeSearchResults');
+  if(list){list.innerHTML='';list.style.display='none'}
+}
+
+/* Manual dropdown selection supersedes any search result (mutual exclusivity). */
+function clearSearchPlace(){
+  __searchPlace=null;
+  const inp=document.getElementById('placeSearch');
+  if(inp)inp.value='';
+  const info=document.getElementById('placeSelectedInfo');
+  if(info){info.style.display='none';info.textContent=''}
+}
+
+function toggleManualPlace(){
+  const row=document.getElementById('manualPlaceRow');
+  const btn=document.getElementById('manualPlaceBtn');
+  const show=!row.style.display||row.style.display==='none';
+  row.style.display=show?'':'none';
+  btn.classList.toggle('expanded',show);
+}
+
+document.addEventListener('click',e=>{
+  const wrap=document.querySelector('.place-ac');
+  if(wrap&&!wrap.contains(e.target))clearPlaceResults();
+});
+
+/* No more hardcoded Chennai default — form starts fully blank so the
+   user must explicitly enter their own place and date of birth. */
+function setDefaults(){
+  clearSearchPlace();
+  const con=document.getElementById('continent'),cou=document.getElementById('country'),cit=document.getElementById('city');
+  if(con)con.value='';
+  if(cou){cou.innerHTML=`<option value="">${gt('optFirstContinent')}</option>`;cou.disabled=true}
+  if(cit){cit.innerHTML=`<option value="">${gt('optFirstCountry')}</option>`;cit.disabled=true}
+}
+
+/* Clears DOB/TOB/node-type/place back to a blank slate, hides any
+   previous error and any previously-shown chart, and persists the
+   blank state into the active profile (so revisiting it later doesn't
+   bring back stale data). Does not delete or switch profiles. */
+function resetForm(){
+  document.getElementById('dob').value='';
+  document.getElementById('tob').value='';
+  document.getElementById('nodeType').value='true';
+  setDefaults();
+  const err=document.getElementById('errbox');
+  if(err){err.style.display='none';err.textContent=''}
+  const results=document.getElementById('resultsLayout');
+  if(results)results.classList.remove('active');
+  window.__aiRawText=null;window.__aiMeta=null;
+  if(typeof resetAIActions==='function')resetAIActions();
+  __lastChartData=null;
+  saveActiveProfileFromForm();
+}
+
+/* ══════════════════════════════════════
+   USER PROFILE MANAGEMENT
+   Additive layer — stores DOB/TOB/node-type/place per named profile in
+   localStorage. Reads/writes the exact same DOM fields & getCityData()
+   shape the calculation engine already uses, so nothing astronomy-side
+   is touched. ══════════════════════════════════════ */
+const PROFILES_KEY='astro-profiles';
+const ACTIVE_PROFILE_KEY='astro-active-profile';
+
+function loadProfilesRaw(){
+  try{
+    const raw=localStorage.getItem(PROFILES_KEY);
+    const arr=raw?JSON.parse(raw):[];
+    return Array.isArray(arr)?arr:[];
+  }catch(e){ return []; }
+}
+function saveProfilesRaw(arr){
+  try{ localStorage.setItem(PROFILES_KEY,JSON.stringify(arr)); }catch(e){}
+}
+function uid(){ return 'p_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8); }
+function blankProfileData(){
+  return{dob:'',tob:'',nodeType:'true',place:null};
+}
+
+/* Snapshot the current form state into a profile-data object. */
+function captureCurrentAsProfileData(){
+  const dob=document.getElementById('dob').value;
+  const tob=document.getElementById('tob').value;
+  const nodeType=document.getElementById('nodeType').value;
+  let place;
+  if(__searchPlace){
+    place={mode:'search',label:__searchPlace.name,lat:__searchPlace.lat,lon:__searchPlace.lon,
+           tz:__searchPlace.tz,zoneName:__searchPlace.zoneName||''};
+  }else{
+    place={mode:'manual',continent:document.getElementById('continent').value,
+           country:document.getElementById('country').value,city:document.getElementById('city').value};
+  }
+  return{dob,tob,nodeType,place};
+}
+
+/* Push a profile-data snapshot back into the form (and __searchPlace). */
+function applyProfileDataToForm(data){
+  if(!data)data=blankProfileData();
+  document.getElementById('dob').value=data.dob||'';
+  document.getElementById('tob').value=data.tob||'';
+  document.getElementById('nodeType').value=data.nodeType||'true';
+  const p=data.place;
+  if(p&&p.mode==='search'&&p.lat!==undefined&&p.lon!==undefined){
+    __searchPlace={name:p.label,nameEn:p.label,lat:p.lat,lon:p.lon,tz:p.tz,zoneName:p.zoneName||''};
+    const inp=document.getElementById('placeSearch');
+    if(inp)inp.value=p.label;
+    const info=document.getElementById('placeSelectedInfo');
+    if(info){
+      info.style.display='block';
+      info.textContent=`${p.label} · ${(+p.lat).toFixed(4)}, ${(+p.lon).toFixed(4)} · UTC${p.tz>=0?'+':''}${p.tz}${p.zoneName?' ('+p.zoneName+')':''}`;
+    }
+    const cou=document.getElementById('country'),cit=document.getElementById('city'),con=document.getElementById('continent');
+    if(con)con.value='';
+    if(cou){cou.innerHTML=`<option value="">${gt('optFirstContinent')}</option>`;cou.disabled=true}
+    if(cit){cit.innerHTML=`<option value="">${gt('optFirstCountry')}</option>`;cit.disabled=true}
+  }else if(p&&p.mode==='manual'){
+    clearSearchPlace();
+    const con=document.getElementById('continent');
+    con.value=p.continent||'';
+    updateCountries();
+    const cou=document.getElementById('country');
+    cou.value=p.country||'';
+    updateCities();
+    const cit=document.getElementById('city');
+    cit.value=p.city||'';
+  }else{
+    // No place saved yet on this profile (e.g. freshly created Father/Mother) — reset fully.
+    clearSearchPlace();
+    const con=document.getElementById('continent'),cou=document.getElementById('country'),cit=document.getElementById('city');
+    if(con)con.value='';
+    if(cou){cou.innerHTML=`<option value="">${gt('optFirstContinent')}</option>`;cou.disabled=true}
+    if(cit){cit.innerHTML=`<option value="">${gt('optFirstCountry')}</option>`;cit.disabled=true}
+  }
+}
+
+/* Save the currently-open form state into whichever profile is active. */
+function saveActiveProfileFromForm(){
+  const profiles=loadProfilesRaw();
+  const activeId=localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const idx=profiles.findIndex(p=>p.id===activeId);
+  if(idx===-1)return;
+  profiles[idx].data=captureCurrentAsProfileData();
+  saveProfilesRaw(profiles);
+}
+
+function renderProfileSelect(filterQuery){
+  const profiles=loadProfilesRaw();
+  const activeId=localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const sel=document.getElementById('profileSelect');
+  if(!sel)return;
+  const q=(filterQuery||'').trim().toLowerCase();
+  const visible=q?profiles.filter(p=>p.name.toLowerCase().includes(q)):profiles;
+  const searchWrap=document.getElementById('profileSearchWrap');
+  if(searchWrap)searchWrap.style.display=profiles.length>6?'block':'none';
+  if(!visible.length){
+    sel.innerHTML=`<option value="">${gt('profileNoMatch')}</option>`;
+  }else{
+    sel.innerHTML=visible.map(p=>
+      `<option value="${p.id}"${p.id===activeId?' selected':''}>${p.isDefault?'★ ':''}${escapeHtml(p.name)}</option>`
+    ).join('');
+    // If the active profile got filtered out, the <select> falls back to
+    // the first visible option's value but must NOT silently switch the
+    // active profile — re-select the true active id if it's in range.
+    if(visible.some(p=>p.id===activeId))sel.value=activeId;
+  }
+  const defBtn=document.getElementById('profileDefaultBtn');
+  const active=profiles.find(p=>p.id===activeId);
+  if(defBtn)defBtn.classList.toggle('is-default',!!(active&&active.isDefault));
+  const summary=document.getElementById('profileSummary');
+  if(summary){
+    if(active&&active.data&&active.data.dob){
+      const placeLabel=active.data.place
+        ?(active.data.place.mode==='search'?active.data.place.label:(PLACE_EN[active.data.place.city]||active.data.place.city||''))
+        :'';
+      const dobFmt=active.data.dob;
+      summary.textContent=[dobFmt,active.data.tob||'',placeLabel].filter(Boolean).join(' · ');
+    }else{
+      summary.textContent=gt('profileNoDob');
+    }
+  }
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function onProfileSelectChange(id){
+  if(!id)return;
+  const profiles=loadProfilesRaw();
+  const p=profiles.find(x=>x.id===id);
+  if(!p)return;
+  localStorage.setItem(ACTIVE_PROFILE_KEY,id);
+  applyProfileDataToForm(p.data);
+  renderProfileSelect();
+  if(p.data&&p.data.dob)calculate();
+}
+
+function createProfile(){
+  const name=(window.prompt(gt('profileNamePrompt'),gt('profileDefaultName'))||'').trim();
+  if(!name)return;
+  const profiles=loadProfilesRaw();
+  const newProfile={id:uid(),name,isDefault:false,data:blankProfileData()};
+  profiles.push(newProfile);
+  saveProfilesRaw(profiles);
+  localStorage.setItem(ACTIVE_PROFILE_KEY,newProfile.id);
+  applyProfileDataToForm(newProfile.data);
+  renderProfileSelect();
+}
+
+function renameProfile(){
+  const profiles=loadProfilesRaw();
+  const activeId=localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const p=profiles.find(x=>x.id===activeId);
+  if(!p)return;
+  const name=(window.prompt(gt('profileRenamePrompt'),p.name)||'').trim();
+  if(!name)return;
+  p.name=name;
+  saveProfilesRaw(profiles);
+  renderProfileSelect();
+}
+
+function duplicateProfile(){
+  const profiles=loadProfilesRaw();
+  const activeId=localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const p=profiles.find(x=>x.id===activeId);
+  if(!p)return;
+  const copy={id:uid(),name:p.name+gt('profileDuplicateSuffix'),isDefault:false,
+              data:JSON.parse(JSON.stringify(p.data||blankProfileData()))};
+  profiles.push(copy);
+  saveProfilesRaw(profiles);
+  localStorage.setItem(ACTIVE_PROFILE_KEY,copy.id);
+  renderProfileSelect();
+}
+
+function exportProfiles(){
+  const profiles=loadProfilesRaw();
+  const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),profiles},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='astro-profiles.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importProfiles(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      const incoming=Array.isArray(parsed)?parsed:(Array.isArray(parsed.profiles)?parsed.profiles:null);
+      if(!incoming)throw new Error('bad format');
+      const profiles=loadProfilesRaw();
+      // New ids assigned on import so re-importing the same file (or
+      // importing on a device with existing profiles) never collides
+      // with or silently overwrites what's already saved.
+      incoming.forEach(ip=>{
+        if(!ip||typeof ip!=='object'||!ip.name)return;
+        profiles.push({id:uid(),name:String(ip.name),
+                        isDefault:false,data:ip.data||blankProfileData()});
+      });
+      saveProfilesRaw(profiles);
+      renderProfileSelect();
+      window.alert(gt('profileImportSuccess'));
+    }catch(e){
+      window.alert(gt('profileImportError'));
+    }
+  };
+  reader.readAsText(file);
+  document.getElementById('profileImportFile').value='';
+}
+
+function deleteProfile(){
+  const profiles=loadProfilesRaw();
+  if(profiles.length<=1){ window.alert(gt('profileDeleteLastAlert')); return; }
+  const activeId=localStorage.getItem(ACTIVE_PROFILE_KEY);
+  const idx=profiles.findIndex(x=>x.id===activeId);
+  if(idx===-1)return;
+  if(!window.confirm(gt('profileDeleteConfirm')))return;
+  const wasDefault=profiles[idx].isDefault;
+  profiles.splice(idx,1);
+  if(wasDefault&&profiles.length)profiles[0].isDefault=true;
+  saveProfilesRaw(profiles);
+  const next=profiles[0];
+  localStorage.setItem(ACTIVE_PROFILE_KEY,next.id);
+  applyProfileDataToForm(next.data);
+  renderProfileSelect();
+  if(next.data&&next.data.dob)calculate();
+}
+
+function setDefaultProfile(){
+  const profiles=loadProfilesRaw();
+  const activeId=localStorage.getItem(ACTIVE_PROFILE_KEY);
+  profiles.forEach(p=>p.isDefault=(p.id===activeId));
+  saveProfilesRaw(profiles);
+  renderProfileSelect();
+}
+
+/* Seed the very first profile — "My Horoscope" with whatever
+   setDefaults() just put in the form, set as default — or restore the
+   last-used profile if profiles already exist. Father/Mother/etc. are
+   no longer auto-created; users add their own via "New profile" with
+   whatever name they type. */
+function initProfiles(){
+  let profiles=loadProfilesRaw();
+  if(!profiles.length){
+    const me={id:uid(),name:gt('profileMyHoroscope'),isDefault:true,data:captureCurrentAsProfileData()};
+    profiles=[me];
+    saveProfilesRaw(profiles);
+    localStorage.setItem(ACTIVE_PROFILE_KEY,me.id);
+  }else{
+    let activeId=localStorage.getItem(ACTIVE_PROFILE_KEY);
+    let active=profiles.find(p=>p.id===activeId);
+    if(!active){
+      active=profiles.find(p=>p.isDefault)||profiles[0];
+      localStorage.setItem(ACTIVE_PROFILE_KEY,active.id);
+    }
+    applyProfileDataToForm(active.data);
+  }
+  renderProfileSelect();
+}
+
+window.addEventListener('DOMContentLoaded',()=>{ setDefaults(); setLanguage(currentLang); initProfiles(); });
+
 
 /* ══════════════════════════════════════
    ASTRONOMICAL ENGINE  (corrected)
@@ -946,6 +1956,35 @@ function julianDay(yr,mo,dy,hr_local,tz){
   return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+dd+B-1524.5;
 }
 function T(jd){return(jd-2451545.0)/36525.0}
+
+/* ── ΔT (UT→TT) — Espenak/Meeus polynomial approximation, valid 1900–2100 ──
+   TT = UT + ΔT. Required so ephemeris series (formulated in TT) aren't fed
+   a raw UT Julian Day. For 1900-2026 this is ~ -3s to +70s, i.e. sub-
+   arcsecond to a few-arcsecond effect on longitude — negligible for sign
+   placement, but spec-correct to include. ── */
+function deltaT(year){
+  const y=year;
+  if(y>=1986&&y<2005){
+    const t=y-2000;
+    return 63.86+0.3345*t-0.060374*t*t+0.0017275*t*t*t+0.000651814*t*t*t*t+0.00002373599*t*t*t*t*t;
+  }
+  if(y>=2005&&y<2050){
+    const t=y-2000;
+    return 62.92+0.32217*t+0.005589*t*t;
+  }
+  if(y>=1961&&y<1986){
+    const t=y-1975;
+    return 45.45+1.067*t-t*t/260-t*t*t/718;
+  }
+  if(y>=1941&&y<1961){
+    const t=y-1950;
+    return 29.07+0.407*t-t*t/233+t*t*t/2547;
+  }
+  if(y<1941)return 29.07;
+  return 62.92+0.32217*50+0.005589*2500;
+}
+/* JD(UT) -> Julian centuries of TT, for ephemeris series */
+function T_TT(jdUT,year){return T(jdUT+deltaT(year)/86400.0)}
 
 /* ── Lahiri / Chitrapaksha Ayanamsa (improved, J2000-referenced)
    Chitrapaksha at J2000.0 = 23.85472°
@@ -1661,6 +2700,22 @@ function detectYogas(planetRasiIdxMap,lagnaIdx,hasLagna){
     yogas.push({n:'சந்திர-மங்கள யோகம்',strong:false,
       d:'சந்திரன் + செவ்வாய் சேர்க்கை/7ம் பார்வை — தன வளர்ச்சி, சக்தி'});
 
+  // Lakshmi Yoga: 9th lord (Bhagyesha) exalted/own AND placed in
+  // kendra/trikona, while the Lagna lord itself is also strong
+  // (exalted or own sign) — classical wealth/grace combination.
+  if(hasLagna){
+    const ninthLord=houseLord(9,lagnaIdx),lagnaLord=houseLord(1,lagnaIdx);
+    const ninthR=G[ninthLord],lagnaLordR=G[lagnaLord];
+    const ninthStatus=PLANET_STATUS[ninthLord],lagnaLordStatus=PLANET_STATUS[lagnaLord];
+    const ninthLordStrong=ninthStatus&&ninthR!==undefined&&(ninthStatus.exalt===ninthR||ninthStatus.own.includes(ninthR));
+    const ninthLordWellPlaced=ninthR!==undefined&&(inKendra(ninthR,lagnaIdx)||inTrikona(ninthR,lagnaIdx));
+    const lagnaLordStrong=lagnaLordStatus&&lagnaLordR!==undefined&&(lagnaLordStatus.exalt===lagnaLordR||lagnaLordStatus.own.includes(lagnaLordR));
+    if(ninthLordStrong&&ninthLordWellPlaced&&lagnaLordStrong){
+      yogas.push({n:'லட்சுமி யோகம்',strong:true,
+        d:'9ம் வீட்டு அதிபதி ('+ninthLord+') உச்ச/சொந்த ராசியில் கேந்திர/திரிகோணத்தில், லக்னாதிபதியும் ('+lagnaLord+') பலமுள்ளவர் — செல்வம், அரசாங்க அருள், சுபிட்சம்'});
+    }
+  }
+
   // Saraswati Yoga
   if(hasLagna){
     if([jup,ven,mer].filter(r=>r!==undefined).every(r=>inKendra(r,lagnaIdx)||inTrikona(r,lagnaIdx)))
@@ -1810,8 +2865,70 @@ function drikBala(pName,rasiIdx,pData){
   return total;
 }
 
+/* ── Kala Bala (Time Strength) — partial implementation ──
+   Classical Kala Bala has six sub-components: Nathonnata, Paksha,
+   Tribhaga, Varsha(Abda)+Masa+Vara+Hora, Ayana, and Yuddha Bala.
+   Nathonnata, Tribhaga, and Hora Bala are all defined relative to the
+   day's sunrise/sunset; Masa/Abda Bala need a lunar-month-lord and
+   solar-year-lord sequence. This app does not yet compute sunrise/
+   sunset, so — consistent with how Drik Bala above is honestly labeled
+   as a simplified indicator rather than faked — those four
+   sub-components are omitted here rather than approximated on bad
+   inputs. The three sub-components below (Paksha, Vara, Ayana) only
+   need data this app already computes accurately (lunar elongation,
+   weekday, and planetary declination), so they're implemented for
+   real. Total Kala Bala here is a genuine partial subset, clearly
+   labeled, not the full six-fold classical value. ── */
+
+/* Paksha Bala: symmetric model — benefics strong near Full Moon
+   (elongation 180°), malefics strong near New Moon (elongation 0°/360°),
+   the two always summing to the classical 60V ceiling for this anga. */
+const PAKSHA_BENEFICS=['சந்திரன்','புதன்','குரு','சுக்கிரன்'];
+function pakshaBala(pName,elongDeg){
+  const halfElong=elongDeg<=180?elongDeg:360-elongDeg; // 0..180, peaks at Full Moon
+  const beneficShare=halfElong/3; // 0..60
+  return PAKSHA_BENEFICS.includes(pName)?beneficShare:60-beneficShare;
+}
+
+/* Vara Bala: the lord of the weekday gets the classical fixed 45V;
+   every other planet gets 0 for this anga. */
+function varaBala(pName,varaLordName){
+  return pName===varaLordName?45:0;
+}
+
+/* Ayana Bala: seasonal/declination strength. Sun, Mars, Jupiter, Venus
+   gain strength at northern declination; Moon and Saturn gain strength
+   at southern declination (BPHS 27.16-18). Mercury's classical formula
+   keeps it consistently strong regardless of season, so it's fixed at
+   60V here rather than modeled with a seasonal curve. Rahu/Ketu have no
+   classical Ayana Bala assignment and are omitted (0), matching how
+   they're already treated for Uchcha/Dig Bala above. */
+const AYANA_NORTH_GAIN=['சூரியன்','செவ்வாய்','குரு','சுக்கிரன்'];
+const AYANA_SOUTH_GAIN=['சந்திரன்','சனி'];
+function obliquityEcl(jd){ // standalone copy of calcLagna()'s obliquity term — not touching that verified function
+  const t2=T(jd);
+  return(23.439291111-0.013004167*t2-0.000000164*t2*t2+0.000000504*t2*t2*t2)*R;
+}
+function declinationOf(tropLonDeg,jd){ // assumes ecliptic latitude ≈ 0, standard simplification for classical/business astrology
+  return Math.asin(Math.sin(obliquityEcl(jd))*Math.sin(tropLonDeg*R))*D;
+}
+function ayanaBala(pName,sidLon,jd){
+  if(pName==='புதன்')return 60;
+  if(!AYANA_NORTH_GAIN.includes(pName)&&!AYANA_SOUTH_GAIN.includes(pName))return 0; // Rahu/Ketu
+  const tropLon=m360(sidLon+ayanamsa(jd));
+  const decl=declinationOf(tropLon,jd); // -23.4..+23.4
+  const declFrac=Math.max(-1,Math.min(1,decl/23.45));
+  const northStrength=30+30*declFrac; // 0..60, peaks at max north declination
+  return AYANA_NORTH_GAIN.includes(pName)?northStrength:60-northStrength;
+}
+
+function kalaBala(pName,sidLon,jd,elongDeg,varaLordName){
+  if(elongDeg===undefined||jd===undefined||!varaLordName)return 0; // no time context — omit rather than fake
+  return pakshaBala(pName,elongDeg)+varaBala(pName,varaLordName)+ayanaBala(pName,sidLon,jd);
+}
+
 /* ── Master Shadbala computation for one planet ── */
-function calcShadbala(pName,sidLon,rasiIdx,lagnaIdx,pData,dailySpeed){
+function calcShadbala(pName,sidLon,rasiIdx,lagnaIdx,pData,dailySpeed,jd,elongDeg,varaLordName){
   const uchcha=uchchaBala(pName,sidLon);
   const kendra=kendraBala(rasiIdx,lagnaIdx);
   const sthana=uchcha+kendra; // partial Sthana Bala (Saptavargaja/Drekkana omitted)
@@ -1820,11 +2937,12 @@ function calcShadbala(pName,sidLon,rasiIdx,lagnaIdx,pData,dailySpeed){
   const cheshta=avgSpd?cheshtaBala(pName,dailySpeed,avgSpd):0;
   const naisargika=NAISARGIKA_BALA[pName]||0;
   const drik=drikBala(pName,rasiIdx,pData);
-  const totalVirupa=sthana+dig+cheshta+naisargika+drik;
+  const kala=kalaBala(pName,sidLon,jd,elongDeg,varaLordName);
+  const totalVirupa=sthana+dig+cheshta+naisargika+drik+kala;
   return{
     uchcha:+uchcha.toFixed(2), kendra, sthana:+sthana.toFixed(2),
     dig:+dig.toFixed(2), cheshta:+cheshta.toFixed(2),
-    naisargika:+naisargika.toFixed(2), drik:+drik.toFixed(2),
+    naisargika:+naisargika.toFixed(2), drik:+drik.toFixed(2), kala:+kala.toFixed(2),
     totalVirupa:+totalVirupa.toFixed(2), totalRupa:+(totalVirupa/60).toFixed(2),
   };
 }
@@ -1841,7 +2959,7 @@ const SHADBALA_MIN_RUPA={ // BPHS Ch.27.32-33 minimum required Shadbala
   'சூரியன்':6.5,'சந்திரன்':6.0,'செவ்வாய்':5.0,'புதன்':7.0,
   'குரு':6.5,'சுக்கிரன்':5.5,'சனி':5.0,
 };
-function planetStrength(pName,rIdx,sidLon,lagnaIdx,pData,dailySpeed){
+function planetStrength(pName,rIdx,sidLon,lagnaIdx,pData,dailySpeed,jd,elongDeg,varaLordName){
   const s=PLANET_STATUS[pName];if(!s)return 50;
   /* Fallback path: insufficient context for full Shadbala (e.g. legacy
      callers that only pass sign index) — keep the old sign-only logic
@@ -1855,7 +2973,7 @@ function planetStrength(pName,rIdx,sidLon,lagnaIdx,pData,dailySpeed){
   }
   const minRupa=SHADBALA_MIN_RUPA[pName];
   if(!minRupa)return 50; // Rahu/Ketu: no classical Shadbala minimum defined
-  const sb=calcShadbala(pName,sidLon,rIdx,lagnaIdx,pData,dailySpeed||0);
+  const sb=calcShadbala(pName,sidLon,rIdx,lagnaIdx,pData,dailySpeed||0,jd,elongDeg,varaLordName);
   /* Map ratio-to-minimum onto 0-100: 1.0x minimum -> 50 (the BPHS pass
      line), 2.0x minimum -> 100, 0x -> 0. Clamped. */
   const ratio=sb.totalRupa/minRupa;
@@ -1866,7 +2984,9 @@ function planetStrength(pName,rIdx,sidLon,lagnaIdx,pData,dailySpeed){
 function calculate(){
   const cd=getCityData(),dob=document.getElementById('dob').value,tob=document.getElementById('tob').value;
   const err=document.getElementById('errbox');err.style.display='none';
-  if(!cd||!dob){shake();err.style.display='block';err.textContent='கண்டம் · நாடு · நகரம் மற்றும் பிறந்த தேதி உள்ளிடவும்';return}
+  if(!cd&&!dob){shake();err.style.display='block';err.textContent=gt('errMissingFields');return}
+  if(!cd){shake();err.style.display='block';err.textContent=gt('errMissingPlace');return}
+  if(!dob){shake();err.style.display='block';err.textContent=gt('errMissingDob');return}
   // Show loading overlay
   const overlay=document.getElementById('loadingOverlay');
   overlay.classList.add('active');
@@ -1882,8 +3002,8 @@ function _doCalculate(cd,dob,tob){
   let hr=12,mn=0;if(tob){const[h,m]=tob.split(':').map(Number);hr=h;mn=m}
   const hourDec=hr+mn/60;
   const JD=julianDay(yr,mo,dy,hourDec,cd.tz);
-  const t=T(JD);
-  const ay=ayanamsa(JD);
+  const t=T_TT(JD,yr); // ephemeris series want TT, not raw UT
+  const ay=ayanamsa(JD); // ayanamsa is a slow linear-in-years model; UT-vs-TT here is immaterial
 
   /* Tropical positions */
   const tSun=sunLon(t);
@@ -1954,21 +3074,36 @@ function _doCalculate(cd,dob,tob){
   const todayJd=todayJD();
   const curDasha=dashas.find(d=>d.startJD<=todayJd&&todayJd<d.endJD)||dashas[0];
 
-  /* ── RENDER ── */
-  renderRasiGrid(pData,lagnaIdx);
-  renderRasiSummary(sunRasi,moonRasi,lagnaIdx,mcIdx,pData,sSun,sMoon);
-  renderNatch(jNatch,pada,sMoon);
-  renderPanchanga(tithi,vara,nYoga,karana,jNatch,JD,dob);
-  renderBhava(lagnaIdx,pMap);
-  renderKundli(pMap,lagnaIdx);
-  renderStrength(pData,lagnaIdx||0,speeds);
-  renderDasha(dashas,curDasha);
-  renderYogas(yogas,sunRasi,moonRasi);
-  document.getElementById('results').style.display='block';
+  /* ── Cache + render. renderAll() is also called directly by
+     setLanguage() on toggle, re-using this same cached data so the
+     dynamic panels re-translate without re-running any astronomical
+     calculation. ── */
+  __lastChartData={pData,lagnaIdx,mcIdx,sunRasi,moonRasi,sSun,sMoon,jNatch,pada,
+    tithi,vara,nYoga,karana,JD,dob,pMap,dashas,curDasha,yogas,speeds,cd,tob};
+  renderAll(__lastChartData);
+  document.getElementById('resultsLayout').classList.add('active');
   document.getElementById('pdf-bar').style.display='block';
-  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  setTimeout(()=>document.getElementById('resultsLayout').scrollIntoView({behavior:'smooth',block:'start'}),100);
+  resetAIActions();
   fetchAI(pData,jNatch,pada,sunRasi,moonRasi,lagnaIdx,curDasha,yogas,tithi,vara,dob,cd.name,tob);
-  renderNewFeatures(pData,sunRasi,moonRasi,lagnaIdx||0,jNatch,dob);
+}
+
+/* All result-panel rendering in one place, driven entirely by cached
+   chart data — no fresh ephemeris/astrology computation happens here.
+   Called once after _doCalculate finishes, and again (with the same
+   cached `d`) whenever the language toggle fires. */
+function renderAll(d){
+  renderRasiGrid(d.pData,d.lagnaIdx);
+  renderRasiSummary(d.sunRasi,d.moonRasi,d.lagnaIdx,d.mcIdx,d.pData,d.sSun,d.sMoon);
+  renderNatch(d.jNatch,d.pada,d.sMoon);
+  renderPanchanga(d.tithi,d.vara,d.nYoga,d.karana,d.jNatch,d.JD,d.dob);
+  renderBhava(d.lagnaIdx,d.pMap);
+  renderKundli(d.pMap,d.lagnaIdx);
+  renderStrength(d.pData,d.lagnaIdx||0,d.speeds,d.JD,parseFloat(d.tithi.diff),d.vara.lord);
+  renderDasha(d.dashas,d.curDasha);
+  renderYogas(d.yogas,d.sunRasi,d.moonRasi);
+  renderNewFeatures(d.pData,d.sunRasi,d.moonRasi,d.lagnaIdx||0,d.jNatch,d.dob);
+  translateDynamicContent('results');
 }
 
 /* RENDER FUNCTIONS */
@@ -2059,14 +3194,14 @@ function renderBhava(lagnaIdx,pMap){
     <div class="ibox"><span class="lbl">7ம் வீடு (களத்திரம்)</span><span class="val">${RASI[(lagnaIdx+6)%12].n}</span></div>
   `;
 }
-function renderStrength(pData,lagnaIdx,speeds){
+function renderStrength(pData,lagnaIdx,speeds,jd,elongDeg,varaLordName){
   const names7=['சூரியன்','சந்திரன்','செவ்வாய்','புதன்','குரு','சுக்கிரன்','சனி'];
   document.getElementById('strengthBars').innerHTML=pData
     .filter(p=>names7.includes(p.name))
     .map(p=>{
       const spd=speeds[p.name]||0;
-      const score=planetStrength(p.name,p.rasiIdx,p.sidLon,lagnaIdx,pData,spd);
-      const sb=calcShadbala(p.name,p.sidLon,p.rasiIdx,lagnaIdx,pData,spd);
+      const score=planetStrength(p.name,p.rasiIdx,p.sidLon,lagnaIdx,pData,spd,jd,elongDeg,varaLordName);
+      const sb=calcShadbala(p.name,p.sidLon,p.rasiIdx,lagnaIdx,pData,spd,jd,elongDeg,varaLordName);
       const cls=score>=70?'strong-fill':score>=40?'medium-fill':'weak-fill';
       const retroTag=spd<0?'<span style="color:var(--grn);font-size:.45rem;margin-left:4px">&#8635; வக்ர</span>':'';
       const minRupa=SHADBALA_MIN_RUPA[p.name]||6;
@@ -2086,6 +3221,7 @@ function renderStrength(pData,lagnaIdx,speeds){
           ${spd!==0?`<span title="சேஷ்ட பலம்">சேஷ்ட ${sb.cheshta.toFixed(0)}V</span>`:''}
           <span title="நைசர்கிக பலம்">நைஸர்கிக ${sb.naisargika}V</span>
           <span title="திருக் பலம்">திருக் ${sb.drik.toFixed(0)}V</span>
+          <span title="கால பலம் (பக்ஷ + வார + அயன)">கால ${sb.kala.toFixed(0)}V</span>
           <span style="margin-left:auto;color:var(--${score>=50?'grn':'sil-d'})" title="மொத்தம் ${sb.totalVirupa}V / ${sb.totalRupa} ரூபா">மொத்தம் ${sb.totalRupa}ரூ</span>
         </div>
       </div>`;
@@ -2107,6 +3243,39 @@ function calcAntardasha(mahadasha){
     const days=Math.round(totalDays-months*30.4375);
     result.push({
       lord:antarLord,
+      years:antarYrs,
+      startJD:jdCursor,
+      endJD:jdCursor+totalDays,
+      startDate:jdToDate(jdCursor),
+      endDate:jdToDate(jdCursor+totalDays),
+      months,days
+    });
+    jdCursor+=totalDays;
+  }
+  return result;
+}
+
+/* ── Pratyantardasha (3rd-level dasha) ──
+   Same recursive Vimshottari proportioning rule as Antardasha-within-
+   Mahadasha, applied one level deeper: each Antardasha is itself
+   subdivided into all 9 lords in DASHA_ORDER sequence starting from the
+   Antardasha's own lord, proportioned by (DASHA_YEARS[lord]/120) of the
+   Antardasha's own duration. */
+function calcPratyantardasha(antardasha){
+  const antarLord=antardasha.lord;
+  const antarYrs=antardasha.years;
+  const startIdx=DASHA_ORDER.indexOf(antarLord);
+  const result=[];
+  let jdCursor=antardasha.startJD;
+  for(let i=0;i<9;i++){
+    const di=(startIdx+i)%9;
+    const praLord=DASHA_ORDER[di];
+    const praYrs=(DASHA_YEARS[di]*antarYrs)/120;
+    const totalDays=praYrs*365.25;
+    const months=Math.floor(totalDays/30.4375);
+    const days=Math.round(totalDays-months*30.4375);
+    result.push({
+      lord:praLord,
       startJD:jdCursor,
       endJD:jdCursor+totalDays,
       startDate:jdToDate(jdCursor),
@@ -2253,42 +3422,103 @@ function drawSouthKundli(pMap,lagnaIdx){
     </svg>`;
 }
 
+/* ── Interactive dasha timeline state ──
+   __dashaTimeline: the 9 Mahadashas for this chart (set once per chart).
+   __selectedMahaIdx: which Mahadasha's Antardashas are currently shown
+   (defaults to the actual current Mahadasha, but the user can click any
+   other Mahadasha cell to browse its Antardashas without changing what
+   "current" means).
+   __expandedAntarIdx: which Antardasha row (within the selected
+   Mahadasha) has its Pratyantardasha sub-table open, if any. */
+let __dashaTimeline=null,__selectedMahaIdx=null,__expandedAntarIdx=null;
+
 function renderDasha(dashas,curDasha){
+  __dashaTimeline=dashas;
+  const curMahaIdx=dashas.findIndex(d=>d.lord===curDasha.lord&&d.startJD===curDasha.startJD);
+  __selectedMahaIdx=curMahaIdx>=0?curMahaIdx:0;
+  __expandedAntarIdx=null;
   document.getElementById('dashaCurrentRow').innerHTML=`
     <div class="ibox"><span class="lbl">தற்போதைய மஹா தசா</span><span class="val">${curDasha.lord} தசா</span><span class="val2">${curDasha.startDate} — ${curDasha.endDate}</span></div>
     <div class="ibox"><span class="lbl">தசா காலம்</span><span class="val">${curDasha.years} ஆண்டுகள்</span></div>
   `;
-  document.getElementById('dashaRow').innerHTML=dashas.map(d=>{
+  document.getElementById('dashaRow').innerHTML=dashas.map((d,i)=>{
     const isCur=d.lord===curDasha.lord&&d.startJD===curDasha.startJD;
-    return`<div class="dasha-cell${isCur?' current':''}">
+    const isSel=i===__selectedMahaIdx;
+    return`<div class="dasha-cell${isCur?' current':''}${isSel?' selected':''}" onclick="selectMahadasha(${i})" title="அந்தர் தசா காண கிளிக் செய்க">
       <span class="dlbl">${d.startDate.slice(0,4)}</span>
       <span class="dgraha">${d.lord}</span>
       <span class="dyrs">${d.years}y · ${d.endDate.slice(0,4)}</span>
     </div>`;
   }).join('');
-  // Antardasha for current Mahadasha
-  const antardashas=calcAntardasha(curDasha);
-  const todayJd=todayJD();
-  const antarRows=antardashas.map(a=>{
-    const isCur=a.startJD<=todayJd&&todayJd<a.endJD;
-    return`<tr class="${isCur?'cur-antar':''}">
-      <td>${a.lord}</td>
-      <td>${a.startDate}</td>
-      <td>${a.endDate}</td>
-      <td>${a.months}மா ${a.days}நா</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('antarWrap').innerHTML=`
-    <div style="font-size:.58rem;color:var(--grn-d);margin:12px 0 6px;letter-spacing:.07em;font-weight:600">${curDasha.lord} தசா — அந்தர் தசா விவரம் · தற்போதைய காலம் பொலிவாக</div>
-    <table class="antar-table">
-      <thead><tr><th>அந்தர்</th><th>துவக்கம்</th><th>முடிவு</th><th>காலம்</th></tr></thead>
-      <tbody>${antarRows}</tbody>
-    </table>`;
+  renderAntarTable(dashas[__selectedMahaIdx]);
   document.getElementById('dashaInfo').innerHTML=`
     <div class="ibox"><span class="lbl">தசா அதிபதி</span><span class="val">${curDasha.lord}</span></div>
     <div class="ibox"><span class="lbl">தசா துவக்கம்</span><span class="val">${curDasha.startDate}</span></div>
     <div class="ibox"><span class="lbl">தசா முடிவு</span><span class="val">${curDasha.endDate}</span></div>
   `;
+}
+
+/* Click a Mahadasha cell — switch which Mahadasha's Antardashas are
+   browsable, without recomputing or altering anything about the actual
+   chart or "current dasha" badge. */
+function selectMahadasha(idx){
+  if(!__dashaTimeline)return;
+  __selectedMahaIdx=idx;
+  __expandedAntarIdx=null;
+  document.querySelectorAll('#dashaRow .dasha-cell').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+  renderAntarTable(__dashaTimeline[idx]);
+}
+
+/* Renders the Antardasha table for one Mahadasha. Each row is
+   clickable; clicking toggles an inline Pratyantardasha sub-table
+   directly beneath that row (accordion-style — only one open at a
+   time, to keep the table readable). */
+function renderAntarTable(mahaDasha){
+  const antardashas=calcAntardasha(mahaDasha);
+  const todayJd=todayJD();
+  const rows=antardashas.map((a,i)=>{
+    const isCur=a.startJD<=todayJd&&todayJd<a.endJD;
+    const isExp=i===__expandedAntarIdx;
+    const mainRow=`<tr class="antar-row${isCur?' cur-antar':''}${isExp?' expanded':''}" onclick="toggleAntardasha(${i})" title="பிரத்யந்தர் தசா காண கிளிக் செய்க">
+      <td><span class="antar-caret">${isExp?'▾':'▸'}</span>${a.lord}</td>
+      <td>${a.startDate}</td>
+      <td>${a.endDate}</td>
+      <td>${a.months}மா ${a.days}நா</td>
+    </tr>`;
+    const subRow=isExp?`<tr class="pratyantar-wrap-row"><td colspan="4">${renderPratyantarRows(a)}</td></tr>`:'';
+    return mainRow+subRow;
+  }).join('');
+  document.getElementById('antarWrap').innerHTML=`
+    <div style="font-size:.58rem;color:var(--grn-d);margin:12px 0 6px;letter-spacing:.07em;font-weight:600">${mahaDasha.lord} தசா — அந்தர் தசா விவரம் (வரிசையைக் கிளிக் செய்து பிரத்யந்தர் தசா காண்க)</div>
+    <table class="antar-table">
+      <thead><tr><th>அந்தர்</th><th>துவக்கம்</th><th>முடிவு</th><th>காலம்</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+/* Click an Antardasha row — expand/collapse its Pratyantardasha
+   sub-table in place. Re-derives the Antardasha list for the currently
+   selected Mahadasha rather than caching it, since it's cheap (pure
+   proportional arithmetic, no ephemeris) and keeps a single source of
+   truth in calcAntardasha(). */
+function toggleAntardasha(idx){
+  __expandedAntarIdx=(__expandedAntarIdx===idx)?null:idx;
+  renderAntarTable(__dashaTimeline[__selectedMahaIdx]);
+}
+
+function renderPratyantarRows(antardasha){
+  const pratyantars=calcPratyantardasha(antardasha);
+  const todayJd=todayJD();
+  const rows=pratyantars.map(p=>{
+    const isCur=p.startJD<=todayJd&&todayJd<p.endJD;
+    return`<tr class="${isCur?'cur-praty':''}">
+      <td>${p.lord}</td><td>${p.startDate}</td><td>${p.endDate}</td><td>${p.months}மா ${p.days}நா</td>
+    </tr>`;
+  }).join('');
+  return`<table class="praty-table">
+    <thead><tr><th>பிரத்யந்தர்</th><th>துவக்கம்</th><th>முடிவு</th><th>காலம்</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
 }
 function renderYogas(yogas,sunR,moonR){
   document.getElementById('yogaList').innerHTML=`<div class="yoga-list">${yogas.map(y=>`<div class="yoga-badge${y.strong?' strong':''}${y.none?' none':''}" title="${y.d||''}">${y.n}</div>`).join('')}</div>
@@ -2300,7 +3530,7 @@ function renderYogas(yogas,sunR,moonR){
 
 async function fetchAI(pData,jNatch,pada,sunR,moonR,lagnaIdx,curDasha,yogas,tithi,vara,dob,city,tob){
   const section=document.getElementById('aiSection');
-  section.innerHTML=`<div class="ai-loading"><span class="spinner"></span>ஜோதிட பலன் கணிக்கிறோம்...</div>`;
+  section.innerHTML=`<div class="ai-loading"><span class="spinner"></span>${gt('aiLoadingText')}</div>`;
   const planetSummary=pData.map(p=>`${p.name}: ${p.rasi.n} ${p.deg}° (${p.status==='exalt'?'உச்சம்':p.status==='debil'?'நீசம்':p.status==='own'?'சொந்த ராசி':'சாதாரண'})`).join(', ');
   const lagnaStr=lagnaIdx!==null?`லக்னம்: ${RASI[lagnaIdx].n}`:'லக்னம்: தெரியவில்லை (நேரம் இல்லை)';
   const yogaStr=yogas.filter(y=>!y.none).map(y=>y.n).join(', ')||'யோகங்கள் இல்லை';
@@ -2340,11 +3570,119 @@ async function fetchAI(pData,jNatch,pada,sunR,moonR,lagnaIdx,curDasha,yogas,tith
     const data=await resp.json();
     if(data.error){throw new Error(data.error.message)}
     const text=data.content?.map(c=>c.text||'').join('')||'';
+    window.__aiRawText=text;
+    window.__aiMeta={dob,tob,city,lagna:lagnaStr,sunR:sunR.n,moonR:moonR.n,jNatch:jNatch.n,pada,curDasha:`${curDasha.lord} (${curDasha.startDate} – ${curDasha.endDate})`};
     const html=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');
     section.innerHTML=`<div class="ai-content">${html}</div>`;
+    enableAIActions();
   }catch(e){
+    window.__aiRawText=null;
     section.innerHTML=`<div class="ai-content" style="color:var(--sil-d)"><p>AI விளக்கம் தற்போது கிடைக்கவில்லை. கிரக நிலைகள் மற்றும் நட்சத்திர தகவல்கள் மேலே காட்டப்பட்டுள்ளன.</p></div>`;
   }
+}
+
+/* ══════════════════════════════════════
+   AI PANEL ACTIONS — Copy / Share / Download (MD, TXT, PDF)
+   Operates on whatever text is currently in #aiSection (AI-generated
+   reading, or a future richer AI response — this layer is generic and
+   does not depend on the prompt/response format above). ══════════════════════════════════════ */
+function resetAIActions(){
+  ['aiCopyBtn','aiShareBtn','aiMdBtn','aiTxtBtn','aiPdfBtn'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b){b.disabled=true;b.classList.remove('copied')}
+  });
+}
+function enableAIActions(){
+  ['aiCopyBtn','aiShareBtn','aiMdBtn','aiTxtBtn','aiPdfBtn'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b)b.disabled=false;
+  });
+}
+/* Plain-text (markdown stripped) version of the current AI reading,
+   used for copy/share/txt. Falls back to the rendered DOM text if the
+   raw markdown isn't available for any reason. */
+function getAIPlainText(){
+  if(window.__aiRawText)return window.__aiRawText.replace(/\*\*(.*?)\*\*/g,'$1').trim();
+  const sec=document.getElementById('aiSection');
+  return sec?sec.innerText.trim():'';
+}
+function getAIMarkdownText(){
+  const meta=window.__aiMeta||{};
+  const head=`# AI ஜோதிட விளக்கம் — Vedic Astrology AI Reading\n\n`+
+    `- DOB: ${meta.dob||''}${meta.tob?` · TOB: ${meta.tob}`:''}\n`+
+    `- Place: ${meta.city||''}\n`+
+    `- ${meta.lagna||''}\n`+
+    `- Sun Rasi: ${meta.sunR||''} · Moon Rasi: ${meta.moonR||''}\n`+
+    `- Nakshatra: ${meta.jNatch||''}${meta.pada?`, Pada ${meta.pada}`:''}\n`+
+    `- Current Dasha: ${meta.curDasha||''}\n\n---\n\n`;
+  return head+(window.__aiRawText||getAIPlainText());
+}
+async function copyAIText(){
+  const btn=document.getElementById('aiCopyBtn');
+  try{
+    await navigator.clipboard.writeText(getAIPlainText());
+    if(btn){btn.classList.add('copied');btn.querySelector('span').textContent=gt('aiCopiedBtn')||'Copied ✓';
+      setTimeout(()=>{btn.classList.remove('copied');btn.querySelector('span').textContent=gt('aiCopyBtn')||'Copy'},1800);}
+  }catch(e){console.error('Copy failed:',e)}
+}
+async function shareAIText(){
+  const text=getAIPlainText();
+  if(navigator.share){
+    try{await navigator.share({title:'AI ஜோதிட விளக்கம்',text})}catch(e){/* user cancelled */}
+  }else{
+    copyAIText();
+  }
+}
+function triggerDownload(filename,content,mime){
+  const blob=new Blob([content],{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function downloadAIText(format){
+  const dob=(window.__aiMeta&&window.__aiMeta.dob)||'chart';
+  if(format==='md'){
+    triggerDownload(`ai-jothidam-${dob}.md`,getAIMarkdownText(),'text/markdown;charset=utf-8');
+  }else{
+    triggerDownload(`ai-jothidam-${dob}.txt`,getAIMarkdownText(),'text/plain;charset=utf-8');
+  }
+}
+async function downloadAIPDF(){
+  const btn=document.getElementById('aiPdfBtn');
+  const label=btn.querySelector('span');
+  const orig=label.textContent;
+  label.textContent='…';btn.disabled=true;
+  try{
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    const{jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const margin=16,pageW=210,pageH=297,usableW=pageW-margin*2;
+    let y=margin;
+    pdf.setFont('helvetica','bold');pdf.setFontSize(15);
+    pdf.text('AI Jothidam Vivaranam — Vedic Astrology AI Reading',margin,y);y+=8;
+    pdf.setDrawColor(201,168,76);pdf.line(margin,y,pageW-margin,y);y+=8;
+    pdf.setFont('helvetica','normal');pdf.setFontSize(10);
+    const meta=window.__aiMeta||{};
+    const metaLines=[`DOB: ${meta.dob||''}  TOB: ${meta.tob||''}`,`Place: ${meta.city||''}`,
+      `${meta.lagna||''}  |  Sun: ${meta.sunR||''}  |  Moon: ${meta.moonR||''}`,
+      `Nakshatra: ${meta.jNatch||''} Pada ${meta.pada||''}  |  Dasha: ${meta.curDasha||''}`];
+    metaLines.forEach(l=>{pdf.text(l,margin,y);y+=5.5});
+    y+=3;pdf.setDrawColor(180,180,180);pdf.line(margin,y,pageW-margin,y);y+=8;
+    pdf.setFontSize(11);
+    const body=getAIPlainText()||'AI reading not available.';
+    body.split('\n').filter(l=>l.trim()).forEach(line=>{
+      const wrapped=pdf.splitTextToSize(line,usableW);
+      wrapped.forEach(wl=>{
+        if(y>pageH-margin){pdf.addPage();y=margin}
+        pdf.text(wl,margin,y);y+=6;
+      });
+      y+=1.5;
+    });
+    pdf.save(`ai-jothidam-${meta.dob||'chart'}.pdf`);
+  }catch(e){console.error('AI PDF error:',e)}
+  finally{label.textContent=orig;btn.disabled=false;}
 }
 
 function shake(){
@@ -2423,28 +3761,135 @@ const CAREER_BY_ELEMENT={
   water: {fields:['கலை','இசை','ஆன்மிகம்','சமூக சேவை','மனோதத்துவம்'],strength:'உள்ளுணர்வு, அனுதாபம், படைப்பாற்றல்'},
 };
 
-/* ── DOSHA CHECK ── */
-function checkDoshas(pData,lagnaIdx){
-  const marsIdx=pData.find(p=>p.name==='செவ்வாய்')?.rasiIdx;
-  const rahuIdx=pData.find(p=>p.name==='ராகு')?.rasiIdx;
-  const ketuIdx=pData.find(p=>p.name==='கேது')?.rasiIdx;
-  const saturnIdx=pData.find(p=>p.name==='சனி')?.rasiIdx;
-  /* Mangala dosha: Mars in 1,2,4,7,8,12 from lagna */
-  const marsHouse=((marsIdx-lagnaIdx)+12)%12+1;
-  const mangalDosha=[1,2,4,7,8,12].includes(marsHouse);
-  /* Kala sarpa: all planets between Rahu-Ketu axis */
-  const allPlanets=pData.filter(p=>!['ராகு','கேது'].includes(p.name));
-  function between(lon,start,end){
-    const l=((lon-start)+360)%360,e=((end-start)+360)%360;return l<e;
+/* ══════════════════════════════════════════════════════
+   DOSHA ENGINE — Mangal (Kuja) Dosha, Kala Sarpa Yoga, Shani Doshas
+   Classical rule-based detection (BPHS / standard Muhurta texts),
+   additive module — does not touch any astronomy calculation above.
+   ══════════════════════════════════════════════════════ */
+
+/* Mars own/exaltation signs (rasi index): Aries(0)/Scorpio(7) own,
+   Capricorn(9) exalted. Used for cancellation checks. */
+const MARS_OWN_EXALT=[0,7,9];
+
+/* Houses (1-indexed) counted from a given reference rasi index.
+   Re-uses the existing houseOf() helper already defined above. */
+function doshaHouseFrom(refIdx,bodyIdx){return houseOf(bodyIdx,refIdx)}
+
+/* Whether `aspectorIdx` (rasi position of a planet) aspects the
+   house occupied by `targetIdx` via Jupiter's special full aspects
+   (5th & 9th, in addition to the universal 7th). Used only for
+   Jupiter, the sole benefic whose aspect is classically invoked to
+   mitigate Mangal Dosha. */
+function jupiterAspectsHouse(jupRasiIdx,targetRasiIdx){
+  const h=houseOf(targetRasiIdx,jupRasiIdx); // house of target counted from Jupiter
+  return h===7||h===5||h===9;
+}
+
+function evaluateMangalDosha(pData,refIdx,refLabel){
+  const mars=pData.find(p=>p.name==='செவ்வாய்');
+  const jup=pData.find(p=>p.name==='குரு');
+  const moon=pData.find(p=>p.name==='சந்திரன்');
+  if(!mars||refIdx===null||refIdx===undefined)return null;
+  const house=doshaHouseFrom(refIdx,mars.rasiIdx);
+  const present=[1,2,4,7,8,12].includes(house);
+  if(!present)return{present:false,cancelled:false,house,refLabel};
+
+  const reasons=[];
+  /* 1. Mars in own sign or exalted — classical primary cancellation */
+  if(MARS_OWN_EXALT.includes(mars.rasiIdx))reasons.push('செவ்வாய் சொந்த/உச்ச ராசியில் உள்ளார்');
+  /* 2. Mars in 2nd house but in a dual/mixed sign (Mithuna/Kanya) */
+  if(house===2&&[2,5].includes(mars.rasiIdx))reasons.push('2ம் வீட்டில் செவ்வாய் மிதுன/கன்னி ராசியில் — தோஷம் தணிவு');
+  /* 3. Mars in 12th house but in a friendly/neutral sign (Pisces/Cancer) */
+  if(house===12&&[11,3].includes(mars.rasiIdx))reasons.push('12ம் வீட்டில் செவ்வாய் நட்பு ராசியில் — தோஷம் தணிவு');
+  /* 4. Jupiter aspects Mars (Guru drishti neutralises malefic influence) */
+  if(jup&&jupiterAspectsHouse(jup.rasiIdx,mars.rasiIdx))reasons.push('குருவின் பார்வை செவ்வாய் மீது உள்ளது');
+  /* 5. Mars conjunct Jupiter or Moon (benefic conjunction) */
+  if(jup&&jup.rasiIdx===mars.rasiIdx)reasons.push('குருவுடன் செவ்வாய் இணைந்துள்ளார்');
+  if(moon&&moon.rasiIdx===mars.rasiIdx)reasons.push('சந்திரனுடன் செவ்வாய் இணைந்துள்ளார்');
+  /* 6. Mesha/Vrischika lagna — Mars rules the ascendant itself */
+  if(refLabel==='லக்னம்'&&[0,7].includes(refIdx))reasons.push('லக்னமே மேஷம்/விருச்சிகம் — செவ்வாய் லக்னாதிபதி');
+
+  return{present:true,cancelled:reasons.length>0,reasons,house,refLabel};
+}
+
+/* Kala Sarpa Yoga — proper arc-containment check in BOTH directions
+   (Rahu→Ketu and Ketu→Rahu), since "all planets on one side of the
+   axis" is the real classical definition, not a single fixed arc. */
+function evaluateKalaSarpa(pData){
+  const rahu=pData.find(p=>p.name==='ராகு'),ketu=pData.find(p=>p.name==='கேது');
+  const classical=pData.filter(p=>!['ராகு','கேது'].includes(p.name));
+  function arcContains(lon,start,end){ // true if lon lies on the forward arc start→end (0-360)
+    const span=m360(end-start);
+    const rel=m360(lon-start);
+    return rel>0&&rel<span;
   }
-  const rahuLon2=rahuIdx*30+15,ketuLon2=ketuIdx*30+15;
-  const kalaSerpa=allPlanets.every(p=>{
-    const lon=p.rasiIdx*30+15;return between(lon,rahuLon2,ketuLon2);
-  });
-  /* Sani dosha: Saturn in 1,4,7,10 from lagna (Sade Sati rough check) */
-  const satHouse=((saturnIdx-lagnaIdx)+12)%12+1;
-  const saniDosha=[1,4,7,10].includes(satHouse);
-  return{mangalDosha,kalaSerpa,saniDosha,marsHouse};
+  const rahuKetuSide=classical.every(p=>arcContains(p.sidLon,rahu.sidLon,ketu.sidLon));
+  const ketuRahuSide=classical.every(p=>arcContains(p.sidLon,ketu.sidLon,rahu.sidLon));
+  const full=rahuKetuSide||ketuRahuSide;
+  if(full)return{present:true,partial:false,type:rahuKetuSide?'ராகு → கேது':'கேது → ராகு'};
+
+  /* Partial Kala Sarpa: exactly one classical graha breaks the arc */
+  const sideACount=classical.filter(p=>arcContains(p.sidLon,rahu.sidLon,ketu.sidLon)).length;
+  const sideBCount=classical.filter(p=>arcContains(p.sidLon,ketu.sidLon,rahu.sidLon)).length;
+  const best=Math.max(sideACount,sideBCount);
+  if(best===classical.length-1){
+    const breaker=classical.find(p=>!arcContains(p.sidLon,rahu.sidLon,ketu.sidLon)&&!arcContains(p.sidLon,ketu.sidLon,rahu.sidLon));
+    return{present:false,partial:true,breaker:breaker?breaker.name:null};
+  }
+  return{present:false,partial:false};
+}
+
+/* Shani (Saturn) doshas — three distinct classical conditions,
+   each measured from the Moon (Chandra Lagna), as per tradition:
+     • Ashtama Shani  — natal Saturn in the 8th from Moon
+     • Kantaka Shani  — natal Saturn in a kendra (1,4,7,10) from Moon
+     • Sade Sati      — CURRENT transiting Saturn in 12th/1st/2nd
+                         from natal Moon (the classical 7.5-year window) */
+function evaluateShaniDoshas(pData){
+  const sat=pData.find(p=>p.name==='சனி');
+  const moon=pData.find(p=>p.name==='சந்திரன்');
+  const houseFromMoon=doshaHouseFrom(moon.rasiIdx,sat.rasiIdx);
+  const ashtama=houseFromMoon===8;
+  const kantaka=[1,4,7,10].includes(houseFromMoon);
+
+  /* Transiting Saturn "today" — independent real ephemeris call,
+     reusing the exact same VSOP87 + Lahiri pipeline as the natal
+     chart (no shortcuts/approximation). */
+  let sadeSati=false,sadeSatiPhase=null;
+  try{
+    const jdNow=todayJD();
+    const tNow=T(jdNow);
+    const sunTropNow=sunLon(tNow);
+    const satTropNow=planetGeoLon('Saturn',tNow,sunTropNow);
+    const satSidNow=sid(satTropNow,jdNow);
+    const transitSatRasi=rasiIdx(satSidNow);
+    const houseFromMoonNow=doshaHouseFrom(moon.rasiIdx,transitSatRasi);
+    sadeSati=[12,1,2].includes(houseFromMoonNow);
+    if(sadeSati)sadeSatiPhase=houseFromMoonNow===12?'முதல் கட்டம் (12ம் வீடு)':houseFromMoonNow===1?'நடு கட்டம் (சந்திராஷ்டமம் அல்லாத கட்டம் — 1ம் வீடு)':'கடைசி கட்டம் (2ம் வீடு)';
+  }catch(e){ /* if transit calc fails for any reason, just omit Sade Sati */ }
+
+  return{ashtama,kantaka,houseFromMoon,sadeSati,sadeSatiPhase};
+}
+
+function checkDoshas(pData,lagnaIdx){
+  const moon=pData.find(p=>p.name==='சந்திரன்');
+  const venus=pData.find(p=>p.name==='சுக்கிரன்');
+  const mangalFromLagna=evaluateMangalDosha(pData,lagnaIdx,'லக்னம்');
+  const mangalFromMoon=moon?evaluateMangalDosha(pData,moon.rasiIdx,'சந்திர லக்னம்'):null;
+  const mangalFromVenus=venus?evaluateMangalDosha(pData,venus.rasiIdx,'சுக்ர லக்னம்'):null;
+  const kalaSarpaInfo=evaluateKalaSarpa(pData);
+  const shani=evaluateShaniDoshas(pData);
+
+  /* Backward-compatible flat fields (kept so nothing else that reads
+     checkDoshas() output breaks), plus the full structured detail. */
+  return{
+    mangalDosha:!!(mangalFromLagna&&mangalFromLagna.present&&!mangalFromLagna.cancelled),
+    kalaSerpa:kalaSarpaInfo.present,
+    saniDosha:shani.ashtama||shani.kantaka,
+    marsHouse:mangalFromLagna?mangalFromLagna.house:null,
+    mangalFromLagna,mangalFromMoon,mangalFromVenus,
+    kalaSarpaInfo,shani
+  };
 }
 
 /* ── NUMEROLOGY ── */
@@ -2564,25 +4009,76 @@ function renderLucky(sunR,lagnaIdx){
 }
 
 function renderDosha(pData,lagnaIdx){
-  const{mangalDosha,kalaSerpa,saniDosha,marsHouse}=checkDoshas(pData,lagnaIdx);
+  const{mangalFromLagna,mangalFromMoon,kalaSarpaInfo,shani}=checkDoshas(pData,lagnaIdx);
+
+  /* ── Mangal (Kuja) Dosha cell ── */
+  let mangalCls='dosha-absent',mangalStatus='இல்லை ✓',mangalNote='செவ்வாய் 1,2,4,7,8,12 வீடுகளில் இல்லை — மாங்கல்ய தோஷம் இல்லை.';
+  if(mangalFromLagna&&mangalFromLagna.present){
+    if(mangalFromLagna.cancelled){
+      mangalCls='dosha-cancelled';mangalStatus='தோஷ பங்கம் (நீக்கப்பட்டது) ◐';
+      mangalNote=`செவ்வாய் லக்னத்தில் இருந்து ${mangalFromLagna.house}ம் வீட்டில் உள்ளார், ஆனால்: ${mangalFromLagna.reasons.join('; ')}. எனவே தோஷம் கணிசமாக தணிக்கப்படுகிறது.`;
+    }else{
+      mangalCls='dosha-present';mangalStatus='உள்ளது ⚠';
+      mangalNote=`செவ்வாய் லக்னத்தில் இருந்து ${mangalFromLagna.house}ம் வீட்டில் உள்ளார். திருமண பொருத்தம் காணும்போது இதை கவனிக்கவும்; பரிகாரம் செய்தால் தாக்கம் குறையும்.`;
+    }
+  }
+  if(mangalFromMoon&&mangalFromMoon.present&&(!mangalFromLagna||!mangalFromLagna.present)){
+    mangalNote+=` (குறிப்பு: சந்திர லக்னத்தில் இருந்தும் ${mangalFromMoon.house}ம் வீட்டில் உள்ளார்.)`;
+  }
+
+  /* ── Kala Sarpa Yoga cell ── */
+  let kalaCls='dosha-absent',kalaStatus='இல்லை ✓',kalaNote='கிரகங்கள் ராகு-கேது அச்சில் இருபுறமும் சமமாக பரவியுள்ளன.';
+  if(kalaSarpaInfo.present){
+    kalaCls='dosha-present';kalaStatus='உள்ளது ⚠';
+    kalaNote=`அனைத்து கிரகங்களும் ${kalaSarpaInfo.type} வளையத்திற்குள் உள்ளன — முழு கால சர்ப யோகம். நாக பூஜை/சர்ப தோஷ பரிகாரம் பயனளிக்கும்.`;
+  }else if(kalaSarpaInfo.partial){
+    kalaCls='dosha-cancelled';kalaStatus='பகுதி யோகம் ◐';
+    kalaNote=`${kalaSarpaInfo.breaker||'ஒரு கிரகம்'} மட்டும் அச்சுக்கு வெளியே உள்ளதால் பகுதி கால சர்ப யோகமாக கருதப்படுகிறது — முழு தோஷம் இல்லை.`;
+  }
+
+  /* ── Ashtama Shani cell ── */
+  const ashtamaCls=shani.ashtama?'dosha-present':'dosha-absent';
+  const ashtamaStatus=shani.ashtama?'உள்ளது ⚠':'இல்லை ✓';
+  const ashtamaNote=shani.ashtama?'சனி சந்திரனில் இருந்து 8ம் வீட்டில் உள்ளார் — அஷ்டம சனி. ஆரோக்கியம் & மனஉறுதி குறித்து கவனம் தேவை.':'சனி சந்திரனில் இருந்து 8ம் வீட்டில் இல்லை.';
+
+  /* ── Kantaka Shani cell ── */
+  const kantakaCls=shani.kantaka?'dosha-present':'dosha-absent';
+  const kantakaStatus=shani.kantaka?'உள்ளது ⚠':'இல்லை ✓';
+  const kantakaNote=shani.kantaka?`சனி சந்திரனில் இருந்து கேந்திரத்தில் (${shani.houseFromMoon}ம் வீடு) உள்ளார் — கண்டக சனி. தடைகள் & தாமதங்கள் ஏற்படலாம்.`:'சனி சந்திர கேந்திரத்தில் இல்லை.';
+
+  /* ── Sade Sati cell (current transit) ── */
+  const sadeCls=shani.sadeSati?'dosha-present':'dosha-absent';
+  const sadeStatus=shani.sadeSati?'நடைபெறுகிறது ⚠':'இல்லை ✓';
+  const sadeNote=shani.sadeSati?`தற்போது சனி பெயர்ச்சி சாடே சாதி காலத்தில் உள்ளது — ${shani.sadeSatiPhase}. சனி பரிகாரம் & பொறுமை பரிந்துரைக்கப்படுகிறது.`:'தற்போது சனி சாடே சாதி பெயர்ச்சியில் இல்லை.';
+
   document.getElementById('doshaRow').innerHTML=`
-    <div class="dosha-cell ${mangalDosha?'dosha-present':'dosha-absent'}">
+    <div class="dosha-cell ${mangalCls}">
       <span class="d-name">மாங்கல்ய தோஷம்</span>
-      <span class="d-status">${mangalDosha?'உள்ளது ⚠':'இல்லை ✓'}</span>
-      <span class="d-note">${mangalDosha?`செவ்வாய் ${marsHouse}ம் வீட்டில் உள்ளார். திருமண பொருத்தம் கவனிக்கவும்.`:'செவ்வாய் சாதகமான நிலையில் உள்ளார்.'}</span>
+      <span class="d-status">${mangalStatus}</span>
+      <span class="d-note">${mangalNote}</span>
     </div>
-    <div class="dosha-cell ${kalaSerpa?'dosha-present':'dosha-absent'}">
+    <div class="dosha-cell ${kalaCls}">
       <span class="d-name">கால சர்ப தோஷம்</span>
-      <span class="d-status">${kalaSerpa?'உள்ளது ⚠':'இல்லை ✓'}</span>
-      <span class="d-note">${kalaSerpa?'எல்லா கிரகங்களும் ராகு-கேது இடையே உள்ளன. நாக பூஜை பயனளிக்கும்.':'கிரகங்கள் சாதகமாக பரவியுள்ளன.'}</span>
+      <span class="d-status">${kalaStatus}</span>
+      <span class="d-note">${kalaNote}</span>
     </div>
-    <div class="dosha-cell ${saniDosha?'dosha-present':'dosha-absent'}">
-      <span class="d-name">சனி தோஷம்</span>
-      <span class="d-status">${saniDosha?'கவனம் ⚠':'சாதாரண ✓'}</span>
-      <span class="d-note">${saniDosha?'சனி கேந்திரத்தில் உள்ளார். சனி பரிகாரம் செய்யவும்.':'சனி நிலை சாதகமாக உள்ளது.'}</span>
+    <div class="dosha-cell ${ashtamaCls}">
+      <span class="d-name">அஷ்டம சனி</span>
+      <span class="d-status">${ashtamaStatus}</span>
+      <span class="d-note">${ashtamaNote}</span>
+    </div>
+    <div class="dosha-cell ${kantakaCls}">
+      <span class="d-name">கண்டக சனி</span>
+      <span class="d-status">${kantakaStatus}</span>
+      <span class="d-note">${kantakaNote}</span>
+    </div>
+    <div class="dosha-cell ${sadeCls}">
+      <span class="d-name">சாடே சாதி (பெயர்ச்சி)</span>
+      <span class="d-status">${sadeStatus}</span>
+      <span class="d-note">${sadeNote}</span>
     </div>
   `;
-  document.getElementById('doshaNote').innerHTML=`<strong>குறிப்பு:</strong> தோஷ கணிப்பு அடிப்படை அளவிலானது. முழுமையான ஆய்வுக்கு அனுபவமிக்க ஜோதிடரை அணுகவும். தோஷம் இருந்தாலும் பரிகாரங்கள் செய்வதன் மூலம் பலன் குறையும்.`;
+  document.getElementById('doshaNote').innerHTML=`<strong>குறிப்பு:</strong> மாங்கல்ய தோஷம் லக்னம், சந்திரன், சுக்கிரன் — மூன்று நிலைகளில் இருந்தும் சரிபார்க்கப்பட்டு, செவ்வாயின் சொந்த/உச்ச நிலை, குரு பார்வை/இணைவு போன்ற தோஷ பங்க விதிகளும் கணக்கில் கொள்ளப்பட்டுள்ளன. கால சர்ப யோகம் ராகு-கேது அச்சின் இருபுறமும் சரிபார்த்து முழு/பகுதி என வேறுபடுத்தப்படுகிறது. சனி தொடர்பான தோஷங்கள் சந்திரனை மையமாகக் கொண்டு (அஷ்டம, கண்டக) கணக்கிடப்பட்டு, சாடே சாதி இன்றைய சனி பெயர்ச்சி நிலையுடன் ஒப்பிடப்படுகிறது. தோஷம் இருந்தாலும் பரிகாரங்கள் மூலம் தாக்கம் கணிசமாக குறையும் — இது ஒரு ஆரம்ப வழிகாட்டலே; முழுமையான ஆலோசனைக்கு அனுபவமிக்க ஜோதிடரை அணுகவும்.`;
 }
 
 function renderCareer(sunR,moonR){
