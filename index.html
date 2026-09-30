@@ -454,6 +454,12 @@ body.bright-mode .ai-panel{background:linear-gradient(155deg,rgba(240,230,255,.9
 .leg-item{display:flex;align-items:center;gap:4px;font-size:.55rem;color:var(--sil-d)}
 .leg-dot{width:8px;height:8px;border-radius:50%}
 footer{margin-top:40px;text-align:center;z-index:1;position:relative;font-size:.65rem;color:var(--sil-d);letter-spacing:.04em}
+.footer-credits{margin-top:18px;padding-top:14px;border-top:1px solid rgba(201,168,76,.14);line-height:1.9}
+.footer-credits .fc-line{display:block;font-size:.62rem;color:var(--sil-d);opacity:.85}
+.footer-credits .fc-line+.fc-line{margin-top:2px}
+.footer-credits .fc-en{font-family:Georgia,'Times New Roman',serif}
+.footer-credits .fc-ta{font-family:'Noto Serif Tamil',serif}
+.footer-credits .fc-sep{display:block;height:8px}
 
 /* ── NEBULA & SHOOTING STARS ── */
 .nebula{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;animation:nebPulse 10s ease-in-out infinite alternate}
@@ -1000,7 +1006,19 @@ body.bright-mode .reset-btn{background:rgba(0,0,0,.025)}
   </button>
 </div>
 
-<footer><p data-i18n="footerText">வேத ஜோதிட கணிப்பு · VSOP87 + ELP2000 · லாஹிரி அயனாம்சம் · பொழுதுபோக்கு & சுய சிந்தனைக்காக மட்டுமே</p></footer>
+<footer><p data-i18n="footerText">வேத ஜோதிட கணிப்பு · VSOP87 + ELP2000 · லாஹிரி அயனாம்சம் · பொழுதுபோக்கு & சுய சிந்தனைக்காக மட்டுமே</p>
+  <div class="footer-credits" data-no-translate>
+    <div lang="en">
+      <span class="fc-line fc-en">© 2026 Barath M · All rights reserved · Chennai, Tamil Nadu, India</span>
+      <span class="fc-line fc-en">Built with HTML · CSS · JS · Deployed on Cloudflare Pages</span>
+    </div>
+    <span class="fc-sep"></span>
+    <div lang="ta">
+      <span class="fc-line fc-ta">© 2026 பரத் எம் · அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை · சென்னை, தமிழ்நாடு, இந்தியா</span>
+      <span class="fc-line fc-ta">HTML · CSS · JS கொண்டு உருவாக்கப்பட்டது · Cloudflare Pages-இல் வெளியிடப்பட்டது</span>
+    </div>
+  </div>
+</footer>
 </div>
 
 <script>
